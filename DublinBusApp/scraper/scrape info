@@ -1,0 +1,33 @@
+Author: @ Andy
+
+Purpose: Scrape DubLinked Transport API
+Understanding how to access API for Real Time info
+
+More info: @ https://data.dublinked.ie/dataset/c9df9a0b-d17a-40ff-a5d4-01da0cf08617/resource/4b9f2c4f-6bf5-4958-a43a-f12dab04cf61/download/rtpirestapispecification.pdf
+
+Sets Checked
+RealTime Bus Info 			- accessed			- good now and up to date
+Timetable Bus Info by Date 	- not accessed		- we can get historic timetable data?
+Full TimeTable Bus Info		- accessed			- not sure what this is yet?
+Retrieve Bus Stop Info		- accessed			- relatively static
+Route List Info				- accessed			- relatively static
+Operator Info				- accessed			- relatively static
+
+-It has been evaluated that scraping the RealTime Info is not needed in the current scope of the project.
+-The API however remains useful for acquiring and accessing various info about DublinBus.
+	--We can extract the static data at a convenient time and save it into a text file
+		---we can write it into a database and query it later to return relevant info
+			---this will need to be scripted, manual handling will take too long.
+		
+	--if we keep our operations light, we should be able to use the API itself for testing purposes without setting up a DB
+
+RTI					https://data.dublinked.ie/cgi-bin/rtpi/realtimebusinformation?stopid=570&format=xml
+Timetable by date	Don't know format of data parameter in URL yet.
+Weekly timetable	https://data.dublinked.ie/cgi-bin/rtpi/timetableinformation?type=week&stopid=570&routeid=31&format=xml
+Bus Stop Info		https://data.dublinked.ie/cgi-bin/rtpi/busstopinformation?stopid=570&format=xml
+Route Info			https://data.dublinked.ie/cgi-bin/rtpi/routeinformation?routeid=31&operator=bac&format=xml
+Operator			https://data.dublinked.ie/cgi-bin/rtpi/operatorinformation?format=xml
+Route List			https://data.dublinked.ie/cgi-bin/rtpi/routelistinformation?operator=bac&format=xml
+
+
+
