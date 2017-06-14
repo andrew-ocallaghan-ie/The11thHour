@@ -378,4 +378,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+# General Cache stuff
+*.idea/
+*.DS_Store/
+*.cache/
+__pycache__/
+
 # End of https://www.gitignore.io/api/osx,java,macos,pydev,linux,python,eclipse,pycharm,windows,android,java-web
