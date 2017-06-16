@@ -34,6 +34,55 @@
             
         // Google Map
         function myMap() {
+            $.getJSON('https://data.dublinked.ie/cgi-bin/rtpi/busstopinformation', function(json) {
+                // Looping through elements in JSON file.
+                // Set at just 200 for now as full file is too big
+                // This will need to be changed
+                
+                // Make empty marker array to put the markers for the clustering
+                var markers = []
+                for (var i = 0; i < 200; i++) {
+                    // Creating Marker
+                    var marker = new google.maps.Marker({
+                        position: {lat: parseFloat(json.results[i].latitude), lng: parseFloat(json.results[i].longitude)},
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor: '#4682b4',
+                            strokeWeight: 1.5,
+                            fillColor: '#4682b4',
+                            fillOpacity: 0.4,
+                            scale: 8
+                        },
+                        map: map});
+                    
+                    // Push the marker into the marker arrray for clustering
+                    markers.push(marker);
+
+                    // Create infowindow on mouseover
+                    var infowindow = new google.maps.InfoWindow();
+
+                    // Contents of infowindow
+                    var html = '<h4>' + json.results[i].shortname + '</h4>'
+                    marker.html = html;
+
+                    // Name of station
+                    marker.name = json.results[i].shortname;
+
+                    // Mouse Over Functionality
+                    google.maps.event.addListener(marker,'mouseover',function() {
+                        // Set contents
+                        infowindow.setContent(this.html);
+                        // Open infowindow
+                        infowindow.open(map, this);
+                    });
+                }
+                
+                // Add a marker clusterer to manage the markers.
+                var markerCluster = new MarkerClusterer(map, markers,
+                    {imagePath: '../marker_clustering/images/m'});
+            });
+
+
             // Centre of map
             var myCenter = new google.maps.LatLng(53.3498,-6.2603);
 
@@ -48,7 +97,9 @@
 
             // Creating map
             var map = new google.maps.Map(mapCanvas, mapOptions);
+
         }
+
 
         //#--------------------------------------------------------------------------#//
 
@@ -152,7 +203,12 @@
                     <div class="col-sm-6 col-lg-3" id="chart_div"></div>        
             </div>
     
+        <!--Google Maps API script-->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
+            
+        <!--Google Maps marker clustering script-->
+        <script src="../marker_clustering/markerclusterer.js"></script>
+
             
         </div>
     
