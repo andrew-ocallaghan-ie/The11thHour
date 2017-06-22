@@ -1,0 +1,2767 @@
+Stop_ID,point1,Stop_ID,point2,distance
+113,"Ballymun Road",7113,"Ballymun Road",1.1436157667311861
+113,"Ballymun Road",7113,"Ballymun Road",1.1597114163507645
+147,"Mobhi Road",7113,"Ballymun Road",3.3380317972298843
+147,"Mobhi Road",7113,"Ballymun Road",3.450585484706572
+147,"Mobhi Road",7113,"Ballymun Road",3.5991331723713094
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.19506163800013
+273,"O'Connell St",7113,"Ballymun Road",6.298682391779556
+273,"O'Connell St",7113,"Ballymun Road",6.373641328776751
+273,"O'Connell St",7113,"Ballymun Road",6.394112371404976
+273,"O'Connell St",7113,"Ballymun Road",6.457500195714953
+408,"Merrion Sq",7113,"Ballymun Road",6.917358357774651
+408,"Merrion Sq",7113,"Ballymun Road",7.006951068522635
+412,"Northumberland Rd",7113,"Ballymun Road",7.705847920598333
+414,"Pembroke Road",7113,"Ballymun Road",8.154168248342403
+414,"Pembroke Road",7113,"Ballymun Road",8.275768721118949
+416,Ballsbridge,7113,"Ballymun Road",8.552185565764912
+416,Ballsbridge,7113,"Ballymun Road",8.599932880620473
+416,Ballsbridge,7113,"Ballymun Road",8.642638855874722
+418,"Merrion Road",7113,"Ballymun Road",8.9766547354242
+418,"Merrion Road",7113,"Ballymun Road",9.07904109152064
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.196132519004795
+424,"Merrion Road",7113,"Ballymun Road",10.510320389521276
+424,"Merrion Road",7113,"Ballymun Road",10.632961480123152
+424,"Merrion Road",7113,"Ballymun Road",10.683694186307
+424,"Merrion Road",7113,"Ballymun Road",10.850275715285697
+426,"Rock Road",7113,"Ballymun Road",11.099601338384776
+426,"Rock Road",7113,"Ballymun Road",11.358562085722598
+428,"Rock Road",7113,"Ballymun Road",11.82367027676396
+428,"Rock Road",7113,"Ballymun Road",11.994205992982698
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.650954495549227
+6334,"Frascati Road",7113,"Ballymun Road",12.657233789533084
+6334,"Frascati Road",7113,"Ballymun Road",12.835499062814097
+6334,"Frascati Road",7113,"Ballymun Road",13.048072722105191
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.279069242287315
+113,"Ballymun Road",7113,"Ballymun Road",1.1436157667311861
+113,"Ballymun Road",7113,"Ballymun Road",1.1597114163507645
+147,"Mobhi Road",7113,"Ballymun Road",3.3380317972298843
+147,"Mobhi Road",7113,"Ballymun Road",3.450585484706572
+147,"Mobhi Road",7113,"Ballymun Road",3.5991331723713094
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.19506163800013
+273,"O'Connell St",7113,"Ballymun Road",6.298682391779556
+273,"O'Connell St",7113,"Ballymun Road",6.373641328776751
+273,"O'Connell St",7113,"Ballymun Road",6.394112371404976
+273,"O'Connell St",7113,"Ballymun Road",6.457500195714953
+408,"Merrion Sq",7113,"Ballymun Road",6.917358357774651
+408,"Merrion Sq",7113,"Ballymun Road",7.006951068522635
+412,"Northumberland Rd",7113,"Ballymun Road",7.705847920598333
+414,"Pembroke Road",7113,"Ballymun Road",8.154168248342403
+414,"Pembroke Road",7113,"Ballymun Road",8.275768721118949
+416,Ballsbridge,7113,"Ballymun Road",8.552185565764912
+416,Ballsbridge,7113,"Ballymun Road",8.599932880620473
+416,Ballsbridge,7113,"Ballymun Road",8.642638855874722
+418,"Merrion Road",7113,"Ballymun Road",8.9766547354242
+418,"Merrion Road",7113,"Ballymun Road",9.07904109152064
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.196132519004795
+424,"Merrion Road",7113,"Ballymun Road",10.510320389521276
+424,"Merrion Road",7113,"Ballymun Road",10.632961480123152
+424,"Merrion Road",7113,"Ballymun Road",10.683694186307
+424,"Merrion Road",7113,"Ballymun Road",10.850275715285697
+426,"Rock Road",7113,"Ballymun Road",11.099601338384776
+426,"Rock Road",7113,"Ballymun Road",11.358562085722598
+428,"Rock Road",7113,"Ballymun Road",11.82367027676396
+428,"Rock Road",7113,"Ballymun Road",11.994205992982698
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.650954495549227
+6334,"Frascati Road",7113,"Ballymun Road",12.657233789533084
+6334,"Frascati Road",7113,"Ballymun Road",12.835499062814097
+6334,"Frascati Road",7113,"Ballymun Road",13.048072722105191
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.279069242287315
+113,"Ballymun Road",7113,"Ballymun Road",1.1436157667311861
+113,"Ballymun Road",7113,"Ballymun Road",1.1597114163507645
+147,"Mobhi Road",7113,"Ballymun Road",3.3380317972298843
+147,"Mobhi Road",7113,"Ballymun Road",3.450585484706572
+147,"Mobhi Road",7113,"Ballymun Road",3.5991331723713094
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.19506163800013
+273,"O'Connell St",7113,"Ballymun Road",6.298682391779556
+273,"O'Connell St",7113,"Ballymun Road",6.373641328776751
+273,"O'Connell St",7113,"Ballymun Road",6.394112371404976
+273,"O'Connell St",7113,"Ballymun Road",6.457500195714953
+408,"Merrion Sq",7113,"Ballymun Road",6.917358357774651
+408,"Merrion Sq",7113,"Ballymun Road",7.006951068522635
+412,"Northumberland Rd",7113,"Ballymun Road",7.705847920598333
+414,"Pembroke Road",7113,"Ballymun Road",8.154168248342403
+414,"Pembroke Road",7113,"Ballymun Road",8.275768721118949
+416,Ballsbridge,7113,"Ballymun Road",8.552185565764912
+416,Ballsbridge,7113,"Ballymun Road",8.599932880620473
+416,Ballsbridge,7113,"Ballymun Road",8.642638855874722
+418,"Merrion Road",7113,"Ballymun Road",8.9766547354242
+418,"Merrion Road",7113,"Ballymun Road",9.07904109152064
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.196132519004795
+424,"Merrion Road",7113,"Ballymun Road",10.510320389521276
+424,"Merrion Road",7113,"Ballymun Road",10.632961480123152
+424,"Merrion Road",7113,"Ballymun Road",10.683694186307
+424,"Merrion Road",7113,"Ballymun Road",10.850275715285697
+426,"Rock Road",7113,"Ballymun Road",11.099601338384776
+426,"Rock Road",7113,"Ballymun Road",11.358562085722598
+428,"Rock Road",7113,"Ballymun Road",11.82367027676396
+428,"Rock Road",7113,"Ballymun Road",11.994205992982698
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.650954495549227
+6334,"Frascati Road",7113,"Ballymun Road",12.657233789533084
+6334,"Frascati Road",7113,"Ballymun Road",12.835499062814097
+6334,"Frascati Road",7113,"Ballymun Road",13.048072722105191
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.279069242287315
+113,"Ballymun Road",7113,"Ballymun Road",1.1436157667311861
+113,"Ballymun Road",7113,"Ballymun Road",1.1597114163507645
+147,"Mobhi Road",7113,"Ballymun Road",3.3380317972298843
+147,"Mobhi Road",7113,"Ballymun Road",3.450585484706572
+147,"Mobhi Road",7113,"Ballymun Road",3.5991331723713094
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.19506163800013
+273,"O'Connell St",7113,"Ballymun Road",6.298682391779556
+273,"O'Connell St",7113,"Ballymun Road",6.373641328776751
+273,"O'Connell St",7113,"Ballymun Road",6.394112371404976
+273,"O'Connell St",7113,"Ballymun Road",6.457500195714953
+408,"Merrion Sq",7113,"Ballymun Road",6.917358357774651
+408,"Merrion Sq",7113,"Ballymun Road",7.006951068522635
+412,"Northumberland Rd",7113,"Ballymun Road",7.705847920598333
+414,"Pembroke Road",7113,"Ballymun Road",8.154168248342403
+414,"Pembroke Road",7113,"Ballymun Road",8.275768721118949
+416,Ballsbridge,7113,"Ballymun Road",8.552185565764912
+416,Ballsbridge,7113,"Ballymun Road",8.599932880620473
+416,Ballsbridge,7113,"Ballymun Road",8.642638855874722
+418,"Merrion Road",7113,"Ballymun Road",8.9766547354242
+418,"Merrion Road",7113,"Ballymun Road",9.07904109152064
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.196132519004795
+424,"Merrion Road",7113,"Ballymun Road",10.510320389521276
+424,"Merrion Road",7113,"Ballymun Road",10.632961480123152
+424,"Merrion Road",7113,"Ballymun Road",10.683694186307
+424,"Merrion Road",7113,"Ballymun Road",10.850275715285697
+426,"Rock Road",7113,"Ballymun Road",11.099601338384776
+426,"Rock Road",7113,"Ballymun Road",11.358562085722598
+428,"Rock Road",7113,"Ballymun Road",11.82367027676396
+428,"Rock Road",7113,"Ballymun Road",11.994205992982698
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.650954495549227
+6334,"Frascati Road",7113,"Ballymun Road",12.657233789533084
+6334,"Frascati Road",7113,"Ballymun Road",12.835499062814097
+6334,"Frascati Road",7113,"Ballymun Road",13.048072722105191
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.279069242287315
+113,"Ballymun Road",7113,"Ballymun Road",1.1436157667311861
+113,"Ballymun Road",7113,"Ballymun Road",1.1597114163507645
+147,"Mobhi Road",7113,"Ballymun Road",3.3380317972298843
+147,"Mobhi Road",7113,"Ballymun Road",3.450585484706572
+147,"Mobhi Road",7113,"Ballymun Road",3.5991331723713094
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.162559942374355
+273,"O'Connell St",7113,"Ballymun Road",6.19506163800013
+273,"O'Connell St",7113,"Ballymun Road",6.298682391779556
+273,"O'Connell St",7113,"Ballymun Road",6.373641328776751
+273,"O'Connell St",7113,"Ballymun Road",6.394112371404976
+273,"O'Connell St",7113,"Ballymun Road",6.457500195714953
+408,"Merrion Sq",7113,"Ballymun Road",6.917358357774651
+408,"Merrion Sq",7113,"Ballymun Road",7.006951068522635
+412,"Northumberland Rd",7113,"Ballymun Road",7.705847920598333
+414,"Pembroke Road",7113,"Ballymun Road",8.154168248342403
+414,"Pembroke Road",7113,"Ballymun Road",8.275768721118949
+416,Ballsbridge,7113,"Ballymun Road",8.552185565764912
+416,Ballsbridge,7113,"Ballymun Road",8.599932880620473
+416,Ballsbridge,7113,"Ballymun Road",8.642638855874722
+418,"Merrion Road",7113,"Ballymun Road",8.9766547354242
+418,"Merrion Road",7113,"Ballymun Road",9.07904109152064
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.066815626515478
+422,"Merrion Road",7113,"Ballymun Road",10.196132519004795
+424,"Merrion Road",7113,"Ballymun Road",10.510320389521276
+424,"Merrion Road",7113,"Ballymun Road",10.632961480123152
+424,"Merrion Road",7113,"Ballymun Road",10.683694186307
+424,"Merrion Road",7113,"Ballymun Road",10.850275715285697
+426,"Rock Road",7113,"Ballymun Road",11.099601338384776
+426,"Rock Road",7113,"Ballymun Road",11.358562085722598
+428,"Rock Road",7113,"Ballymun Road",11.82367027676396
+428,"Rock Road",7113,"Ballymun Road",11.994205992982698
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.567091607835186
+6334,"Frascati Road",7113,"Ballymun Road",12.650954495549227
+6334,"Frascati Road",7113,"Ballymun Road",12.657233789533084
+6334,"Frascati Road",7113,"Ballymun Road",12.835499062814097
+6334,"Frascati Road",7113,"Ballymun Road",13.048072722105191
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.192238378499255
+6334,"Frascati Road",7113,"Ballymun Road",13.279069242287315
+113,"Ballymun Road",7113,"Ballymun Road",1.034399513249957
+113,"Ballymun Road",7113,"Ballymun Road",1.0504996623938376
+147,"Mobhi Road",7113,"Ballymun Road",3.2298631305421046
+147,"Mobhi Road",7113,"Ballymun Road",3.3427678532381395
+147,"Mobhi Road",7113,"Ballymun Road",3.491888559322811
+273,"O'Connell St",7113,"Ballymun Road",6.053335799038551
+273,"O'Connell St",7113,"Ballymun Road",6.053335799038551
+273,"O'Connell St",7113,"Ballymun Road",6.053335799038551
+273,"O'Connell St",7113,"Ballymun Road",6.053335799038551
+273,"O'Connell St",7113,"Ballymun Road",6.08582581499053
+273,"O'Connell St",7113,"Ballymun Road",6.189371919542215
+273,"O'Connell St",7113,"Ballymun Road",6.264402676246999
+273,"O'Connell St",7113,"Ballymun Road",6.2849027597171085
+273,"O'Connell St",7113,"Ballymun Road",6.34835085916783
+408,"Merrion Sq",7113,"Ballymun Road",6.807884725853317
+408,"Merrion Sq",7113,"Ballymun Road",6.8975092876716895
+412,"Northumberland Rd",7113,"Ballymun Road",7.596996280179991
+414,"Pembroke Road",7113,"Ballymun Road",8.045450353973084
+414,"Pembroke Road",7113,"Ballymun Road",8.167129442435856
+416,Ballsbridge,7113,"Ballymun Road",8.443891729162265
+416,Ballsbridge,7113,"Ballymun Road",8.491742017685647
+416,Ballsbridge,7113,"Ballymun Road",8.534544643562237
+418,"Merrion Road",7113,"Ballymun Road",8.868940898417577
+418,"Merrion Road",7113,"Ballymun Road",8.971441585467224
+422,"Merrion Road",7113,"Ballymun Road",9.96038163746279
+422,"Merrion Road",7113,"Ballymun Road",9.96038163746279
+422,"Merrion Road",7113,"Ballymun Road",10.08999178972808
+424,"Merrion Road",7113,"Ballymun Road",10.404653822975089
+424,"Merrion Road",7113,"Ballymun Road",10.527327119645017
+424,"Merrion Road",7113,"Ballymun Road",10.578060779031068
+424,"Merrion Road",7113,"Ballymun Road",10.744648845333312
+426,"Rock Road",7113,"Ballymun Road",10.994103653916387
+426,"Rock Road",7113,"Ballymun Road",11.253386424100572
+428,"Rock Road",7113,"Ballymun Road",11.71925797904982
+428,"Rock Road",7113,"Ballymun Road",11.88994444110825
+6334,"Frascati Road",7113,"Ballymun Road",12.46351131602357
+6334,"Frascati Road",7113,"Ballymun Road",12.46351131602357
+6334,"Frascati Road",7113,"Ballymun Road",12.547433591805929
+6334,"Frascati Road",7113,"Ballymun Road",12.553721618054242
+6334,"Frascati Road",7113,"Ballymun Road",12.732231722337158
+6334,"Frascati Road",7113,"Ballymun Road",12.945338266004182
+6334,"Frascati Road",7113,"Ballymun Road",13.089685151174677
+6334,"Frascati Road",7113,"Ballymun Road",13.089685151174677
+6334,"Frascati Road",7113,"Ballymun Road",13.089685151174677
+6334,"Frascati Road",7113,"Ballymun Road",13.176578311745851
+113,"Ballymun Road",7113,"Ballymun Road",1.025303639878056
+113,"Ballymun Road",7113,"Ballymun Road",1.041405441803925
+147,"Mobhi Road",7113,"Ballymun Road",3.221052993480013
+147,"Mobhi Road",7113,"Ballymun Road",3.334034403872634
+147,"Mobhi Road",7113,"Ballymun Road",3.483270535984446
+273,"O'Connell St",7113,"Ballymun Road",6.0442241387177065
+273,"O'Connell St",7113,"Ballymun Road",6.0442241387177065
+273,"O'Connell St",7113,"Ballymun Road",6.0442241387177065
+273,"O'Connell St",7113,"Ballymun Road",6.0442241387177065
+273,"O'Connell St",7113,"Ballymun Road",6.076709376998238
+273,"O'Connell St",7113,"Ballymun Road",6.18022250581419
+273,"O'Connell St",7113,"Ballymun Road",6.255285001736776
+273,"O'Connell St",7113,"Ballymun Road",6.275796809339824
+273,"O'Connell St",7113,"Ballymun Road",6.339267758908704
+408,"Merrion Sq",7113,"Ballymun Road",6.7985642207167585
+408,"Merrion Sq",7113,"Ballymun Road",6.888153893367528
+412,"Northumberland Rd",7113,"Ballymun Road",7.587500314671995
+414,"Pembroke Road",7113,"Ballymun Road",8.035940333193759
+414,"Pembroke Road",7113,"Ballymun Road",8.157612199982358
+416,Ballsbridge,7113,"Ballymun Road",8.434349438649289
+416,Ballsbridge,7113,"Ballymun Road",8.482193886108462
+416,Ballsbridge,7113,"Ballymun Road",8.524991564212907
+418,"Merrion Road",7113,"Ballymun Road",8.859372474539178
+418,"Merrion Road",7113,"Ballymun Road",8.961869611001614
+422,"Merrion Road",7113,"Ballymun Road",9.950792156955329
+422,"Merrion Road",7113,"Ballymun Road",9.950792156955329
+422,"Merrion Road",7113,"Ballymun Road",10.080401807334473
+424,"Merrion Road",7113,"Ballymun Road",10.395065407045353
+424,"Merrion Road",7113,"Ballymun Road",10.517738903379026
+424,"Merrion Road",7113,"Ballymun Road",10.56847256765572
+424,"Merrion Road",7113,"Ballymun Road",10.735060672534972
+426,"Rock Road",7113,"Ballymun Road",10.984516404157684
+426,"Rock Road",7113,"Ballymun Road",11.24380221398356
+428,"Rock Road",7113,"Ballymun Road",11.709684614684962
+428,"Rock Road",7113,"Ballymun Road",11.880373742334994
+6334,"Frascati Road",7113,"Ballymun Road",12.453954539750779
+6334,"Frascati Road",7113,"Ballymun Road",12.453954539750779
+6334,"Frascati Road",7113,"Ballymun Road",12.537878159297655
+6334,"Frascati Road",7113,"Ballymun Road",12.54416638586885
+6334,"Frascati Road",7113,"Ballymun Road",12.722682267035937
+6334,"Frascati Road",7113,"Ballymun Road",12.935802487131498
+6334,"Frascati Road",7113,"Ballymun Road",13.08015433021356
+6334,"Frascati Road",7113,"Ballymun Road",13.08015433021356
+6334,"Frascati Road",7113,"Ballymun Road",13.08015433021356
+6334,"Frascati Road",7113,"Ballymun Road",13.167049225416326
+113,"Ballymun Road",7113,"Ballymun Road",0.954102772213038
+113,"Ballymun Road",7113,"Ballymun Road",0.9702133837679542
+147,"Mobhi Road",7113,"Ballymun Road",3.152067828963718
+147,"Mobhi Road",7113,"Ballymun Road",3.265705251210298
+147,"Mobhi Road",7113,"Ballymun Road",3.4159250303560755
+273,"O'Connell St",7113,"Ballymun Road",5.972550307392127
+273,"O'Connell St",7113,"Ballymun Road",5.972550307392127
+273,"O'Connell St",7113,"Ballymun Road",5.972550307392127
+273,"O'Connell St",7113,"Ballymun Road",5.972550307392127
+273,"O'Connell St",7113,"Ballymun Road",6.0049935377602
+273,"O'Connell St",7113,"Ballymun Road",6.108217504559243
+273,"O'Connell St",7113,"Ballymun Road",6.183556606199038
+273,"O'Connell St",7113,"Ballymun Road",6.204170436623999
+273,"O'Connell St",7113,"Ballymun Road",6.267839683290414
+408,"Merrion Sq",7113,"Ballymun Road",6.725042729209348
+408,"Merrion Sq",7113,"Ballymun Road",6.814318575836503
+412,"Northumberland Rd",7113,"Ballymun Road",7.51236413397785
+414,"Pembroke Road",7113,"Ballymun Road",7.960667838918692
+414,"Pembroke Road",7113,"Ballymun Road",8.082269084285336
+416,Ballsbridge,7113,"Ballymun Road",8.358755885785088
+416,Ballsbridge,7113,"Ballymun Road",8.406540186866595
+416,Ballsbridge,7113,"Ballymun Road",8.449286178777324
+418,"Merrion Road",7113,"Ballymun Road",8.783500374646747
+418,"Merrion Road",7113,"Ballymun Road",8.885956865926364
+422,"Merrion Road",7113,"Ballymun Road",9.87463162107037
+422,"Merrion Road",7113,"Ballymun Road",9.87463162107037
+422,"Merrion Road",7113,"Ballymun Road",10.004213638209572
+424,"Merrion Road",7113,"Ballymun Road",10.318853722909527
+424,"Merrion Road",7113,"Ballymun Road",10.441526473825897
+424,"Merrion Road",7113,"Ballymun Road",10.492260121765263
+424,"Merrion Road",7113,"Ballymun Road",10.658848098094357
+426,"Rock Road",7113,"Ballymun Road",10.908301885005889
+426,"Rock Road",7113,"Ballymun Road",11.167589302795873
+428,"Rock Road",7113,"Ballymun Road",11.633507766325087
+428,"Rock Road",7113,"Ballymun Road",11.804208684827488
+6334,"Frascati Road",7113,"Ballymun Road",12.377859342906177
+6334,"Frascati Road",7113,"Ballymun Road",12.377859342906177
+6334,"Frascati Road",7113,"Ballymun Road",12.461790216164873
+6334,"Frascati Road",7113,"Ballymun Road",12.468079527686466
+6334,"Frascati Road",7113,"Ballymun Road",12.646627354982778
+6334,"Frascati Road",7113,"Ballymun Road",12.85982683963306
+6334,"Frascati Road",7113,"Ballymun Road",13.004208372920537
+6334,"Frascati Road",7113,"Ballymun Road",13.004208372920537
+6334,"Frascati Road",7113,"Ballymun Road",13.004208372920537
+6334,"Frascati Road",7113,"Ballymun Road",13.091113748719154
+113,"Ballymun Road",7113,"Ballymun Road",0.7620910593657408
+113,"Ballymun Road",7113,"Ballymun Road",0.7781978081868424
+147,"Mobhi Road",7113,"Ballymun Road",2.961815191270186
+147,"Mobhi Road",7113,"Ballymun Road",3.0762237550395755
+147,"Mobhi Road",7113,"Ballymun Road",3.227679140317691
+273,"O'Connell St",7113,"Ballymun Road",5.77964772681754
+273,"O'Connell St",7113,"Ballymun Road",5.77964772681754
+273,"O'Connell St",7113,"Ballymun Road",5.77964772681754
+273,"O'Connell St",7113,"Ballymun Road",5.77964772681754
+273,"O'Connell St",7113,"Ballymun Road",5.812062518352789
+273,"O'Connell St",7113,"Ballymun Road",5.9151036199665095
+273,"O'Connell St",7113,"Ballymun Road",5.990615535111709
+273,"O'Connell St",7113,"Ballymun Road",6.01129768547247
+273,"O'Connell St",7113,"Ballymun Road",6.075106001426769
+408,"Merrion Sq",7113,"Ballymun Road",6.531388954545684
+408,"Merrion Sq",7113,"Ballymun Road",6.620671916568142
+412,"Northumberland Rd",7113,"Ballymun Road",7.31956464346027
+414,"Pembroke Road",7113,"Ballymun Road",7.768084192976474
+414,"Pembroke Road",7113,"Ballymun Road",7.8898136196159605
+416,Ballsbridge,7113,"Ballymun Road",8.166872226712554
+416,Ballsbridge,7113,"Ballymun Road",8.214829074100477
+416,Ballsbridge,7113,"Ballymun Road",8.257737678617557
+418,"Merrion Road",7113,"Ballymun Road",8.592595432377582
+418,"Merrion Road",7113,"Ballymun Road",8.695246410839115
+422,"Merrion Road",7113,"Ballymun Road",9.685920784240219
+422,"Merrion Road",7113,"Ballymun Road",9.685920784240219
+422,"Merrion Road",7113,"Ballymun Road",9.816010762624122
+424,"Merrion Road",7113,"Ballymun Road",10.131472355653377
+424,"Merrion Road",7113,"Ballymun Road",10.25419917698432
+424,"Merrion Road",7113,"Ballymun Road",10.304933605103738
+424,"Merrion Road",7113,"Ballymun Road",10.471530142737144
+426,"Rock Road",7113,"Ballymun Road",10.72120513905239
+426,"Rock Road",7113,"Ballymun Road",10.981050399412375
+428,"Rock Road",7113,"Ballymun Road",11.448296012797847
+428,"Rock Road",7113,"Ballymun Road",11.619257707787344
+6334,"Frascati Road",7113,"Ballymun Road",12.194091517809364
+6334,"Frascati Road",7113,"Ballymun Road",12.194091517809364
+6334,"Frascati Road",7113,"Ballymun Road",12.278124846838613
+6334,"Frascati Road",7113,"Ballymun Road",12.284429353242524
+6334,"Frascati Road",7113,"Ballymun Road",12.463403220835932
+6334,"Frascati Road",7113,"Ballymun Road",12.677534415997446
+6334,"Frascati Road",7113,"Ballymun Road",12.82223129880252
+6334,"Frascati Road",7113,"Ballymun Road",12.82223129880252
+6334,"Frascati Road",7113,"Ballymun Road",12.82223129880252
+6334,"Frascati Road",7113,"Ballymun Road",12.90924420574962
+113,"Ballymun Road",7113,"Ballymun Road",0.6277493439889454
+113,"Ballymun Road",7113,"Ballymun Road",0.6438584114784899
+147,"Mobhi Road",7113,"Ballymun Road",2.827381385956243
+147,"Mobhi Road",7113,"Ballymun Road",2.9418555034664045
+147,"Mobhi Road",7113,"Ballymun Road",3.093507486252569
+273,"O'Connell St",7113,"Ballymun Road",5.645782283351621
+273,"O'Connell St",7113,"Ballymun Road",5.645782283351621
+273,"O'Connell St",7113,"Ballymun Road",5.645782283351621
+273,"O'Connell St",7113,"Ballymun Road",5.645782283351621
+273,"O'Connell St",7113,"Ballymun Road",5.67821884684534
+273,"O'Connell St",7113,"Ballymun Road",5.781422410860666
+273,"O'Connell St",7113,"Ballymun Road",5.856779862514914
+273,"O'Connell St",7113,"Ballymun Road",5.877410478699741
+273,"O'Connell St",7113,"Ballymun Road",5.941126767526673
+408,"Merrion Sq",7113,"Ballymun Road",6.399051634786929
+408,"Merrion Sq",7113,"Ballymun Road",6.488752310784614
+412,"Northumberland Rd",7113,"Ballymun Road",7.190336235656133
+414,"Pembroke Road",7113,"Ballymun Road",7.63927943640565
+414,"Pembroke Road",7113,"Ballymun Road",7.761249599533927
+416,Ballsbridge,7113,"Ballymun Road",8.039302537533255
+416,Ballsbridge,7113,"Ballymun Road",8.08753999451841
+416,Ballsbridge,7113,"Ballymun Road",8.130706569975814
+418,"Merrion Road",7113,"Ballymun Road",8.466531184914238
+418,"Merrion Road",7113,"Ballymun Road",8.569461427590525
+422,"Merrion Road",7113,"Ballymun Road",9.562783626109606
+422,"Merrion Road",7113,"Ballymun Road",9.562783626109606
+422,"Merrion Road",7113,"Ballymun Road",9.6935030811076
+424,"Merrion Road",7113,"Ballymun Road",10.009951682836123
+424,"Merrion Road",7113,"Ballymun Road",10.132739358609346
+424,"Merrion Road",7113,"Ballymun Road",10.18347323135565
+424,"Merrion Road",7113,"Ballymun Road",10.350075189656877
+426,"Rock Road",7113,"Ballymun Road",10.60000553290776
+426,"Rock Road",7113,"Ballymun Road",10.860496505371813
+428,"Rock Road",7113,"Ballymun Road",11.329240129178249
+428,"Rock Road",7113,"Ballymun Road",11.500487814412246
+6334,"Frascati Road",7113,"Ballymun Road",12.076603347986993
+6334,"Frascati Road",7113,"Ballymun Road",12.076603347986993
+6334,"Frascati Road",7113,"Ballymun Road",12.16074518843695
+6334,"Frascati Road",7113,"Ballymun Road",12.1670659404405
+6334,"Frascati Road",7113,"Ballymun Road",12.346493237765436
+6334,"Frascati Road",7113,"Ballymun Road",12.561608443489314
+6334,"Frascati Road",7113,"Ballymun Road",12.706632721934959
+6334,"Frascati Road",7113,"Ballymun Road",12.706632721934959
+6334,"Frascati Road",7113,"Ballymun Road",12.706632721934959
+6334,"Frascati Road",7113,"Ballymun Road",12.793755813562234
+113,"Ballymun Road",7113,"Ballymun Road",0.4596065116472679
+113,"Ballymun Road",7113,"Ballymun Road",0.4757174326599046
+147,"Mobhi Road",7113,"Ballymun Road",2.658988233903458
+147,"Mobhi Road",7113,"Ballymun Road",2.773537197159844
+147,"Mobhi Road",7113,"Ballymun Road",2.9254375148486287
+273,"O'Connell St",7113,"Ballymun Road",5.478217534921555
+273,"O'Connell St",7113,"Ballymun Road",5.478217534921555
+273,"O'Connell St",7113,"Ballymun Road",5.478217534921555
+273,"O'Connell St",7113,"Ballymun Road",5.478217534921555
+273,"O'Connell St",7113,"Ballymun Road",5.510683878887873
+273,"O'Connell St",7113,"Ballymun Road",5.614109864059299
+273,"O'Connell St",7113,"Ballymun Road",5.6892545192648525
+273,"O'Connell St",7113,"Ballymun Road",5.709814001295028
+273,"O'Connell St",7113,"Ballymun Road",5.773402794843175
+408,"Merrion Sq",7113,"Ballymun Road",6.233549156899748
+408,"Merrion Sq",7113,"Ballymun Road",6.3238079014208015
+412,"Northumberland Rd",7113,"Ballymun Road",7.028948672510687
+414,"Pembroke Road",7113,"Ballymun Road",7.47843398667781
+414,"Pembroke Road",7113,"Ballymun Road",7.600716881441512
+416,Ballsbridge,7113,"Ballymun Road",7.880067277032644
+416,Ballsbridge,7113,"Ballymun Road",7.928671420941011
+416,Ballsbridge,7113,"Ballymun Road",7.9721749275970835
+418,"Merrion Road",7113,"Ballymun Road",8.309252473205058
+418,"Merrion Road",7113,"Ballymun Road",8.412543688177676
+422,"Merrion Road",7113,"Ballymun Road",9.40927537097192
+422,"Merrion Road",7113,"Ballymun Road",9.40927537097192
+422,"Merrion Road",7113,"Ballymun Road",9.540807607639257
+424,"Merrion Road",7113,"Ballymun Road",9.858523542589264
+424,"Merrion Road",7113,"Ballymun Road",9.981384310569906
+424,"Merrion Road",7113,"Ballymun Road",10.032115054752037
+424,"Merrion Road",7113,"Ballymun Road",10.198716308204013
+426,"Rock Road",7113,"Ballymun Road",10.448966545885112
+426,"Rock Road",7113,"Ballymun Road",10.710282645428151
+428,"Rock Road",7113,"Ballymun Road",11.180943692637133
+428,"Rock Road",7113,"Ballymun Road",11.352553405054277
+6334,"Frascati Road",7113,"Ballymun Road",11.93029855621668
+6334,"Frascati Road",7113,"Ballymun Road",11.93029855621668
+6334,"Frascati Road",7113,"Ballymun Road",12.014576757282558
+6334,"Frascati Road",7113,"Ballymun Road",12.02091819026194
+6334,"Frascati Road",7113,"Ballymun Road",12.200922463337573
+6334,"Frascati Road",7113,"Ballymun Road",12.41729630260802
+6334,"Frascati Road",7113,"Ballymun Road",12.562735954603788
+6334,"Frascati Road",7113,"Ballymun Road",12.562735954603788
+6334,"Frascati Road",7113,"Ballymun Road",12.562735954603788
+6334,"Frascati Road",7113,"Ballymun Road",12.649997191997493
+7113,"Ballymun Road",113,"Ballymun Road",1.1436157667311861
+7113,"Ballymun Road",113,"Ballymun Road",1.1436157667311861
+7113,"Ballymun Road",113,"Ballymun Road",1.1436157667311861
+7113,"Ballymun Road",113,"Ballymun Road",1.1436157667311861
+7113,"Ballymun Road",113,"Ballymun Road",1.1436157667311861
+7113,"Ballymun Road",113,"Ballymun Road",1.034399513249957
+7113,"Ballymun Road",113,"Ballymun Road",1.025303639878056
+7113,"Ballymun Road",113,"Ballymun Road",0.954102772213038
+7113,"Ballymun Road",113,"Ballymun Road",0.7620910593657408
+7113,"Ballymun Road",113,"Ballymun Road",0.6277493439889454
+7113,"Ballymun Road",113,"Ballymun Road",0.4596065116472679
+147,"Mobhi Road",113,"Ballymun Road",2.200892985825496
+147,"Mobhi Road",113,"Ballymun Road",2.316499660501882
+147,"Mobhi Road",113,"Ballymun Road",2.470354988902904
+273,"O'Connell St",113,"Ballymun Road",5.018946308025214
+273,"O'Connell St",113,"Ballymun Road",5.018946308025214
+273,"O'Connell St",113,"Ballymun Road",5.018946308025214
+273,"O'Connell St",113,"Ballymun Road",5.018946308025214
+273,"O'Connell St",113,"Ballymun Road",5.051445891328505
+273,"O'Connell St",113,"Ballymun Road",5.155149127501969
+273,"O'Connell St",113,"Ballymun Road",5.230025584339635
+273,"O'Connell St",113,"Ballymun Road",5.250505966087129
+273,"O'Connell St",113,"Ballymun Road",5.313969418515522
+408,"Merrion Sq",113,"Ballymun Road",5.777730438275802
+408,"Merrion Sq",113,"Ballymun Road",5.869118513517063
+412,"Northumberland Rd",113,"Ballymun Road",6.5821021448172266
+414,"Pembroke Road",113,"Ballymun Road",7.032779086968093
+414,"Pembroke Road",113,"Ballymun Road",7.155776845019517
+416,Ballsbridge,113,"Ballymun Road",7.438161502228614
+416,Ballsbridge,113,"Ballymun Road",7.487636756815924
+416,Ballsbridge,113,"Ballymun Road",7.531943782382774
+418,"Merrion Road",113,"Ballymun Road",7.8719920819124445
+418,"Merrion Road",113,"Ballymun Road",7.976142528752034
+422,"Merrion Road",113,"Ballymun Road",8.98106537670978
+422,"Merrion Road",113,"Ballymun Road",8.98106537670978
+422,"Merrion Road",113,"Ballymun Road",9.114592964000487
+424,"Merrion Road",113,"Ballymun Road",9.435405207203436
+424,"Merrion Road",113,"Ballymun Road",9.558419885283188
+424,"Merrion Road",113,"Ballymun Road",9.609130824196571
+424,"Merrion Road",113,"Ballymun Road",9.775691906438952
+426,"Rock Road",113,"Ballymun Road",10.026687572029568
+426,"Rock Road",113,"Ballymun Road",10.290015643754137
+428,"Rock Road",113,"Ballymun Road",10.765400288916167
+428,"Rock Road",113,"Ballymun Road",10.937886089746332
+6334,"Frascati Road",113,"Ballymun Road",11.519627944165462
+6334,"Frascati Road",113,"Ballymun Road",11.519627944165462
+6334,"Frascati Road",113,"Ballymun Road",11.604233541492896
+6334,"Frascati Road",113,"Ballymun Road",11.610626024879549
+6334,"Frascati Road",113,"Ballymun Road",11.79205478742282
+6334,"Frascati Road",113,"Ballymun Road",12.011579838514557
+6334,"Frascati Road",113,"Ballymun Road",12.158045120152995
+6334,"Frascati Road",113,"Ballymun Road",12.158045120152995
+6334,"Frascati Road",113,"Ballymun Road",12.158045120152995
+6334,"Frascati Road",113,"Ballymun Road",12.24563928064044
+7113,"Ballymun Road",113,"Ballymun Road",1.1597114163507645
+7113,"Ballymun Road",113,"Ballymun Road",1.1597114163507645
+7113,"Ballymun Road",113,"Ballymun Road",1.1597114163507645
+7113,"Ballymun Road",113,"Ballymun Road",1.1597114163507645
+7113,"Ballymun Road",113,"Ballymun Road",1.1597114163507645
+7113,"Ballymun Road",113,"Ballymun Road",1.0504996623938376
+7113,"Ballymun Road",113,"Ballymun Road",1.041405441803925
+7113,"Ballymun Road",113,"Ballymun Road",0.9702133837679542
+7113,"Ballymun Road",113,"Ballymun Road",0.7781978081868424
+7113,"Ballymun Road",113,"Ballymun Road",0.6438584114784899
+7113,"Ballymun Road",113,"Ballymun Road",0.4757174326599046
+147,"Mobhi Road",113,"Ballymun Road",2.1848439099792087
+147,"Mobhi Road",113,"Ballymun Road",2.300493930815244
+147,"Mobhi Road",113,"Ballymun Road",2.454428716941171
+273,"O'Connell St",113,"Ballymun Road",5.002849442338954
+273,"O'Connell St",113,"Ballymun Road",5.002849442338954
+273,"O'Connell St",113,"Ballymun Road",5.002849442338954
+273,"O'Connell St",113,"Ballymun Road",5.002849442338954
+273,"O'Connell St",113,"Ballymun Road",5.03535035003743
+273,"O'Connell St",113,"Ballymun Road",5.139064577041033
+273,"O'Connell St",113,"Ballymun Road",5.213930360987611
+273,"O'Connell St",113,"Ballymun Road",5.234407573974893
+273,"O'Connell St",113,"Ballymun Road",5.297865960928493
+408,"Merrion Sq",113,"Ballymun Road",5.761767151762181
+408,"Merrion Sq",113,"Ballymun Road",5.853198372144946
+412,"Northumberland Rd",113,"Ballymun Road",6.56647761688137
+414,"Pembroke Road",113,"Ballymun Road",7.0171973322334775
+414,"Pembroke Road",113,"Ballymun Road",7.140221385043931
+416,Ballsbridge,113,"Ballymun Road",7.422718424925669
+416,Ballsbridge,113,"Ballymun Road",7.472226021929651
+416,Ballsbridge,113,"Ballymun Road",7.516562859416286
+418,"Merrion Road",113,"Ballymun Road",7.856720110035106
+418,"Merrion Road",113,"Ballymun Road",7.96090194992336
+422,"Merrion Road",113,"Ballymun Road",8.96612240998258
+422,"Merrion Road",113,"Ballymun Road",8.96612240998258
+422,"Merrion Road",113,"Ballymun Road",9.099722838207198
+424,"Merrion Road",113,"Ballymun Road",9.420647154341385
+424,"Merrion Road",113,"Ballymun Road",9.543666696266264
+424,"Merrion Road",113,"Ballymun Road",9.594376579210671
+424,"Merrion Road",113,"Ballymun Road",9.76093513699188
+426,"Rock Road",113,"Ballymun Road",10.011956677393792
+426,"Rock Road",113,"Ballymun Road",10.275357034485163
+428,"Rock Road",113,"Ballymun Road",10.750911880633778
+428,"Rock Road",113,"Ballymun Road",10.923428687952867
+6334,"Frascati Road",113,"Ballymun Road",11.505313060716166
+6334,"Frascati Road",113,"Ballymun Road",11.505313060716166
+6334,"Frascati Road",113,"Ballymun Road",11.58993010569329
+6334,"Frascati Road",113,"Ballymun Road",11.596324413432223
+6334,"Frascati Road",113,"Ballymun Road",11.77780405091643
+6334,"Frascati Road",113,"Ballymun Road",11.997442590236902
+6334,"Frascati Road",113,"Ballymun Road",12.143944337093874
+6334,"Frascati Road",113,"Ballymun Road",12.143944337093874
+6334,"Frascati Road",113,"Ballymun Road",12.143944337093874
+6334,"Frascati Road",113,"Ballymun Road",12.231550097677506
+7113,"Ballymun Road",147,"Mobhi Road",3.3380317972298843
+7113,"Ballymun Road",147,"Mobhi Road",3.3380317972298843
+7113,"Ballymun Road",147,"Mobhi Road",3.3380317972298843
+7113,"Ballymun Road",147,"Mobhi Road",3.3380317972298843
+7113,"Ballymun Road",147,"Mobhi Road",3.3380317972298843
+7113,"Ballymun Road",147,"Mobhi Road",3.2298631305421046
+7113,"Ballymun Road",147,"Mobhi Road",3.221052993480013
+7113,"Ballymun Road",147,"Mobhi Road",3.152067828963718
+7113,"Ballymun Road",147,"Mobhi Road",2.961815191270186
+7113,"Ballymun Road",147,"Mobhi Road",2.827381385956243
+7113,"Ballymun Road",147,"Mobhi Road",2.658988233903458
+113,"Ballymun Road",147,"Mobhi Road",2.200892985825496
+113,"Ballymun Road",147,"Mobhi Road",2.1848439099792087
+273,"O'Connell St",147,"Mobhi Road",2.8504801239623174
+273,"O'Connell St",147,"Mobhi Road",2.8504801239623174
+273,"O'Connell St",147,"Mobhi Road",2.8504801239623174
+273,"O'Connell St",147,"Mobhi Road",2.8504801239623174
+273,"O'Connell St",147,"Mobhi Road",2.8837808737824884
+273,"O'Connell St",147,"Mobhi Road",2.99401798938208
+273,"O'Connell St",147,"Mobhi Road",3.06174416217204
+273,"O'Connell St",147,"Mobhi Road",3.0798667451977644
+273,"O'Connell St",147,"Mobhi Road",3.139000331208622
+408,"Merrion Sq",147,"Mobhi Road",3.663542953476497
+408,"Merrion Sq",147,"Mobhi Road",3.76877763344862
+412,"Northumberland Rd",147,"Mobhi Road",4.559648575022807
+414,"Pembroke Road",147,"Mobhi Road",5.016124096058682
+414,"Pembroke Road",147,"Mobhi Road",5.144411151605299
+416,Ballsbridge,147,"Mobhi Road",5.451239657595177
+416,Ballsbridge,147,"Mobhi Road",5.507890488763044
+416,Ballsbridge,147,"Mobhi Road",5.558757554637906
+418,"Merrion Road",147,"Mobhi Road",5.920238972263012
+418,"Merrion Road",147,"Mobhi Road",6.030359318849079
+422,"Merrion Road",147,"Mobhi Road",7.0894023304126685
+422,"Merrion Road",147,"Mobhi Road",7.0894023304126685
+422,"Merrion Road",147,"Mobhi Road",7.236778798216997
+424,"Merrion Road",147,"Mobhi Road",7.577421665708222
+424,"Merrion Road",147,"Mobhi Road",7.700248162490648
+424,"Merrion Road",147,"Mobhi Road",7.750272024830305
+424,"Merrion Road",147,"Mobhi Road",7.914811862619638
+426,"Rock Road",147,"Mobhi Road",8.168822813231886
+426,"Rock Road",147,"Mobhi Road",8.444309873351541
+428,"Rock Road",147,"Mobhi Road",8.949053670427478
+428,"Rock Road",147,"Mobhi Road",9.126147283891006
+6334,"Frascati Road",147,"Mobhi Road",9.730589862537217
+6334,"Frascati Road",147,"Mobhi Road",9.730589862537217
+6334,"Frascati Road",147,"Mobhi Road",9.816734915384158
+6334,"Frascati Road",147,"Mobhi Road",9.82342405696529
+6334,"Frascati Road",147,"Mobhi Road",10.013083930940182
+6334,"Frascati Road",147,"Mobhi Road",10.2521345794879
+6334,"Frascati Road",147,"Mobhi Road",10.40429816661678
+6334,"Frascati Road",147,"Mobhi Road",10.40429816661678
+6334,"Frascati Road",147,"Mobhi Road",10.40429816661678
+6334,"Frascati Road",147,"Mobhi Road",10.49342009302574
+7113,"Ballymun Road",147,"Mobhi Road",3.450585484706572
+7113,"Ballymun Road",147,"Mobhi Road",3.450585484706572
+7113,"Ballymun Road",147,"Mobhi Road",3.450585484706572
+7113,"Ballymun Road",147,"Mobhi Road",3.450585484706572
+7113,"Ballymun Road",147,"Mobhi Road",3.450585484706572
+7113,"Ballymun Road",147,"Mobhi Road",3.3427678532381395
+7113,"Ballymun Road",147,"Mobhi Road",3.334034403872634
+7113,"Ballymun Road",147,"Mobhi Road",3.265705251210298
+7113,"Ballymun Road",147,"Mobhi Road",3.0762237550395755
+7113,"Ballymun Road",147,"Mobhi Road",2.9418555034664045
+7113,"Ballymun Road",147,"Mobhi Road",2.773537197159844
+113,"Ballymun Road",147,"Mobhi Road",2.316499660501882
+113,"Ballymun Road",147,"Mobhi Road",2.300493930815244
+273,"O'Connell St",147,"Mobhi Road",2.753992644764144
+273,"O'Connell St",147,"Mobhi Road",2.753992644764144
+273,"O'Connell St",147,"Mobhi Road",2.753992644764144
+273,"O'Connell St",147,"Mobhi Road",2.753992644764144
+273,"O'Connell St",147,"Mobhi Road",2.7874758603658205
+273,"O'Connell St",147,"Mobhi Road",2.899435880310024
+273,"O'Connell St",147,"Mobhi Road",2.9649105823521946
+273,"O'Connell St",147,"Mobhi Road",2.9822683710359845
+273,"O'Connell St",147,"Mobhi Road",3.039907220110574
+408,"Merrion Sq",147,"Mobhi Road",3.5787367795688576
+408,"Merrion Sq",147,"Mobhi Road",3.6865043359484084
+412,"Northumberland Rd",147,"Mobhi Road",4.488903008952233
+414,"Pembroke Road",147,"Mobhi Road",4.945322254347256
+414,"Pembroke Road",147,"Mobhi Road",5.074151563765426
+416,Ballsbridge,147,"Mobhi Road",5.38391516667785
+416,Ballsbridge,147,"Mobhi Road",5.4414571605917335
+416,Ballsbridge,147,"Mobhi Road",5.493129696419164
+418,"Merrion Road",147,"Mobhi Road",5.85684655210373
+418,"Merrion Road",147,"Mobhi Road",5.967561564390797
+422,"Merrion Road",147,"Mobhi Road",7.031725564400515
+422,"Merrion Road",147,"Mobhi Road",7.031725564400515
+422,"Merrion Road",147,"Mobhi Road",7.180525989019777
+424,"Merrion Road",147,"Mobhi Road",7.5230048214671905
+424,"Merrion Road",147,"Mobhi Road",7.645662744266298
+424,"Merrion Road",147,"Mobhi Road",7.695550709059623
+424,"Merrion Road",147,"Mobhi Road",7.859676085005216
+426,"Rock Road",147,"Mobhi Road",8.113749300428054
+426,"Rock Road",147,"Mobhi Road",8.390297518901948
+428,"Rock Road",147,"Mobhi Road",8.89771852967627
+428,"Rock Road",147,"Mobhi Road",9.075135789245548
+6334,"Frascati Road",147,"Mobhi Road",9.681416735606842
+6334,"Frascati Road",147,"Mobhi Road",9.681416735606842
+6334,"Frascati Road",147,"Mobhi Road",9.767648889838505
+6334,"Frascati Road",147,"Mobhi Road",9.774362997826513
+6334,"Frascati Road",147,"Mobhi Road",9.96471066528817
+6334,"Frascati Road",147,"Mobhi Road",10.205542097033298
+6334,"Frascati Road",147,"Mobhi Road",10.358156410877616
+6334,"Frascati Road",147,"Mobhi Road",10.358156410877616
+6334,"Frascati Road",147,"Mobhi Road",10.358156410877616
+6334,"Frascati Road",147,"Mobhi Road",10.44736252671464
+7113,"Ballymun Road",147,"Mobhi Road",3.5991331723713094
+7113,"Ballymun Road",147,"Mobhi Road",3.5991331723713094
+7113,"Ballymun Road",147,"Mobhi Road",3.5991331723713094
+7113,"Ballymun Road",147,"Mobhi Road",3.5991331723713094
+7113,"Ballymun Road",147,"Mobhi Road",3.5991331723713094
+7113,"Ballymun Road",147,"Mobhi Road",3.491888559322811
+7113,"Ballymun Road",147,"Mobhi Road",3.483270535984446
+7113,"Ballymun Road",147,"Mobhi Road",3.4159250303560755
+7113,"Ballymun Road",147,"Mobhi Road",3.227679140317691
+7113,"Ballymun Road",147,"Mobhi Road",3.093507486252569
+7113,"Ballymun Road",147,"Mobhi Road",2.9254375148486287
+113,"Ballymun Road",147,"Mobhi Road",2.470354988902904
+113,"Ballymun Road",147,"Mobhi Road",2.454428716941171
+273,"O'Connell St",147,"Mobhi Road",2.637192541074167
+273,"O'Connell St",147,"Mobhi Road",2.637192541074167
+273,"O'Connell St",147,"Mobhi Road",2.637192541074167
+273,"O'Connell St",147,"Mobhi Road",2.637192541074167
+273,"O'Connell St",147,"Mobhi Road",2.6708989598492225
+273,"O'Connell St",147,"Mobhi Road",2.785367837365474
+273,"O'Connell St",147,"Mobhi Road",2.8471708400414455
+273,"O'Connell St",147,"Mobhi Road",2.8632883798118796
+273,"O'Connell St",147,"Mobhi Road",2.9184628846170835
+408,"Merrion Sq",147,"Mobhi Road",3.478681508246829
+408,"Merrion Sq",147,"Mobhi Road",3.590141286639435
+412,"Northumberland Rd",147,"Mobhi Road",4.408762906050943
+414,"Pembroke Road",147,"Mobhi Road",4.864658675702592
+414,"Pembroke Road",147,"Mobhi Road",4.994174039882231
+416,Ballsbridge,147,"Mobhi Road",5.307984732479127
+416,Ballsbridge,147,"Mobhi Road",5.366782434768336
+416,Ballsbridge,147,"Mobhi Road",5.419589080179419
+418,"Merrion Road",147,"Mobhi Road",5.786296334283306
+418,"Merrion Road",147,"Mobhi Road",5.8978001464073415
+422,"Merrion Road",147,"Mobhi Road",6.968750996959975
+422,"Merrion Road",147,"Mobhi Road",6.968750996959975
+422,"Merrion Road",147,"Mobhi Road",7.11952141596871
+424,"Merrion Road",147,"Mobhi Road",7.464472390647718
+424,"Merrion Road",147,"Mobhi Road",7.5868383347898085
+424,"Merrion Road",147,"Mobhi Road",7.6365119251037274
+424,"Merrion Road",147,"Mobhi Road",7.7999804897143505
+426,"Rock Road",147,"Mobhi Road",8.054047045978203
+426,"Rock Road",147,"Mobhi Road",8.33201058850787
+428,"Rock Road",147,"Mobhi Road",8.843074118077068
+428,"Rock Road",147,"Mobhi Road",9.02089693482676
+6334,"Frascati Road",147,"Mobhi Road",9.629613427236027
+6334,"Frascati Road",147,"Mobhi Road",9.629613427236027
+6334,"Frascati Road",147,"Mobhi Road",9.715946289653559
+6334,"Frascati Road",147,"Mobhi Road",9.722693992512658
+6334,"Frascati Road",147,"Mobhi Road",9.913966218867559
+6334,"Frascati Road",147,"Mobhi Road",10.157254448734909
+6334,"Frascati Road",147,"Mobhi Road",10.310468544676667
+6334,"Frascati Road",147,"Mobhi Road",10.310468544676667
+6334,"Frascati Road",147,"Mobhi Road",10.310468544676667
+6334,"Frascati Road",147,"Mobhi Road",10.399772700876559
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.053335799038551
+7113,"Ballymun Road",273,"O'Connell St",6.0442241387177065
+7113,"Ballymun Road",273,"O'Connell St",5.972550307392127
+7113,"Ballymun Road",273,"O'Connell St",5.77964772681754
+7113,"Ballymun Road",273,"O'Connell St",5.645782283351621
+7113,"Ballymun Road",273,"O'Connell St",5.478217534921555
+113,"Ballymun Road",273,"O'Connell St",5.018946308025214
+113,"Ballymun Road",273,"O'Connell St",5.002849442338954
+147,"Mobhi Road",273,"O'Connell St",2.8504801239623174
+147,"Mobhi Road",273,"O'Connell St",2.753992644764144
+147,"Mobhi Road",273,"O'Connell St",2.637192541074167
+408,"Merrion Sq",273,"O'Connell St",0.910724625746777
+408,"Merrion Sq",273,"O'Connell St",1.0452746349923867
+412,"Northumberland Rd",273,"O'Connell St",1.9538903942018084
+414,"Pembroke Road",273,"O'Connell St",2.3833965149322682
+414,"Pembroke Road",273,"O'Connell St",2.5135864502202043
+416,Ballsbridge,273,"O'Connell St",2.8489758831681926
+416,Ballsbridge,273,"O'Connell St",2.9160134197884973
+416,Ballsbridge,273,"O'Connell St",2.976361039315104
+418,"Merrion Road",273,"O'Connell St",3.3559810682793914
+418,"Merrion Road",273,"O'Connell St",3.4706727968597404
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.734369557392537
+424,"Merrion Road",273,"O'Connell St",5.092826736291621
+424,"Merrion Road",273,"O'Connell St",5.210445376787877
+424,"Merrion Road",273,"O'Connell St",5.257450160463797
+424,"Merrion Road",273,"O'Connell St",5.412748055529477
+426,"Rock Road",273,"O'Connell St",5.662705565271393
+426,"Rock Road",273,"O'Connell St",5.947786163856018
+428,"Rock Road",273,"O'Connell St",6.480974940806458
+428,"Rock Road",273,"O'Connell St",6.659737060338096
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.366932571449141
+6334,"Frascati Road",273,"O'Connell St",7.373876474826393
+6334,"Frascati Road",273,"O'Connell St",7.570531527134008
+6334,"Frascati Road",273,"O'Connell St",7.831328347460285
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",8.077045554643936
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.053335799038551
+7113,"Ballymun Road",273,"O'Connell St",6.0442241387177065
+7113,"Ballymun Road",273,"O'Connell St",5.972550307392127
+7113,"Ballymun Road",273,"O'Connell St",5.77964772681754
+7113,"Ballymun Road",273,"O'Connell St",5.645782283351621
+7113,"Ballymun Road",273,"O'Connell St",5.478217534921555
+113,"Ballymun Road",273,"O'Connell St",5.018946308025214
+113,"Ballymun Road",273,"O'Connell St",5.002849442338954
+147,"Mobhi Road",273,"O'Connell St",2.8504801239623174
+147,"Mobhi Road",273,"O'Connell St",2.753992644764144
+147,"Mobhi Road",273,"O'Connell St",2.637192541074167
+408,"Merrion Sq",273,"O'Connell St",0.910724625746777
+408,"Merrion Sq",273,"O'Connell St",1.0452746349923867
+412,"Northumberland Rd",273,"O'Connell St",1.9538903942018084
+414,"Pembroke Road",273,"O'Connell St",2.3833965149322682
+414,"Pembroke Road",273,"O'Connell St",2.5135864502202043
+416,Ballsbridge,273,"O'Connell St",2.8489758831681926
+416,Ballsbridge,273,"O'Connell St",2.9160134197884973
+416,Ballsbridge,273,"O'Connell St",2.976361039315104
+418,"Merrion Road",273,"O'Connell St",3.3559810682793914
+418,"Merrion Road",273,"O'Connell St",3.4706727968597404
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.734369557392537
+424,"Merrion Road",273,"O'Connell St",5.092826736291621
+424,"Merrion Road",273,"O'Connell St",5.210445376787877
+424,"Merrion Road",273,"O'Connell St",5.257450160463797
+424,"Merrion Road",273,"O'Connell St",5.412748055529477
+426,"Rock Road",273,"O'Connell St",5.662705565271393
+426,"Rock Road",273,"O'Connell St",5.947786163856018
+428,"Rock Road",273,"O'Connell St",6.480974940806458
+428,"Rock Road",273,"O'Connell St",6.659737060338096
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.366932571449141
+6334,"Frascati Road",273,"O'Connell St",7.373876474826393
+6334,"Frascati Road",273,"O'Connell St",7.570531527134008
+6334,"Frascati Road",273,"O'Connell St",7.831328347460285
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",8.077045554643936
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.053335799038551
+7113,"Ballymun Road",273,"O'Connell St",6.0442241387177065
+7113,"Ballymun Road",273,"O'Connell St",5.972550307392127
+7113,"Ballymun Road",273,"O'Connell St",5.77964772681754
+7113,"Ballymun Road",273,"O'Connell St",5.645782283351621
+7113,"Ballymun Road",273,"O'Connell St",5.478217534921555
+113,"Ballymun Road",273,"O'Connell St",5.018946308025214
+113,"Ballymun Road",273,"O'Connell St",5.002849442338954
+147,"Mobhi Road",273,"O'Connell St",2.8504801239623174
+147,"Mobhi Road",273,"O'Connell St",2.753992644764144
+147,"Mobhi Road",273,"O'Connell St",2.637192541074167
+408,"Merrion Sq",273,"O'Connell St",0.910724625746777
+408,"Merrion Sq",273,"O'Connell St",1.0452746349923867
+412,"Northumberland Rd",273,"O'Connell St",1.9538903942018084
+414,"Pembroke Road",273,"O'Connell St",2.3833965149322682
+414,"Pembroke Road",273,"O'Connell St",2.5135864502202043
+416,Ballsbridge,273,"O'Connell St",2.8489758831681926
+416,Ballsbridge,273,"O'Connell St",2.9160134197884973
+416,Ballsbridge,273,"O'Connell St",2.976361039315104
+418,"Merrion Road",273,"O'Connell St",3.3559810682793914
+418,"Merrion Road",273,"O'Connell St",3.4706727968597404
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.734369557392537
+424,"Merrion Road",273,"O'Connell St",5.092826736291621
+424,"Merrion Road",273,"O'Connell St",5.210445376787877
+424,"Merrion Road",273,"O'Connell St",5.257450160463797
+424,"Merrion Road",273,"O'Connell St",5.412748055529477
+426,"Rock Road",273,"O'Connell St",5.662705565271393
+426,"Rock Road",273,"O'Connell St",5.947786163856018
+428,"Rock Road",273,"O'Connell St",6.480974940806458
+428,"Rock Road",273,"O'Connell St",6.659737060338096
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.366932571449141
+6334,"Frascati Road",273,"O'Connell St",7.373876474826393
+6334,"Frascati Road",273,"O'Connell St",7.570531527134008
+6334,"Frascati Road",273,"O'Connell St",7.831328347460285
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",8.077045554643936
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.162559942374355
+7113,"Ballymun Road",273,"O'Connell St",6.053335799038551
+7113,"Ballymun Road",273,"O'Connell St",6.0442241387177065
+7113,"Ballymun Road",273,"O'Connell St",5.972550307392127
+7113,"Ballymun Road",273,"O'Connell St",5.77964772681754
+7113,"Ballymun Road",273,"O'Connell St",5.645782283351621
+7113,"Ballymun Road",273,"O'Connell St",5.478217534921555
+113,"Ballymun Road",273,"O'Connell St",5.018946308025214
+113,"Ballymun Road",273,"O'Connell St",5.002849442338954
+147,"Mobhi Road",273,"O'Connell St",2.8504801239623174
+147,"Mobhi Road",273,"O'Connell St",2.753992644764144
+147,"Mobhi Road",273,"O'Connell St",2.637192541074167
+408,"Merrion Sq",273,"O'Connell St",0.910724625746777
+408,"Merrion Sq",273,"O'Connell St",1.0452746349923867
+412,"Northumberland Rd",273,"O'Connell St",1.9538903942018084
+414,"Pembroke Road",273,"O'Connell St",2.3833965149322682
+414,"Pembroke Road",273,"O'Connell St",2.5135864502202043
+416,Ballsbridge,273,"O'Connell St",2.8489758831681926
+416,Ballsbridge,273,"O'Connell St",2.9160134197884973
+416,Ballsbridge,273,"O'Connell St",2.976361039315104
+418,"Merrion Road",273,"O'Connell St",3.3559810682793914
+418,"Merrion Road",273,"O'Connell St",3.4706727968597404
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.57060564248858
+422,"Merrion Road",273,"O'Connell St",4.734369557392537
+424,"Merrion Road",273,"O'Connell St",5.092826736291621
+424,"Merrion Road",273,"O'Connell St",5.210445376787877
+424,"Merrion Road",273,"O'Connell St",5.257450160463797
+424,"Merrion Road",273,"O'Connell St",5.412748055529477
+426,"Rock Road",273,"O'Connell St",5.662705565271393
+426,"Rock Road",273,"O'Connell St",5.947786163856018
+428,"Rock Road",273,"O'Connell St",6.480974940806458
+428,"Rock Road",273,"O'Connell St",6.659737060338096
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.280766274325115
+6334,"Frascati Road",273,"O'Connell St",7.366932571449141
+6334,"Frascati Road",273,"O'Connell St",7.373876474826393
+6334,"Frascati Road",273,"O'Connell St",7.570531527134008
+6334,"Frascati Road",273,"O'Connell St",7.831328347460285
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",7.987866991411506
+6334,"Frascati Road",273,"O'Connell St",8.077045554643936
+7113,"Ballymun Road",273,"O'Connell St",6.19506163800013
+7113,"Ballymun Road",273,"O'Connell St",6.19506163800013
+7113,"Ballymun Road",273,"O'Connell St",6.19506163800013
+7113,"Ballymun Road",273,"O'Connell St",6.19506163800013
+7113,"Ballymun Road",273,"O'Connell St",6.19506163800013
+7113,"Ballymun Road",273,"O'Connell St",6.08582581499053
+7113,"Ballymun Road",273,"O'Connell St",6.076709376998238
+7113,"Ballymun Road",273,"O'Connell St",6.0049935377602
+7113,"Ballymun Road",273,"O'Connell St",5.812062518352789
+7113,"Ballymun Road",273,"O'Connell St",5.67821884684534
+7113,"Ballymun Road",273,"O'Connell St",5.510683878887873
+113,"Ballymun Road",273,"O'Connell St",5.051445891328505
+113,"Ballymun Road",273,"O'Connell St",5.03535035003743
+147,"Mobhi Road",273,"O'Connell St",2.8837808737824884
+147,"Mobhi Road",273,"O'Connell St",2.7874758603658205
+147,"Mobhi Road",273,"O'Connell St",2.6708989598492225
+408,"Merrion Sq",273,"O'Connell St",0.8788810796495965
+408,"Merrion Sq",273,"O'Connell St",1.013981889874793
+412,"Northumberland Rd",273,"O'Connell St",1.923602880246681
+414,"Pembroke Road",273,"O'Connell St",2.352079914260133
+414,"Pembroke Road",273,"O'Connell St",2.482192347393471
+416,Ballsbridge,273,"O'Connell St",2.8178002936210342
+416,Ballsbridge,273,"O'Connell St",2.8849569530429817
+416,Ballsbridge,273,"O'Connell St",2.945413106964361
+418,"Merrion Road",273,"O'Connell St",3.325066769633804
+418,"Merrion Road",273,"O'Connell St",3.439760228877892
+422,"Merrion Road",273,"O'Connell St",4.539763750723198
+422,"Merrion Road",273,"O'Connell St",4.539763750723198
+422,"Merrion Road",273,"O'Connell St",4.703684617171944
+424,"Merrion Road",273,"O'Connell St",5.062250061831719
+424,"Merrion Road",273,"O'Connell St",5.179764171494953
+424,"Merrion Road",273,"O'Connell St",5.226716168497723
+424,"Merrion Road",273,"O'Connell St",5.381853061793392
+426,"Rock Road",273,"O'Connell St",5.6316954241312756
+426,"Rock Road",273,"O'Connell St",5.916824607171202
+428,"Rock Road",273,"O'Connell St",6.450236395908503
+428,"Rock Road",273,"O'Connell St",6.628981544909108
+6334,"Frascati Road",273,"O'Connell St",7.250087833362972
+6334,"Frascati Road",273,"O'Connell St",7.250087833362972
+6334,"Frascati Road",273,"O'Connell St",7.336239504639098
+6334,"Frascati Road",273,"O'Connell St",7.343185149950639
+6334,"Frascati Road",273,"O'Connell St",7.539887385765185
+6334,"Frascati Road",273,"O'Connell St",7.800889900307911
+6334,"Frascati Road",273,"O'Connell St",7.957453280408539
+6334,"Frascati Road",273,"O'Connell St",7.957453280408539
+6334,"Frascati Road",273,"O'Connell St",7.957453280408539
+6334,"Frascati Road",273,"O'Connell St",8.046618535878503
+7113,"Ballymun Road",273,"O'Connell St",6.298682391779556
+7113,"Ballymun Road",273,"O'Connell St",6.298682391779556
+7113,"Ballymun Road",273,"O'Connell St",6.298682391779556
+7113,"Ballymun Road",273,"O'Connell St",6.298682391779556
+7113,"Ballymun Road",273,"O'Connell St",6.298682391779556
+7113,"Ballymun Road",273,"O'Connell St",6.189371919542215
+7113,"Ballymun Road",273,"O'Connell St",6.18022250581419
+7113,"Ballymun Road",273,"O'Connell St",6.108217504559243
+7113,"Ballymun Road",273,"O'Connell St",5.9151036199665095
+7113,"Ballymun Road",273,"O'Connell St",5.781422410860666
+7113,"Ballymun Road",273,"O'Connell St",5.614109864059299
+113,"Ballymun Road",273,"O'Connell St",5.155149127501969
+113,"Ballymun Road",273,"O'Connell St",5.139064577041033
+147,"Mobhi Road",273,"O'Connell St",2.99401798938208
+147,"Mobhi Road",273,"O'Connell St",2.899435880310024
+147,"Mobhi Road",273,"O'Connell St",2.785367837365474
+408,"Merrion Sq",273,"O'Connell St",0.7545842117565791
+408,"Merrion Sq",273,"O'Connell St",0.8901502393320514
+412,"Northumberland Rd",273,"O'Connell St",1.800922165241887
+414,"Pembroke Road",273,"O'Connell St",2.228131924717025
+414,"Pembroke Road",273,"O'Connell St",2.3581712959256986
+416,Ballsbridge,273,"O'Connell St",2.69397672463948
+416,Ballsbridge,273,"O'Connell St",2.76125434769753
+416,Ballsbridge,273,"O'Connell St",2.8218269679069423
+418,"Merrion Road",273,"O'Connell St",3.2015094524221097
+418,"Merrion Road",273,"O'Connell St",3.3162025613989448
+422,"Merrion Road",273,"O'Connell St",4.4162693980325525
+422,"Merrion Road",273,"O'Connell St",4.4162693980325525
+422,"Merrion Road",273,"O'Connell St",4.580372377927922
+424,"Merrion Road",273,"O'Connell St",4.939066468823176
+424,"Merrion Road",273,"O'Connell St",5.056451058185166
+424,"Merrion Road",273,"O'Connell St",5.1033396518086125
+424,"Merrion Road",273,"O'Connell St",5.25829111718255
+426,"Rock Road",273,"O'Connell St",5.508007766672487
+426,"Rock Road",273,"O'Connell St",5.793186612410847
+428,"Rock Road",273,"O'Connell St",6.326845069562405
+428,"Rock Road",273,"O'Connell St",6.505569357408287
+6334,"Frascati Road",273,"O'Connell St",7.126762973547678
+6334,"Frascati Road",273,"O'Connell St",7.126762973547678
+6334,"Frascati Road",273,"O'Connell St",7.212896816964342
+6334,"Frascati Road",273,"O'Connell St",7.2198444935106325
+6334,"Frascati Road",273,"O'Connell St",7.4166021961831605
+6334,"Frascati Road",273,"O'Connell St",7.677859931601544
+6334,"Frascati Road",273,"O'Connell St",7.834454441219215
+6334,"Frascati Road",273,"O'Connell St",7.834454441219215
+6334,"Frascati Road",273,"O'Connell St",7.834454441219215
+6334,"Frascati Road",273,"O'Connell St",7.923602015326813
+7113,"Ballymun Road",273,"O'Connell St",6.373641328776751
+7113,"Ballymun Road",273,"O'Connell St",6.373641328776751
+7113,"Ballymun Road",273,"O'Connell St",6.373641328776751
+7113,"Ballymun Road",273,"O'Connell St",6.373641328776751
+7113,"Ballymun Road",273,"O'Connell St",6.373641328776751
+7113,"Ballymun Road",273,"O'Connell St",6.264402676246999
+7113,"Ballymun Road",273,"O'Connell St",6.255285001736776
+7113,"Ballymun Road",273,"O'Connell St",6.183556606199038
+7113,"Ballymun Road",273,"O'Connell St",5.990615535111709
+7113,"Ballymun Road",273,"O'Connell St",5.856779862514914
+7113,"Ballymun Road",273,"O'Connell St",5.6892545192648525
+113,"Ballymun Road",273,"O'Connell St",5.230025584339635
+113,"Ballymun Road",273,"O'Connell St",5.213930360987611
+147,"Mobhi Road",273,"O'Connell St",3.06174416217204
+147,"Mobhi Road",273,"O'Connell St",2.9649105823521946
+147,"Mobhi Road",273,"O'Connell St",2.8471708400414455
+408,"Merrion Sq",273,"O'Connell St",0.7423596181112451
+408,"Merrion Sq",273,"O'Connell St",0.8818662233447822
+412,"Northumberland Rd",273,"O'Connell St",1.7964435075628737
+414,"Pembroke Road",273,"O'Connell St",2.215020851000011
+414,"Pembroke Road",273,"O'Connell St",2.344253890372691
+416,Ballsbridge,273,"O'Connell St",2.6814690627927593
+416,Ballsbridge,273,"O'Connell St",2.7496168958660183
+416,Ballsbridge,273,"O'Connell St",2.8109682324741483
+418,"Merrion Road",273,"O'Connell St",3.1906021286753847
+418,"Merrion Road",273,"O'Connell St",3.3052301283218304
+422,"Merrion Road",273,"O'Connell St",4.405276809479178
+422,"Merrion Road",273,"O'Connell St",4.405276809479178
+422,"Merrion Road",273,"O'Connell St",4.5704608367007795
+424,"Merrion Road",273,"O'Connell St",4.9298066595073164
+424,"Merrion Road",273,"O'Connell St",5.046412839043226
+424,"Merrion Road",273,"O'Connell St",5.092908689000994
+424,"Merrion Road",273,"O'Connell St",5.246643795598527
+426,"Rock Road",273,"O'Connell St",5.495442271657085
+426,"Rock Road",273,"O'Connell St",5.780920055482507
+428,"Rock Road",273,"O'Connell St",6.316100766692622
+428,"Rock Road",273,"O'Connell St",6.494671093178097
+6334,"Frascati Road",273,"O'Connell St",7.116315674199127
+6334,"Frascati Road",273,"O'Connell St",7.116315674199127
+6334,"Frascati Road",273,"O'Connell St",7.202333159526566
+6334,"Frascati Road",273,"O'Connell St",7.209292219721994
+6334,"Frascati Road",273,"O'Connell St",7.406356569871481
+6334,"Frascati Road",273,"O'Connell St",7.66901005954107
+6334,"Frascati Road",273,"O'Connell St",7.825753800574136
+6334,"Frascati Road",273,"O'Connell St",7.825753800574136
+6334,"Frascati Road",273,"O'Connell St",7.825753800574136
+6334,"Frascati Road",273,"O'Connell St",7.914799280606634
+7113,"Ballymun Road",273,"O'Connell St",6.394112371404976
+7113,"Ballymun Road",273,"O'Connell St",6.394112371404976
+7113,"Ballymun Road",273,"O'Connell St",6.394112371404976
+7113,"Ballymun Road",273,"O'Connell St",6.394112371404976
+7113,"Ballymun Road",273,"O'Connell St",6.394112371404976
+7113,"Ballymun Road",273,"O'Connell St",6.2849027597171085
+7113,"Ballymun Road",273,"O'Connell St",6.275796809339824
+7113,"Ballymun Road",273,"O'Connell St",6.204170436623999
+7113,"Ballymun Road",273,"O'Connell St",6.01129768547247
+7113,"Ballymun Road",273,"O'Connell St",5.877410478699741
+7113,"Ballymun Road",273,"O'Connell St",5.709814001295028
+113,"Ballymun Road",273,"O'Connell St",5.250505966087129
+113,"Ballymun Road",273,"O'Connell St",5.234407573974893
+147,"Mobhi Road",273,"O'Connell St",3.0798667451977644
+147,"Mobhi Road",273,"O'Connell St",2.9822683710359845
+147,"Mobhi Road",273,"O'Connell St",2.8632883798118796
+408,"Merrion Sq",273,"O'Connell St",0.7461053134552135
+408,"Merrion Sq",273,"O'Connell St",0.886419901816349
+412,"Northumberland Rd",273,"O'Connell St",1.8009889306996711
+414,"Pembroke Road",273,"O'Connell St",2.2166060787645376
+414,"Pembroke Road",273,"O'Connell St",2.345528277418274
+416,Ballsbridge,273,"O'Connell St",2.6830818703769452
+416,Ballsbridge,273,"O'Connell St",2.7514882318944087
+416,Ballsbridge,273,"O'Connell St",2.8130712031203746
+418,"Merrion Road",273,"O'Connell St",3.192600290964634
+418,"Merrion Road",273,"O'Connell St",3.3071845931047665
+422,"Merrion Road",273,"O'Connell St",4.407065307345129
+422,"Merrion Road",273,"O'Connell St",4.407065307345129
+422,"Merrion Road",273,"O'Connell St",4.572576266998984
+424,"Merrion Road",273,"O'Connell St",4.932095617493365
+424,"Merrion Road",273,"O'Connell St",5.048444356433964
+424,"Merrion Road",273,"O'Connell St",5.094811362692508
+424,"Merrion Road",273,"O'Connell St",5.248146562403316
+426,"Rock Road",273,"O'Connell St",5.496633574102813
+426,"Rock Road",273,"O'Connell St",5.782187895032124
+428,"Rock Road",273,"O'Connell St",6.317823260862295
+428,"Rock Road",273,"O'Connell St",6.49633532618435
+6334,"Frascati Road",273,"O'Connell St",7.118095130057491
+6334,"Frascati Road",273,"O'Connell St",7.118095130057491
+6334,"Frascati Road",273,"O'Connell St",7.204072010823965
+6334,"Frascati Road",273,"O'Connell St",7.211034412242054
+6334,"Frascati Road",273,"O'Connell St",7.408188598279437
+6334,"Frascati Road",273,"O'Connell St",7.671276095426872
+6334,"Frascati Road",273,"O'Connell St",7.828061703057222
+6334,"Frascati Road",273,"O'Connell St",7.828061703057222
+6334,"Frascati Road",273,"O'Connell St",7.828061703057222
+6334,"Frascati Road",273,"O'Connell St",7.917071724128543
+7113,"Ballymun Road",273,"O'Connell St",6.457500195714953
+7113,"Ballymun Road",273,"O'Connell St",6.457500195714953
+7113,"Ballymun Road",273,"O'Connell St",6.457500195714953
+7113,"Ballymun Road",273,"O'Connell St",6.457500195714953
+7113,"Ballymun Road",273,"O'Connell St",6.457500195714953
+7113,"Ballymun Road",273,"O'Connell St",6.34835085916783
+7113,"Ballymun Road",273,"O'Connell St",6.339267758908704
+7113,"Ballymun Road",273,"O'Connell St",6.267839683290414
+7113,"Ballymun Road",273,"O'Connell St",6.075106001426769
+7113,"Ballymun Road",273,"O'Connell St",5.941126767526673
+7113,"Ballymun Road",273,"O'Connell St",5.773402794843175
+113,"Ballymun Road",273,"O'Connell St",5.313969418515522
+113,"Ballymun Road",273,"O'Connell St",5.297865960928493
+147,"Mobhi Road",273,"O'Connell St",3.139000331208622
+147,"Mobhi Road",273,"O'Connell St",3.039907220110574
+147,"Mobhi Road",273,"O'Connell St",2.9184628846170835
+408,"Merrion Sq",273,"O'Connell St",0.7432154263689431
+408,"Merrion Sq",273,"O'Connell St",0.8846068802394061
+412,"Northumberland Rd",273,"O'Connell St",1.7966361388689394
+414,"Pembroke Road",273,"O'Connell St",2.204471892230717
+414,"Pembroke Road",273,"O'Connell St",2.3325247863563217
+416,Ballsbridge,273,"O'Connell St",2.6706755444263166
+416,Ballsbridge,273,"O'Connell St",2.7396760596338905
+416,Ballsbridge,273,"O'Connell St",2.8017935948378927
+418,"Merrion Road",273,"O'Connell St",3.1808818593152264
+418,"Merrion Road",273,"O'Connell St",3.2953118578272913
+422,"Merrion Road",273,"O'Connell St",4.394459211282213
+422,"Merrion Road",273,"O'Connell St",4.394459211282213
+422,"Merrion Road",273,"O'Connell St",4.560736331271001
+424,"Merrion Road",273,"O'Connell St",4.920612787331776
+424,"Merrion Road",273,"O'Connell St",5.036309371287355
+424,"Merrion Road",273,"O'Connell St",5.082352723420115
+424,"Merrion Road",273,"O'Connell St",5.234684562636738
+426,"Rock Road",273,"O'Connell St",5.482374198212463
+426,"Rock Road",273,"O'Connell St",5.76807662558042
+428,"Rock Road",273,"O'Connell St",6.304759576344961
+428,"Rock Road",273,"O'Connell St",6.483110417375949
+6334,"Frascati Road",273,"O'Connell St",7.105094124214741
+6334,"Frascati Road",273,"O'Connell St",7.105094124214741
+6334,"Frascati Road",273,"O'Connell St",7.1909644564606205
+6334,"Frascati Road",273,"O'Connell St",7.197934454940254
+6334,"Frascati Road",273,"O'Connell St",7.395292528118215
+6334,"Frascati Road",273,"O'Connell St",7.659423682175701
+6334,"Frascati Road",273,"O'Connell St",7.816300762266528
+6334,"Frascati Road",273,"O'Connell St",7.816300762266528
+6334,"Frascati Road",273,"O'Connell St",7.816300762266528
+6334,"Frascati Road",273,"O'Connell St",7.9052175384913195
+7113,"Ballymun Road",408,"Merrion Sq",6.917358357774651
+7113,"Ballymun Road",408,"Merrion Sq",6.917358357774651
+7113,"Ballymun Road",408,"Merrion Sq",6.917358357774651
+7113,"Ballymun Road",408,"Merrion Sq",6.917358357774651
+7113,"Ballymun Road",408,"Merrion Sq",6.917358357774651
+7113,"Ballymun Road",408,"Merrion Sq",6.807884725853317
+7113,"Ballymun Road",408,"Merrion Sq",6.7985642207167585
+7113,"Ballymun Road",408,"Merrion Sq",6.725042729209348
+7113,"Ballymun Road",408,"Merrion Sq",6.531388954545684
+7113,"Ballymun Road",408,"Merrion Sq",6.399051634786929
+7113,"Ballymun Road",408,"Merrion Sq",6.233549156899748
+113,"Ballymun Road",408,"Merrion Sq",5.777730438275802
+113,"Ballymun Road",408,"Merrion Sq",5.761767151762181
+147,"Mobhi Road",408,"Merrion Sq",3.663542953476497
+147,"Mobhi Road",408,"Merrion Sq",3.5787367795688576
+147,"Mobhi Road",408,"Merrion Sq",3.478681508246829
+273,"O'Connell St",408,"Merrion Sq",0.910724625746777
+273,"O'Connell St",408,"Merrion Sq",0.910724625746777
+273,"O'Connell St",408,"Merrion Sq",0.910724625746777
+273,"O'Connell St",408,"Merrion Sq",0.910724625746777
+273,"O'Connell St",408,"Merrion Sq",0.8788810796495965
+273,"O'Connell St",408,"Merrion Sq",0.7545842117565791
+273,"O'Connell St",408,"Merrion Sq",0.7423596181112451
+273,"O'Connell St",408,"Merrion Sq",0.7461053134552135
+273,"O'Connell St",408,"Merrion Sq",0.7432154263689431
+412,"Northumberland Rd",408,"Merrion Sq",1.0549857598642007
+414,"Pembroke Road",408,"Merrion Sq",1.4742618766140596
+414,"Pembroke Road",408,"Merrion Sq",1.6040406216507546
+416,Ballsbridge,408,"Merrion Sq",1.940467266796469
+416,Ballsbridge,408,"Merrion Sq",2.0082062273575043
+416,Ballsbridge,408,"Merrion Sq",2.069255972448032
+418,"Merrion Road",408,"Merrion Sq",2.4489569536294082
+418,"Merrion Road",408,"Merrion Sq",2.5636221376978368
+422,"Merrion Road",408,"Merrion Sq",3.6637662821719132
+422,"Merrion Road",408,"Merrion Sq",3.6637662821719132
+422,"Merrion Road",408,"Merrion Sq",3.8285911847103256
+424,"Merrion Road",408,"Merrion Sq",4.187779013433091
+424,"Merrion Road",408,"Merrion Sq",4.304603173107083
+424,"Merrion Road",408,"Merrion Sq",4.351228793404433
+424,"Merrion Road",408,"Merrion Sq",4.505451766480804
+426,"Rock Road",408,"Merrion Sq",4.754709115800377
+426,"Rock Road",408,"Merrion Sq",5.040044286009447
+428,"Rock Road",408,"Merrion Sq",5.574577114671138
+428,"Rock Road",408,"Merrion Sq",5.753211166710797
+6334,"Frascati Road",408,"Merrion Sq",6.3747051237100205
+6334,"Frascati Road",408,"Merrion Sq",6.3747051237100205
+6334,"Frascati Road",408,"Merrion Sq",6.460765958435662
+6334,"Frascati Road",408,"Merrion Sq",6.467721071292216
+6334,"Frascati Road",408,"Merrion Sq",6.664683085833516
+6334,"Frascati Road",408,"Merrion Sq",6.9269527953113945
+6334,"Frascati Road",408,"Merrion Sq",7.083666543646059
+6334,"Frascati Road",408,"Merrion Sq",7.083666543646059
+6334,"Frascati Road",408,"Merrion Sq",7.083666543646059
+6334,"Frascati Road",408,"Merrion Sq",7.172735148715781
+7113,"Ballymun Road",408,"Merrion Sq",7.006951068522635
+7113,"Ballymun Road",408,"Merrion Sq",7.006951068522635
+7113,"Ballymun Road",408,"Merrion Sq",7.006951068522635
+7113,"Ballymun Road",408,"Merrion Sq",7.006951068522635
+7113,"Ballymun Road",408,"Merrion Sq",7.006951068522635
+7113,"Ballymun Road",408,"Merrion Sq",6.8975092876716895
+7113,"Ballymun Road",408,"Merrion Sq",6.888153893367528
+7113,"Ballymun Road",408,"Merrion Sq",6.814318575836503
+7113,"Ballymun Road",408,"Merrion Sq",6.620671916568142
+7113,"Ballymun Road",408,"Merrion Sq",6.488752310784614
+7113,"Ballymun Road",408,"Merrion Sq",6.3238079014208015
+113,"Ballymun Road",408,"Merrion Sq",5.869118513517063
+113,"Ballymun Road",408,"Merrion Sq",5.853198372144946
+147,"Mobhi Road",408,"Merrion Sq",3.76877763344862
+147,"Mobhi Road",408,"Merrion Sq",3.6865043359484084
+147,"Mobhi Road",408,"Merrion Sq",3.590141286639435
+273,"O'Connell St",408,"Merrion Sq",1.0452746349923867
+273,"O'Connell St",408,"Merrion Sq",1.0452746349923867
+273,"O'Connell St",408,"Merrion Sq",1.0452746349923867
+273,"O'Connell St",408,"Merrion Sq",1.0452746349923867
+273,"O'Connell St",408,"Merrion Sq",1.013981889874793
+273,"O'Connell St",408,"Merrion Sq",0.8901502393320514
+273,"O'Connell St",408,"Merrion Sq",0.8818662233447822
+273,"O'Connell St",408,"Merrion Sq",0.886419901816349
+273,"O'Connell St",408,"Merrion Sq",0.8846068802394061
+412,"Northumberland Rd",408,"Merrion Sq",0.9146454017051691
+414,"Pembroke Road",408,"Merrion Sq",1.3381246521569896
+414,"Pembroke Road",408,"Merrion Sq",1.4683268505944813
+416,Ballsbridge,408,"Merrion Sq",1.8038370209813215
+416,Ballsbridge,408,"Merrion Sq",1.8711214216158532
+416,Ballsbridge,408,"Merrion Sq",1.9317912318091486
+418,"Merrion Road",408,"Merrion Sq",2.3114961015489746
+418,"Merrion Road",408,"Merrion Sq",2.426185524503227
+422,"Merrion Road",408,"Merrion Sq",3.526307309471762
+422,"Merrion Road",408,"Merrion Sq",3.526307309471762
+422,"Merrion Road",408,"Merrion Sq",3.6907038783619286
+424,"Merrion Road",408,"Merrion Sq",4.049651617881016
+424,"Merrion Road",408,"Merrion Sq",4.166764699110322
+424,"Merrion Road",408,"Merrion Sq",4.2135397212028725
+424,"Merrion Road",408,"Merrion Sq",4.368241084599947
+426,"Rock Road",408,"Merrion Sq",4.617870582994049
+426,"Rock Road",408,"Merrion Sq",4.903073372216662
+428,"Rock Road",408,"Merrion Sq",5.437000130318492
+428,"Rock Road",408,"Merrion Sq",5.615691043289956
+6334,"Frascati Road",408,"Merrion Sq",6.237015040311064
+6334,"Frascati Road",408,"Merrion Sq",6.237015040311064
+6334,"Frascati Road",408,"Merrion Sq",6.323118127200418
+6334,"Frascati Road",408,"Merrion Sq",6.330069055967784
+6334,"Frascati Road",408,"Merrion Sq",6.526919576308958
+6334,"Frascati Road",408,"Merrion Sq",6.788707070965872
+6334,"Frascati Road",408,"Merrion Sq",6.945372383979632
+6334,"Frascati Road",408,"Merrion Sq",6.945372383979632
+6334,"Frascati Road",408,"Merrion Sq",6.945372383979632
+6334,"Frascati Road",408,"Merrion Sq",7.034475310031289
+7113,"Ballymun Road",412,"Northumberland Rd",7.705847920598333
+7113,"Ballymun Road",412,"Northumberland Rd",7.705847920598333
+7113,"Ballymun Road",412,"Northumberland Rd",7.705847920598333
+7113,"Ballymun Road",412,"Northumberland Rd",7.705847920598333
+7113,"Ballymun Road",412,"Northumberland Rd",7.705847920598333
+7113,"Ballymun Road",412,"Northumberland Rd",7.596996280179991
+7113,"Ballymun Road",412,"Northumberland Rd",7.587500314671995
+7113,"Ballymun Road",412,"Northumberland Rd",7.51236413397785
+7113,"Ballymun Road",412,"Northumberland Rd",7.31956464346027
+7113,"Ballymun Road",412,"Northumberland Rd",7.190336235656133
+7113,"Ballymun Road",412,"Northumberland Rd",7.028948672510687
+113,"Ballymun Road",412,"Northumberland Rd",6.5821021448172266
+113,"Ballymun Road",412,"Northumberland Rd",6.56647761688137
+147,"Mobhi Road",412,"Northumberland Rd",4.559648575022807
+147,"Mobhi Road",412,"Northumberland Rd",4.488903008952233
+147,"Mobhi Road",412,"Northumberland Rd",4.408762906050943
+273,"O'Connell St",412,"Northumberland Rd",1.9538903942018084
+273,"O'Connell St",412,"Northumberland Rd",1.9538903942018084
+273,"O'Connell St",412,"Northumberland Rd",1.9538903942018084
+273,"O'Connell St",412,"Northumberland Rd",1.9538903942018084
+273,"O'Connell St",412,"Northumberland Rd",1.923602880246681
+273,"O'Connell St",412,"Northumberland Rd",1.800922165241887
+273,"O'Connell St",412,"Northumberland Rd",1.7964435075628737
+273,"O'Connell St",412,"Northumberland Rd",1.8009889306996711
+273,"O'Connell St",412,"Northumberland Rd",1.7966361388689394
+408,"Merrion Sq",412,"Northumberland Rd",1.0549857598642007
+408,"Merrion Sq",412,"Northumberland Rd",0.9146454017051691
+414,"Pembroke Road",412,"Northumberland Rd",0.4564842079940655
+414,"Pembroke Road",412,"Northumberland Rd",0.5854321063073569
+416,Ballsbridge,412,"Northumberland Rd",0.9064142671957218
+416,Ballsbridge,412,"Northumberland Rd",0.9700063951952714
+416,Ballsbridge,412,"Northumberland Rd",1.0279111192208754
+418,"Merrion Road",412,"Northumberland Rd",1.4060395384371702
+418,"Merrion Road",412,"Northumberland Rd",1.5205228022208508
+422,"Merrion Road",412,"Northumberland Rd",2.6188551247886753
+422,"Merrion Road",412,"Northumberland Rd",2.6188551247886753
+422,"Merrion Road",412,"Northumberland Rd",2.781468967677396
+424,"Merrion Road",412,"Northumberland Rd",3.139387171641127
+424,"Merrion Road",412,"Northumberland Rd",3.2574550306416605
+424,"Merrion Road",412,"Northumberland Rd",3.304747798852319
+424,"Merrion Road",412,"Northumberland Rd",3.4611765040765627
+426,"Rock Road",412,"Northumberland Rd",3.712135085868868
+426,"Rock Road",412,"Northumberland Rd",3.9966619486464925
+428,"Rock Road",412,"Northumberland Rd",4.52815790365041
+428,"Rock Road",412,"Northumberland Rd",4.706998013268465
+6334,"Frascati Road",412,"Northumberland Rd",5.3276077154319665
+6334,"Frascati Road",412,"Northumberland Rd",5.3276077154319665
+6334,"Frascati Road",412,"Northumberland Rd",5.4138344681883925
+6334,"Frascati Road",412,"Northumberland Rd",5.420770239226179
+6334,"Frascati Road",412,"Northumberland Rd",5.617222338171415
+6334,"Frascati Road",412,"Northumberland Rd",5.877502443340677
+6334,"Frascati Road",412,"Northumberland Rd",6.034013895648047
+6334,"Frascati Road",412,"Northumberland Rd",6.034013895648047
+6334,"Frascati Road",412,"Northumberland Rd",6.034013895648047
+6334,"Frascati Road",412,"Northumberland Rd",6.123205447363297
+7113,"Ballymun Road",414,"Pembroke Road",8.154168248342403
+7113,"Ballymun Road",414,"Pembroke Road",8.154168248342403
+7113,"Ballymun Road",414,"Pembroke Road",8.154168248342403
+7113,"Ballymun Road",414,"Pembroke Road",8.154168248342403
+7113,"Ballymun Road",414,"Pembroke Road",8.154168248342403
+7113,"Ballymun Road",414,"Pembroke Road",8.045450353973084
+7113,"Ballymun Road",414,"Pembroke Road",8.035940333193759
+7113,"Ballymun Road",414,"Pembroke Road",7.960667838918692
+7113,"Ballymun Road",414,"Pembroke Road",7.768084192976474
+7113,"Ballymun Road",414,"Pembroke Road",7.63927943640565
+7113,"Ballymun Road",414,"Pembroke Road",7.47843398667781
+113,"Ballymun Road",414,"Pembroke Road",7.032779086968093
+113,"Ballymun Road",414,"Pembroke Road",7.0171973322334775
+147,"Mobhi Road",414,"Pembroke Road",5.016124096058682
+147,"Mobhi Road",414,"Pembroke Road",4.945322254347256
+147,"Mobhi Road",414,"Pembroke Road",4.864658675702592
+273,"O'Connell St",414,"Pembroke Road",2.3833965149322682
+273,"O'Connell St",414,"Pembroke Road",2.3833965149322682
+273,"O'Connell St",414,"Pembroke Road",2.3833965149322682
+273,"O'Connell St",414,"Pembroke Road",2.3833965149322682
+273,"O'Connell St",414,"Pembroke Road",2.352079914260133
+273,"O'Connell St",414,"Pembroke Road",2.228131924717025
+273,"O'Connell St",414,"Pembroke Road",2.215020851000011
+273,"O'Connell St",414,"Pembroke Road",2.2166060787645376
+273,"O'Connell St",414,"Pembroke Road",2.204471892230717
+408,"Merrion Sq",414,"Pembroke Road",1.4742618766140596
+408,"Merrion Sq",414,"Pembroke Road",1.3381246521569896
+412,"Northumberland Rd",414,"Pembroke Road",0.4564842079940655
+416,Ballsbridge,414,"Pembroke Road",0.46647676355858747
+416,Ballsbridge,414,"Pembroke Road",0.5352066292561656
+416,Ballsbridge,414,"Pembroke Road",0.5975882807239061
+418,"Merrion Road",414,"Pembroke Road",0.9764100149535033
+418,"Merrion Road",414,"Pembroke Road",1.090861086888011
+422,"Merrion Road",414,"Pembroke Road",2.1904763549581454
+422,"Merrion Road",414,"Pembroke Road",2.1904763549581454
+422,"Merrion Road",414,"Pembroke Road",2.3563264534125006
+424,"Merrion Road",414,"Pembroke Road",2.7161451231356746
+424,"Merrion Road",414,"Pembroke Road",2.832032487424565
+424,"Merrion Road",414,"Pembroke Road",2.878272512949733
+424,"Merrion Road",414,"Pembroke Road",3.0316277876068307
+426,"Rock Road",414,"Pembroke Road",3.2805405031763755
+426,"Rock Road",414,"Pembroke Road",3.565953022788193
+428,"Rock Road",414,"Pembroke Road",4.101217439033636
+428,"Rock Road",414,"Pembroke Road",4.279738003772624
+6334,"Frascati Road",414,"Pembroke Road",4.901491022192183
+6334,"Frascati Road",414,"Pembroke Road",4.901491022192183
+6334,"Frascati Road",414,"Pembroke Road",4.987465986974792
+6334,"Frascati Road",414,"Pembroke Road",4.99442834225572
+6334,"Frascati Road",414,"Pembroke Road",5.191593741819844
+6334,"Frascati Road",414,"Pembroke Road",5.4550777422425085
+6334,"Frascati Road",414,"Pembroke Road",5.611926022387106
+6334,"Frascati Road",414,"Pembroke Road",5.611926022387106
+6334,"Frascati Road",414,"Pembroke Road",5.611926022387106
+6334,"Frascati Road",414,"Pembroke Road",5.700875091365052
+7113,"Ballymun Road",414,"Pembroke Road",8.275768721118949
+7113,"Ballymun Road",414,"Pembroke Road",8.275768721118949
+7113,"Ballymun Road",414,"Pembroke Road",8.275768721118949
+7113,"Ballymun Road",414,"Pembroke Road",8.275768721118949
+7113,"Ballymun Road",414,"Pembroke Road",8.275768721118949
+7113,"Ballymun Road",414,"Pembroke Road",8.167129442435856
+7113,"Ballymun Road",414,"Pembroke Road",8.157612199982358
+7113,"Ballymun Road",414,"Pembroke Road",8.082269084285336
+7113,"Ballymun Road",414,"Pembroke Road",7.8898136196159605
+7113,"Ballymun Road",414,"Pembroke Road",7.761249599533927
+7113,"Ballymun Road",414,"Pembroke Road",7.600716881441512
+113,"Ballymun Road",414,"Pembroke Road",7.155776845019517
+113,"Ballymun Road",414,"Pembroke Road",7.140221385043931
+147,"Mobhi Road",414,"Pembroke Road",5.144411151605299
+147,"Mobhi Road",414,"Pembroke Road",5.074151563765426
+147,"Mobhi Road",414,"Pembroke Road",4.994174039882231
+273,"O'Connell St",414,"Pembroke Road",2.5135864502202043
+273,"O'Connell St",414,"Pembroke Road",2.5135864502202043
+273,"O'Connell St",414,"Pembroke Road",2.5135864502202043
+273,"O'Connell St",414,"Pembroke Road",2.5135864502202043
+273,"O'Connell St",414,"Pembroke Road",2.482192347393471
+273,"O'Connell St",414,"Pembroke Road",2.3581712959256986
+273,"O'Connell St",414,"Pembroke Road",2.344253890372691
+273,"O'Connell St",414,"Pembroke Road",2.345528277418274
+273,"O'Connell St",414,"Pembroke Road",2.3325247863563217
+408,"Merrion Sq",414,"Pembroke Road",1.6040406216507546
+408,"Merrion Sq",414,"Pembroke Road",1.4683268505944813
+412,"Northumberland Rd",414,"Pembroke Road",0.5854321063073569
+416,Ballsbridge,414,"Pembroke Road",0.3384334508220165
+416,Ballsbridge,414,"Pembroke Road",0.40843109635654573
+416,Ballsbridge,414,"Pembroke Road",0.4718554252085807
+418,"Merrion Road",414,"Pembroke Road",0.8489865873192939
+418,"Merrion Road",414,"Pembroke Road",0.9631548817797791
+422,"Merrion Road",414,"Pembroke Road",2.061953242370136
+422,"Merrion Road",414,"Pembroke Road",2.061953242370136
+422,"Merrion Road",414,"Pembroke Road",2.228319574329002
+424,"Merrion Road",414,"Pembroke Road",2.58834012244209
+424,"Merrion Road",414,"Pembroke Road",2.7037945740340334
+424,"Merrion Road",414,"Pembroke Road",2.749837142341026
+424,"Merrion Road",414,"Pembroke Road",2.9026423373484564
+426,"Rock Road",414,"Pembroke Road",3.1511919087319957
+426,"Rock Road",414,"Pembroke Road",3.4366953930189044
+428,"Rock Road",414,"Pembroke Road",3.972471341350374
+428,"Rock Road",414,"Pembroke Road",4.150919633259973
+6334,"Frascati Road",414,"Pembroke Road",4.772787085517463
+6334,"Frascati Road",414,"Pembroke Road",4.772787085517463
+6334,"Frascati Road",414,"Pembroke Road",4.858714995905813
+6334,"Frascati Road",414,"Pembroke Road",4.865680866986176
+6334,"Frascati Road",414,"Pembroke Road",5.0629405069134785
+6334,"Frascati Road",414,"Pembroke Road",5.326914985044398
+6334,"Frascati Road",414,"Pembroke Road",5.483804793221521
+6334,"Frascati Road",414,"Pembroke Road",5.483804793221521
+6334,"Frascati Road",414,"Pembroke Road",5.483804793221521
+6334,"Frascati Road",414,"Pembroke Road",5.572706818739538
+7113,"Ballymun Road",416,Ballsbridge,8.552185565764912
+7113,"Ballymun Road",416,Ballsbridge,8.552185565764912
+7113,"Ballymun Road",416,Ballsbridge,8.552185565764912
+7113,"Ballymun Road",416,Ballsbridge,8.552185565764912
+7113,"Ballymun Road",416,Ballsbridge,8.552185565764912
+7113,"Ballymun Road",416,Ballsbridge,8.443891729162265
+7113,"Ballymun Road",416,Ballsbridge,8.434349438649289
+7113,"Ballymun Road",416,Ballsbridge,8.358755885785088
+7113,"Ballymun Road",416,Ballsbridge,8.166872226712554
+7113,"Ballymun Road",416,Ballsbridge,8.039302537533255
+7113,"Ballymun Road",416,Ballsbridge,7.880067277032644
+113,"Ballymun Road",416,Ballsbridge,7.438161502228614
+113,"Ballymun Road",416,Ballsbridge,7.422718424925669
+147,"Mobhi Road",416,Ballsbridge,5.451239657595177
+147,"Mobhi Road",416,Ballsbridge,5.38391516667785
+147,"Mobhi Road",416,Ballsbridge,5.307984732479127
+273,"O'Connell St",416,Ballsbridge,2.8489758831681926
+273,"O'Connell St",416,Ballsbridge,2.8489758831681926
+273,"O'Connell St",416,Ballsbridge,2.8489758831681926
+273,"O'Connell St",416,Ballsbridge,2.8489758831681926
+273,"O'Connell St",416,Ballsbridge,2.8178002936210342
+273,"O'Connell St",416,Ballsbridge,2.69397672463948
+273,"O'Connell St",416,Ballsbridge,2.6814690627927593
+273,"O'Connell St",416,Ballsbridge,2.6830818703769452
+273,"O'Connell St",416,Ballsbridge,2.6706755444263166
+408,"Merrion Sq",416,Ballsbridge,1.940467266796469
+408,"Merrion Sq",416,Ballsbridge,1.8038370209813215
+412,"Northumberland Rd",416,Ballsbridge,0.9064142671957218
+414,"Pembroke Road",416,Ballsbridge,0.46647676355858747
+414,"Pembroke Road",416,Ballsbridge,0.3384334508220165
+418,"Merrion Road",416,Ballsbridge,0.5105535566222696
+418,"Merrion Road",416,Ballsbridge,0.6247523675374576
+422,"Merrion Road",416,Ballsbridge,1.7240177632813007
+422,"Merrion Road",416,Ballsbridge,1.7240177632813007
+422,"Merrion Road",416,Ballsbridge,1.890065318115334
+424,"Merrion Road",416,Ballsbridge,2.250013869157067
+424,"Merrion Road",416,Ballsbridge,2.365666622016255
+424,"Merrion Road",416,Ballsbridge,2.4118400556005364
+424,"Merrion Road",416,Ballsbridge,2.56517549750017
+426,"Rock Road",416,Ballsbridge,2.8142418556647244
+426,"Rock Road",416,Ballsbridge,3.0995951555058
+428,"Rock Road",416,Ballsbridge,3.634741392537333
+428,"Rock Road",416,Ballsbridge,3.813261617930284
+6334,"Frascati Road",416,Ballsbridge,4.435018101014073
+6334,"Frascati Road",416,Ballsbridge,4.435018101014073
+6334,"Frascati Road",416,Ballsbridge,4.520990228069363
+6334,"Frascati Road",416,Ballsbridge,4.527952741118747
+6334,"Frascati Road",416,Ballsbridge,4.725126374042493
+6334,"Frascati Road",416,Ballsbridge,4.9887603791643045
+6334,"Frascati Road",416,Ballsbridge,5.145629065130286
+6334,"Frascati Road",416,Ballsbridge,5.145629065130286
+6334,"Frascati Road",416,Ballsbridge,5.145629065130286
+6334,"Frascati Road",416,Ballsbridge,5.234555890068499
+7113,"Ballymun Road",416,Ballsbridge,8.599932880620473
+7113,"Ballymun Road",416,Ballsbridge,8.599932880620473
+7113,"Ballymun Road",416,Ballsbridge,8.599932880620473
+7113,"Ballymun Road",416,Ballsbridge,8.599932880620473
+7113,"Ballymun Road",416,Ballsbridge,8.599932880620473
+7113,"Ballymun Road",416,Ballsbridge,8.491742017685647
+7113,"Ballymun Road",416,Ballsbridge,8.482193886108462
+7113,"Ballymun Road",416,Ballsbridge,8.406540186866595
+7113,"Ballymun Road",416,Ballsbridge,8.214829074100477
+7113,"Ballymun Road",416,Ballsbridge,8.08753999451841
+7113,"Ballymun Road",416,Ballsbridge,7.928671420941011
+113,"Ballymun Road",416,Ballsbridge,7.487636756815924
+113,"Ballymun Road",416,Ballsbridge,7.472226021929651
+147,"Mobhi Road",416,Ballsbridge,5.507890488763044
+147,"Mobhi Road",416,Ballsbridge,5.4414571605917335
+147,"Mobhi Road",416,Ballsbridge,5.366782434768336
+273,"O'Connell St",416,Ballsbridge,2.9160134197884973
+273,"O'Connell St",416,Ballsbridge,2.9160134197884973
+273,"O'Connell St",416,Ballsbridge,2.9160134197884973
+273,"O'Connell St",416,Ballsbridge,2.9160134197884973
+273,"O'Connell St",416,Ballsbridge,2.8849569530429817
+273,"O'Connell St",416,Ballsbridge,2.76125434769753
+273,"O'Connell St",416,Ballsbridge,2.7496168958660183
+273,"O'Connell St",416,Ballsbridge,2.7514882318944087
+273,"O'Connell St",416,Ballsbridge,2.7396760596338905
+408,"Merrion Sq",416,Ballsbridge,2.0082062273575043
+408,"Merrion Sq",416,Ballsbridge,1.8711214216158532
+412,"Northumberland Rd",416,Ballsbridge,0.9700063951952714
+414,"Pembroke Road",416,Ballsbridge,0.5352066292561656
+414,"Pembroke Road",416,Ballsbridge,0.40843109635654573
+418,"Merrion Road",416,Ballsbridge,0.4412118059345169
+418,"Merrion Road",416,Ballsbridge,0.555717969138567
+422,"Merrion Road",416,Ballsbridge,1.6556605222530891
+422,"Merrion Road",416,Ballsbridge,1.6556605222530891
+422,"Merrion Road",416,Ballsbridge,1.8211859755338518
+424,"Merrion Road",416,Ballsbridge,2.1809505805973703
+424,"Merrion Road",416,Ballsbridge,2.2969730970670565
+424,"Merrion Road",416,Ballsbridge,2.3433316840641254
+424,"Merrion Road",416,Ballsbridge,2.4972488810587694
+426,"Rock Road",416,Ballsbridge,2.746753499952536
+426,"Rock Road",416,Ballsbridge,3.0319601896343893
+428,"Rock Road",416,Ballsbridge,3.5664884872370277
+428,"Rock Road",416,Ballsbridge,3.745077555729161
+6334,"Frascati Road",416,Ballsbridge,4.366699844190538
+6334,"Frascati Road",416,Ballsbridge,4.366699844190538
+6334,"Frascati Road",416,Ballsbridge,4.452716944904356
+6334,"Frascati Road",416,Ballsbridge,4.4596757667894344
+6334,"Frascati Road",416,Ballsbridge,4.656752508243099
+6334,"Frascati Road",416,Ballsbridge,4.919947575021382
+6334,"Frascati Road",416,Ballsbridge,5.076781296990518
+6334,"Frascati Road",416,Ballsbridge,5.076781296990518
+6334,"Frascati Road",416,Ballsbridge,5.076781296990518
+6334,"Frascati Road",416,Ballsbridge,5.165745466292166
+7113,"Ballymun Road",416,Ballsbridge,8.642638855874722
+7113,"Ballymun Road",416,Ballsbridge,8.642638855874722
+7113,"Ballymun Road",416,Ballsbridge,8.642638855874722
+7113,"Ballymun Road",416,Ballsbridge,8.642638855874722
+7113,"Ballymun Road",416,Ballsbridge,8.642638855874722
+7113,"Ballymun Road",416,Ballsbridge,8.534544643562237
+7113,"Ballymun Road",416,Ballsbridge,8.524991564212907
+7113,"Ballymun Road",416,Ballsbridge,8.449286178777324
+7113,"Ballymun Road",416,Ballsbridge,8.257737678617557
+7113,"Ballymun Road",416,Ballsbridge,8.130706569975814
+7113,"Ballymun Road",416,Ballsbridge,7.9721749275970835
+113,"Ballymun Road",416,Ballsbridge,7.531943782382774
+113,"Ballymun Road",416,Ballsbridge,7.516562859416286
+147,"Mobhi Road",416,Ballsbridge,5.558757554637906
+147,"Mobhi Road",416,Ballsbridge,5.493129696419164
+147,"Mobhi Road",416,Ballsbridge,5.419589080179419
+273,"O'Connell St",416,Ballsbridge,2.976361039315104
+273,"O'Connell St",416,Ballsbridge,2.976361039315104
+273,"O'Connell St",416,Ballsbridge,2.976361039315104
+273,"O'Connell St",416,Ballsbridge,2.976361039315104
+273,"O'Connell St",416,Ballsbridge,2.945413106964361
+273,"O'Connell St",416,Ballsbridge,2.8218269679069423
+273,"O'Connell St",416,Ballsbridge,2.8109682324741483
+273,"O'Connell St",416,Ballsbridge,2.8130712031203746
+273,"O'Connell St",416,Ballsbridge,2.8017935948378927
+408,"Merrion Sq",416,Ballsbridge,2.069255972448032
+408,"Merrion Sq",416,Ballsbridge,1.9317912318091486
+412,"Northumberland Rd",416,Ballsbridge,1.0279111192208754
+414,"Pembroke Road",416,Ballsbridge,0.5975882807239061
+414,"Pembroke Road",416,Ballsbridge,0.4718554252085807
+418,"Merrion Road",416,Ballsbridge,0.37971411566441776
+418,"Merrion Road",416,Ballsbridge,0.49439763984768864
+422,"Merrion Road",416,Ballsbridge,1.5945441313113806
+422,"Merrion Road",416,Ballsbridge,1.5945441313113806
+422,"Merrion Road",416,Ballsbridge,1.7595168483685049
+424,"Merrion Road",416,Ballsbridge,2.119061863914368
+424,"Merrion Road",416,Ballsbridge,2.235444855407122
+424,"Merrion Road",416,Ballsbridge,2.2819839927845766
+424,"Merrion Road",416,Ballsbridge,2.4364646515133668
+426,"Rock Road",416,Ballsbridge,2.686380621143569
+426,"Rock Road",416,Ballsbridge,2.9714252276982402
+428,"Rock Road",416,Ballsbridge,3.5053267129096404
+428,"Rock Road",416,Ballsbridge,3.6839765442645627
+6334,"Frascati Road",416,Ballsbridge,4.305451402455576
+6334,"Frascati Road",416,Ballsbridge,4.305451402455576
+6334,"Frascati Road",416,Ballsbridge,4.391510003821399
+6334,"Frascati Road",416,Ballsbridge,4.398465100044324
+6334,"Frascati Road",416,Ballsbridge,4.595443988869466
+6334,"Frascati Road",416,Ballsbridge,4.858209945219894
+6334,"Frascati Road",416,Ballsbridge,5.015007438539374
+6334,"Frascati Road",416,Ballsbridge,5.015007438539374
+6334,"Frascati Road",416,Ballsbridge,5.015007438539374
+6334,"Frascati Road",416,Ballsbridge,5.104006419570652
+7113,"Ballymun Road",418,"Merrion Road",8.9766547354242
+7113,"Ballymun Road",418,"Merrion Road",8.9766547354242
+7113,"Ballymun Road",418,"Merrion Road",8.9766547354242
+7113,"Ballymun Road",418,"Merrion Road",8.9766547354242
+7113,"Ballymun Road",418,"Merrion Road",8.9766547354242
+7113,"Ballymun Road",418,"Merrion Road",8.868940898417577
+7113,"Ballymun Road",418,"Merrion Road",8.859372474539178
+7113,"Ballymun Road",418,"Merrion Road",8.783500374646747
+7113,"Ballymun Road",418,"Merrion Road",8.592595432377582
+7113,"Ballymun Road",418,"Merrion Road",8.466531184914238
+7113,"Ballymun Road",418,"Merrion Road",8.309252473205058
+113,"Ballymun Road",418,"Merrion Road",7.8719920819124445
+113,"Ballymun Road",418,"Merrion Road",7.856720110035106
+147,"Mobhi Road",418,"Merrion Road",5.920238972263012
+147,"Mobhi Road",418,"Merrion Road",5.85684655210373
+147,"Mobhi Road",418,"Merrion Road",5.786296334283306
+273,"O'Connell St",418,"Merrion Road",3.3559810682793914
+273,"O'Connell St",418,"Merrion Road",3.3559810682793914
+273,"O'Connell St",418,"Merrion Road",3.3559810682793914
+273,"O'Connell St",418,"Merrion Road",3.3559810682793914
+273,"O'Connell St",418,"Merrion Road",3.325066769633804
+273,"O'Connell St",418,"Merrion Road",3.2015094524221097
+273,"O'Connell St",418,"Merrion Road",3.1906021286753847
+273,"O'Connell St",418,"Merrion Road",3.192600290964634
+273,"O'Connell St",418,"Merrion Road",3.1808818593152264
+408,"Merrion Sq",418,"Merrion Road",2.4489569536294082
+408,"Merrion Sq",418,"Merrion Road",2.3114961015489746
+412,"Northumberland Rd",418,"Merrion Road",1.4060395384371702
+414,"Pembroke Road",418,"Merrion Road",0.9764100149535033
+414,"Pembroke Road",418,"Merrion Road",0.8489865873192939
+416,Ballsbridge,418,"Merrion Road",0.5105535566222696
+416,Ballsbridge,418,"Merrion Road",0.4412118059345169
+416,Ballsbridge,418,"Merrion Road",0.37971411566441776
+422,"Merrion Road",418,"Merrion Road",1.2148300592050234
+422,"Merrion Road",418,"Merrion Road",1.2148300592050234
+422,"Merrion Road",418,"Merrion Road",1.3800006440684505
+424,"Merrion Road",418,"Merrion Road",1.7397389737045117
+424,"Merrion Road",418,"Merrion Road",1.8558468180744705
+424,"Merrion Road",418,"Merrion Road",1.9023119112659765
+424,"Merrion Road",418,"Merrion Road",2.056787808051613
+426,"Rock Road",418,"Merrion Road",2.306876087075362
+426,"Rock Road",418,"Merrion Road",2.5918289517903195
+428,"Rock Road",418,"Merrion Road",3.125620578118185
+428,"Rock Road",418,"Merrion Road",3.304264835215258
+6334,"Frascati Road",418,"Merrion Road",3.925761767754523
+6334,"Frascati Road",418,"Merrion Road",3.925761767754523
+6334,"Frascati Road",418,"Merrion Road",4.011812308559243
+6334,"Frascati Road",418,"Merrion Road",4.018768086477744
+6334,"Frascati Road",418,"Merrion Road",4.215769925311328
+6334,"Frascati Road",418,"Merrion Road",4.4787574168951805
+6334,"Frascati Road",418,"Merrion Road",4.63558360463603
+6334,"Frascati Road",418,"Merrion Road",4.63558360463603
+6334,"Frascati Road",418,"Merrion Road",4.63558360463603
+6334,"Frascati Road",418,"Merrion Road",4.724555302602625
+7113,"Ballymun Road",418,"Merrion Road",9.07904109152064
+7113,"Ballymun Road",418,"Merrion Road",9.07904109152064
+7113,"Ballymun Road",418,"Merrion Road",9.07904109152064
+7113,"Ballymun Road",418,"Merrion Road",9.07904109152064
+7113,"Ballymun Road",418,"Merrion Road",9.07904109152064
+7113,"Ballymun Road",418,"Merrion Road",8.971441585467224
+7113,"Ballymun Road",418,"Merrion Road",8.961869611001614
+7113,"Ballymun Road",418,"Merrion Road",8.885956865926364
+7113,"Ballymun Road",418,"Merrion Road",8.695246410839115
+7113,"Ballymun Road",418,"Merrion Road",8.569461427590525
+7113,"Ballymun Road",418,"Merrion Road",8.412543688177676
+113,"Ballymun Road",418,"Merrion Road",7.976142528752034
+113,"Ballymun Road",418,"Merrion Road",7.96090194992336
+147,"Mobhi Road",418,"Merrion Road",6.030359318849079
+147,"Mobhi Road",418,"Merrion Road",5.967561564390797
+147,"Mobhi Road",418,"Merrion Road",5.8978001464073415
+273,"O'Connell St",418,"Merrion Road",3.4706727968597404
+273,"O'Connell St",418,"Merrion Road",3.4706727968597404
+273,"O'Connell St",418,"Merrion Road",3.4706727968597404
+273,"O'Connell St",418,"Merrion Road",3.4706727968597404
+273,"O'Connell St",418,"Merrion Road",3.439760228877892
+273,"O'Connell St",418,"Merrion Road",3.3162025613989448
+273,"O'Connell St",418,"Merrion Road",3.3052301283218304
+273,"O'Connell St",418,"Merrion Road",3.3071845931047665
+273,"O'Connell St",418,"Merrion Road",3.2953118578272913
+408,"Merrion Sq",418,"Merrion Road",2.5636221376978368
+408,"Merrion Sq",418,"Merrion Road",2.426185524503227
+412,"Northumberland Rd",418,"Merrion Road",1.5205228022208508
+414,"Pembroke Road",418,"Merrion Road",1.090861086888011
+414,"Pembroke Road",418,"Merrion Road",0.9631548817797791
+416,Ballsbridge,418,"Merrion Road",0.6247523675374576
+416,Ballsbridge,418,"Merrion Road",0.555717969138567
+416,Ballsbridge,418,"Merrion Road",0.49439763984768864
+422,"Merrion Road",418,"Merrion Road",1.1001519216726066
+422,"Merrion Road",418,"Merrion Road",1.1001519216726066
+422,"Merrion Road",418,"Merrion Road",1.2654734841323603
+424,"Merrion Road",418,"Merrion Road",1.6253065703027985
+424,"Merrion Road",418,"Merrion Road",1.741262423570256
+424,"Merrion Road",418,"Merrion Road",1.7876785866701448
+424,"Merrion Road",418,"Merrion Road",1.9420941991864213
+426,"Rock Road",418,"Merrion Road",2.1922083823827134
+426,"Rock Road",418,"Merrion Road",2.477143333111524
+428,"Rock Road",418,"Merrion Road",3.010955781369911
+428,"Rock Road",418,"Merrion Road",3.189592430973133
+6334,"Frascati Road",418,"Merrion Road",3.8111113013955333
+6334,"Frascati Road",418,"Merrion Road",3.8111113013955333
+6334,"Frascati Road",418,"Merrion Road",3.8971551949401357
+6334,"Frascati Road",418,"Merrion Road",3.904111553999257
+6334,"Frascati Road",418,"Merrion Road",4.101130429369066
+6334,"Frascati Road",418,"Merrion Road",4.364234095758716
+6334,"Frascati Road",418,"Merrion Road",4.521073090576526
+6334,"Frascati Road",418,"Merrion Road",4.521073090576526
+6334,"Frascati Road",418,"Merrion Road",4.521073090576526
+6334,"Frascati Road",418,"Merrion Road",4.610031910157614
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",9.96038163746279
+7113,"Ballymun Road",422,"Merrion Road",9.950792156955329
+7113,"Ballymun Road",422,"Merrion Road",9.87463162107037
+7113,"Ballymun Road",422,"Merrion Road",9.685920784240219
+7113,"Ballymun Road",422,"Merrion Road",9.562783626109606
+7113,"Ballymun Road",422,"Merrion Road",9.40927537097192
+113,"Ballymun Road",422,"Merrion Road",8.98106537670978
+113,"Ballymun Road",422,"Merrion Road",8.96612240998258
+147,"Mobhi Road",422,"Merrion Road",7.0894023304126685
+147,"Mobhi Road",422,"Merrion Road",7.031725564400515
+147,"Mobhi Road",422,"Merrion Road",6.968750996959975
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.539763750723198
+273,"O'Connell St",422,"Merrion Road",4.4162693980325525
+273,"O'Connell St",422,"Merrion Road",4.405276809479178
+273,"O'Connell St",422,"Merrion Road",4.407065307345129
+273,"O'Connell St",422,"Merrion Road",4.394459211282213
+408,"Merrion Sq",422,"Merrion Road",3.6637662821719132
+408,"Merrion Sq",422,"Merrion Road",3.526307309471762
+412,"Northumberland Rd",422,"Merrion Road",2.6188551247886753
+414,"Pembroke Road",422,"Merrion Road",2.1904763549581454
+414,"Pembroke Road",422,"Merrion Road",2.061953242370136
+416,Ballsbridge,422,"Merrion Road",1.7240177632813007
+416,Ballsbridge,422,"Merrion Road",1.6556605222530891
+416,Ballsbridge,422,"Merrion Road",1.5945441313113806
+418,"Merrion Road",422,"Merrion Road",1.2148300592050234
+418,"Merrion Road",422,"Merrion Road",1.1001519216726066
+424,"Merrion Road",422,"Merrion Road",0.5298387489057912
+424,"Merrion Road",422,"Merrion Road",0.6422633756563871
+424,"Merrion Road",422,"Merrion Road",0.6879011266408236
+424,"Merrion Road",422,"Merrion Road",0.8423257828523707
+426,"Rock Road",422,"Merrion Road",1.0937405818587345
+426,"Rock Road",422,"Merrion Road",1.3778430061117795
+428,"Rock Road",422,"Merrion Road",1.910830779219226
+428,"Rock Road",422,"Merrion Road",2.089444981249019
+6334,"Frascati Road",422,"Merrion Road",2.711045847710463
+6334,"Frascati Road",422,"Merrion Road",2.711045847710463
+6334,"Frascati Road",422,"Merrion Road",2.797056470231666
+6334,"Frascati Road",422,"Merrion Road",2.8040154204100967
+6334,"Frascati Road",422,"Merrion Road",3.001123354949707
+6334,"Frascati Road",422,"Merrion Road",3.2651408333812872
+6334,"Frascati Road",422,"Merrion Road",3.4220815759801235
+6334,"Frascati Road",422,"Merrion Road",3.4220815759801235
+6334,"Frascati Road",422,"Merrion Road",3.4220815759801235
+6334,"Frascati Road",422,"Merrion Road",3.510917263876508
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",10.066815626515478
+7113,"Ballymun Road",422,"Merrion Road",9.96038163746279
+7113,"Ballymun Road",422,"Merrion Road",9.950792156955329
+7113,"Ballymun Road",422,"Merrion Road",9.87463162107037
+7113,"Ballymun Road",422,"Merrion Road",9.685920784240219
+7113,"Ballymun Road",422,"Merrion Road",9.562783626109606
+7113,"Ballymun Road",422,"Merrion Road",9.40927537097192
+113,"Ballymun Road",422,"Merrion Road",8.98106537670978
+113,"Ballymun Road",422,"Merrion Road",8.96612240998258
+147,"Mobhi Road",422,"Merrion Road",7.0894023304126685
+147,"Mobhi Road",422,"Merrion Road",7.031725564400515
+147,"Mobhi Road",422,"Merrion Road",6.968750996959975
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.57060564248858
+273,"O'Connell St",422,"Merrion Road",4.539763750723198
+273,"O'Connell St",422,"Merrion Road",4.4162693980325525
+273,"O'Connell St",422,"Merrion Road",4.405276809479178
+273,"O'Connell St",422,"Merrion Road",4.407065307345129
+273,"O'Connell St",422,"Merrion Road",4.394459211282213
+408,"Merrion Sq",422,"Merrion Road",3.6637662821719132
+408,"Merrion Sq",422,"Merrion Road",3.526307309471762
+412,"Northumberland Rd",422,"Merrion Road",2.6188551247886753
+414,"Pembroke Road",422,"Merrion Road",2.1904763549581454
+414,"Pembroke Road",422,"Merrion Road",2.061953242370136
+416,Ballsbridge,422,"Merrion Road",1.7240177632813007
+416,Ballsbridge,422,"Merrion Road",1.6556605222530891
+416,Ballsbridge,422,"Merrion Road",1.5945441313113806
+418,"Merrion Road",422,"Merrion Road",1.2148300592050234
+418,"Merrion Road",422,"Merrion Road",1.1001519216726066
+424,"Merrion Road",422,"Merrion Road",0.5298387489057912
+424,"Merrion Road",422,"Merrion Road",0.6422633756563871
+424,"Merrion Road",422,"Merrion Road",0.6879011266408236
+424,"Merrion Road",422,"Merrion Road",0.8423257828523707
+426,"Rock Road",422,"Merrion Road",1.0937405818587345
+426,"Rock Road",422,"Merrion Road",1.3778430061117795
+428,"Rock Road",422,"Merrion Road",1.910830779219226
+428,"Rock Road",422,"Merrion Road",2.089444981249019
+6334,"Frascati Road",422,"Merrion Road",2.711045847710463
+6334,"Frascati Road",422,"Merrion Road",2.711045847710463
+6334,"Frascati Road",422,"Merrion Road",2.797056470231666
+6334,"Frascati Road",422,"Merrion Road",2.8040154204100967
+6334,"Frascati Road",422,"Merrion Road",3.001123354949707
+6334,"Frascati Road",422,"Merrion Road",3.2651408333812872
+6334,"Frascati Road",422,"Merrion Road",3.4220815759801235
+6334,"Frascati Road",422,"Merrion Road",3.4220815759801235
+6334,"Frascati Road",422,"Merrion Road",3.4220815759801235
+6334,"Frascati Road",422,"Merrion Road",3.510917263876508
+7113,"Ballymun Road",422,"Merrion Road",10.196132519004795
+7113,"Ballymun Road",422,"Merrion Road",10.196132519004795
+7113,"Ballymun Road",422,"Merrion Road",10.196132519004795
+7113,"Ballymun Road",422,"Merrion Road",10.196132519004795
+7113,"Ballymun Road",422,"Merrion Road",10.196132519004795
+7113,"Ballymun Road",422,"Merrion Road",10.08999178972808
+7113,"Ballymun Road",422,"Merrion Road",10.080401807334473
+7113,"Ballymun Road",422,"Merrion Road",10.004213638209572
+7113,"Ballymun Road",422,"Merrion Road",9.816010762624122
+7113,"Ballymun Road",422,"Merrion Road",9.6935030811076
+7113,"Ballymun Road",422,"Merrion Road",9.540807607639257
+113,"Ballymun Road",422,"Merrion Road",9.114592964000487
+113,"Ballymun Road",422,"Merrion Road",9.099722838207198
+147,"Mobhi Road",422,"Merrion Road",7.236778798216997
+147,"Mobhi Road",422,"Merrion Road",7.180525989019777
+147,"Mobhi Road",422,"Merrion Road",7.11952141596871
+273,"O'Connell St",422,"Merrion Road",4.734369557392537
+273,"O'Connell St",422,"Merrion Road",4.734369557392537
+273,"O'Connell St",422,"Merrion Road",4.734369557392537
+273,"O'Connell St",422,"Merrion Road",4.734369557392537
+273,"O'Connell St",422,"Merrion Road",4.703684617171944
+273,"O'Connell St",422,"Merrion Road",4.580372377927922
+273,"O'Connell St",422,"Merrion Road",4.5704608367007795
+273,"O'Connell St",422,"Merrion Road",4.572576266998984
+273,"O'Connell St",422,"Merrion Road",4.560736331271001
+408,"Merrion Sq",422,"Merrion Road",3.8285911847103256
+408,"Merrion Sq",422,"Merrion Road",3.6907038783619286
+412,"Northumberland Rd",422,"Merrion Road",2.781468967677396
+414,"Pembroke Road",422,"Merrion Road",2.3563264534125006
+414,"Pembroke Road",422,"Merrion Road",2.228319574329002
+416,Ballsbridge,422,"Merrion Road",1.890065318115334
+416,Ballsbridge,422,"Merrion Road",1.8211859755338518
+416,Ballsbridge,422,"Merrion Road",1.7595168483685049
+418,"Merrion Road",422,"Merrion Road",1.3800006440684505
+418,"Merrion Road",422,"Merrion Road",1.2654734841323603
+424,"Merrion Road",422,"Merrion Road",0.3603592511014974
+424,"Merrion Road",422,"Merrion Road",0.47607992254329645
+424,"Merrion Road",422,"Merrion Road",0.5233318907739046
+424,"Merrion Road",422,"Merrion Road",0.6823699816438232
+426,"Rock Road",422,"Merrion Road",0.9358094344713481
+426,"Rock Road",422,"Merrion Road",1.217694803014952
+428,"Rock Road",422,"Merrion Road",1.7467015908734325
+428,"Rock Road",422,"Merrion Road",1.9255306829199788
+6334,"Frascati Road",422,"Merrion Road",2.546403267732943
+6334,"Frascati Road",422,"Merrion Road",2.546403267732943
+6334,"Frascati Road",422,"Merrion Road",2.6325630179342667
+6334,"Frascati Road",422,"Merrion Road",2.6395069928725294
+6334,"Frascati Road",422,"Merrion Road",2.836234414044054
+6334,"Frascati Road",422,"Merrion Road",3.0987616139830836
+6334,"Frascati Road",422,"Merrion Road",3.2556004115319044
+6334,"Frascati Road",422,"Merrion Road",3.2556004115319044
+6334,"Frascati Road",422,"Merrion Road",3.2556004115319044
+6334,"Frascati Road",422,"Merrion Road",3.344559499758673
+7113,"Ballymun Road",424,"Merrion Road",10.510320389521276
+7113,"Ballymun Road",424,"Merrion Road",10.510320389521276
+7113,"Ballymun Road",424,"Merrion Road",10.510320389521276
+7113,"Ballymun Road",424,"Merrion Road",10.510320389521276
+7113,"Ballymun Road",424,"Merrion Road",10.510320389521276
+7113,"Ballymun Road",424,"Merrion Road",10.404653822975089
+7113,"Ballymun Road",424,"Merrion Road",10.395065407045353
+7113,"Ballymun Road",424,"Merrion Road",10.318853722909527
+7113,"Ballymun Road",424,"Merrion Road",10.131472355653377
+7113,"Ballymun Road",424,"Merrion Road",10.009951682836123
+7113,"Ballymun Road",424,"Merrion Road",9.858523542589264
+113,"Ballymun Road",424,"Merrion Road",9.435405207203436
+113,"Ballymun Road",424,"Merrion Road",9.420647154341385
+147,"Mobhi Road",424,"Merrion Road",7.577421665708222
+147,"Mobhi Road",424,"Merrion Road",7.5230048214671905
+147,"Mobhi Road",424,"Merrion Road",7.464472390647718
+273,"O'Connell St",424,"Merrion Road",5.092826736291621
+273,"O'Connell St",424,"Merrion Road",5.092826736291621
+273,"O'Connell St",424,"Merrion Road",5.092826736291621
+273,"O'Connell St",424,"Merrion Road",5.092826736291621
+273,"O'Connell St",424,"Merrion Road",5.062250061831719
+273,"O'Connell St",424,"Merrion Road",4.939066468823176
+273,"O'Connell St",424,"Merrion Road",4.9298066595073164
+273,"O'Connell St",424,"Merrion Road",4.932095617493365
+273,"O'Connell St",424,"Merrion Road",4.920612787331776
+408,"Merrion Sq",424,"Merrion Road",4.187779013433091
+408,"Merrion Sq",424,"Merrion Road",4.049651617881016
+412,"Northumberland Rd",424,"Merrion Road",3.139387171641127
+414,"Pembroke Road",424,"Merrion Road",2.7161451231356746
+414,"Pembroke Road",424,"Merrion Road",2.58834012244209
+416,Ballsbridge,424,"Merrion Road",2.250013869157067
+416,Ballsbridge,424,"Merrion Road",2.1809505805973703
+416,Ballsbridge,424,"Merrion Road",2.119061863914368
+418,"Merrion Road",424,"Merrion Road",1.7397389737045117
+418,"Merrion Road",424,"Merrion Road",1.6253065703027985
+422,"Merrion Road",424,"Merrion Road",0.5298387489057912
+422,"Merrion Road",424,"Merrion Road",0.5298387489057912
+422,"Merrion Road",424,"Merrion Road",0.3603592511014974
+426,"Rock Road",424,"Merrion Road",0.5926916475692555
+426,"Rock Road",424,"Merrion Road",0.8675415014448266
+428,"Rock Road",424,"Merrion Road",1.389544423664286
+428,"Rock Road",424,"Merrion Road",1.5684666114718924
+6334,"Frascati Road",424,"Merrion Road",2.1883026732694533
+6334,"Frascati Road",424,"Merrion Road",2.1883026732694533
+6334,"Frascati Road",424,"Merrion Road",2.2745755983940343
+6334,"Frascati Road",424,"Merrion Road",2.28150354523085
+6334,"Frascati Road",424,"Merrion Road",2.4778384157533524
+6334,"Frascati Road",424,"Merrion Road",2.73920472852831
+6334,"Frascati Road",424,"Merrion Road",2.8959685232604944
+6334,"Frascati Road",424,"Merrion Road",2.8959685232604944
+6334,"Frascati Road",424,"Merrion Road",2.8959685232604944
+6334,"Frascati Road",424,"Merrion Road",2.984995861710033
+7113,"Ballymun Road",424,"Merrion Road",10.632961480123152
+7113,"Ballymun Road",424,"Merrion Road",10.632961480123152
+7113,"Ballymun Road",424,"Merrion Road",10.632961480123152
+7113,"Ballymun Road",424,"Merrion Road",10.632961480123152
+7113,"Ballymun Road",424,"Merrion Road",10.632961480123152
+7113,"Ballymun Road",424,"Merrion Road",10.527327119645017
+7113,"Ballymun Road",424,"Merrion Road",10.517738903379026
+7113,"Ballymun Road",424,"Merrion Road",10.441526473825897
+7113,"Ballymun Road",424,"Merrion Road",10.25419917698432
+7113,"Ballymun Road",424,"Merrion Road",10.132739358609346
+7113,"Ballymun Road",424,"Merrion Road",9.981384310569906
+113,"Ballymun Road",424,"Merrion Road",9.558419885283188
+113,"Ballymun Road",424,"Merrion Road",9.543666696266264
+147,"Mobhi Road",424,"Merrion Road",7.700248162490648
+147,"Mobhi Road",424,"Merrion Road",7.645662744266298
+147,"Mobhi Road",424,"Merrion Road",7.5868383347898085
+273,"O'Connell St",424,"Merrion Road",5.210445376787877
+273,"O'Connell St",424,"Merrion Road",5.210445376787877
+273,"O'Connell St",424,"Merrion Road",5.210445376787877
+273,"O'Connell St",424,"Merrion Road",5.210445376787877
+273,"O'Connell St",424,"Merrion Road",5.179764171494953
+273,"O'Connell St",424,"Merrion Road",5.056451058185166
+273,"O'Connell St",424,"Merrion Road",5.046412839043226
+273,"O'Connell St",424,"Merrion Road",5.048444356433964
+273,"O'Connell St",424,"Merrion Road",5.036309371287355
+408,"Merrion Sq",424,"Merrion Road",4.304603173107083
+408,"Merrion Sq",424,"Merrion Road",4.166764699110322
+412,"Northumberland Rd",424,"Merrion Road",3.2574550306416605
+414,"Pembroke Road",424,"Merrion Road",2.832032487424565
+414,"Pembroke Road",424,"Merrion Road",2.7037945740340334
+416,Ballsbridge,424,"Merrion Road",2.365666622016255
+416,Ballsbridge,424,"Merrion Road",2.2969730970670565
+416,Ballsbridge,424,"Merrion Road",2.235444855407122
+418,"Merrion Road",424,"Merrion Road",1.8558468180744705
+418,"Merrion Road",424,"Merrion Road",1.741262423570256
+422,"Merrion Road",424,"Merrion Road",0.6422633756563871
+422,"Merrion Road",424,"Merrion Road",0.6422633756563871
+422,"Merrion Road",424,"Merrion Road",0.47607992254329645
+426,"Rock Road",424,"Merrion Road",0.4694798177129844
+426,"Rock Road",424,"Merrion Road",0.745383557051071
+428,"Rock Road",424,"Merrion Road",1.270712190634386
+428,"Rock Road",424,"Merrion Road",1.4495746423700806
+6334,"Frascati Road",424,"Merrion Road",2.07032404269348
+6334,"Frascati Road",424,"Merrion Road",2.07032404269348
+6334,"Frascati Road",424,"Merrion Road",2.1564887228834184
+6334,"Frascati Road",424,"Merrion Road",2.163431860512523
+6334,"Frascati Road",424,"Merrion Road",2.360160777721318
+6334,"Frascati Road",424,"Merrion Road",2.6231209872821193
+6334,"Frascati Road",424,"Merrion Road",2.780020256029682
+6334,"Frascati Road",424,"Merrion Road",2.780020256029682
+6334,"Frascati Road",424,"Merrion Road",2.780020256029682
+6334,"Frascati Road",424,"Merrion Road",2.8689122961438427
+7113,"Ballymun Road",424,"Merrion Road",10.683694186307
+7113,"Ballymun Road",424,"Merrion Road",10.683694186307
+7113,"Ballymun Road",424,"Merrion Road",10.683694186307
+7113,"Ballymun Road",424,"Merrion Road",10.683694186307
+7113,"Ballymun Road",424,"Merrion Road",10.683694186307
+7113,"Ballymun Road",424,"Merrion Road",10.578060779031068
+7113,"Ballymun Road",424,"Merrion Road",10.56847256765572
+7113,"Ballymun Road",424,"Merrion Road",10.492260121765263
+7113,"Ballymun Road",424,"Merrion Road",10.304933605103738
+7113,"Ballymun Road",424,"Merrion Road",10.18347323135565
+7113,"Ballymun Road",424,"Merrion Road",10.032115054752037
+113,"Ballymun Road",424,"Merrion Road",9.609130824196571
+113,"Ballymun Road",424,"Merrion Road",9.594376579210671
+147,"Mobhi Road",424,"Merrion Road",7.750272024830305
+147,"Mobhi Road",424,"Merrion Road",7.695550709059623
+147,"Mobhi Road",424,"Merrion Road",7.6365119251037274
+273,"O'Connell St",424,"Merrion Road",5.257450160463797
+273,"O'Connell St",424,"Merrion Road",5.257450160463797
+273,"O'Connell St",424,"Merrion Road",5.257450160463797
+273,"O'Connell St",424,"Merrion Road",5.257450160463797
+273,"O'Connell St",424,"Merrion Road",5.226716168497723
+273,"O'Connell St",424,"Merrion Road",5.1033396518086125
+273,"O'Connell St",424,"Merrion Road",5.092908689000994
+273,"O'Connell St",424,"Merrion Road",5.094811362692508
+273,"O'Connell St",424,"Merrion Road",5.082352723420115
+408,"Merrion Sq",424,"Merrion Road",4.351228793404433
+408,"Merrion Sq",424,"Merrion Road",4.2135397212028725
+412,"Northumberland Rd",424,"Merrion Road",3.304747798852319
+414,"Pembroke Road",424,"Merrion Road",2.878272512949733
+414,"Pembroke Road",424,"Merrion Road",2.749837142341026
+416,Ballsbridge,424,"Merrion Road",2.4118400556005364
+416,Ballsbridge,424,"Merrion Road",2.3433316840641254
+416,Ballsbridge,424,"Merrion Road",2.2819839927845766
+418,"Merrion Road",424,"Merrion Road",1.9023119112659765
+418,"Merrion Road",424,"Merrion Road",1.7876785866701448
+422,"Merrion Road",424,"Merrion Road",0.6879011266408236
+422,"Merrion Road",424,"Merrion Road",0.6879011266408236
+422,"Merrion Road",424,"Merrion Road",0.5233318907739046
+426,"Rock Road",424,"Merrion Road",0.41905343219475427
+426,"Rock Road",424,"Merrion Road",0.6960873103868968
+428,"Rock Road",424,"Merrion Road",1.2235248286013418
+428,"Rock Road",424,"Merrion Road",1.4023053018840732
+6334,"Frascati Road",424,"Merrion Road",2.0234856713813985
+6334,"Frascati Road",424,"Merrion Road",2.0234856713813985
+6334,"Frascati Road",424,"Merrion Road",2.109578407286572
+6334,"Frascati Road",424,"Merrion Road",2.116529419279974
+6334,"Frascati Road",424,"Merrion Road",2.3134602378608236
+6334,"Frascati Road",424,"Merrion Road",2.5772723941187694
+6334,"Frascati Road",424,"Merrion Road",2.7342300638674923
+6334,"Frascati Road",424,"Merrion Road",2.7342300638674923
+6334,"Frascati Road",424,"Merrion Road",2.7342300638674923
+6334,"Frascati Road",424,"Merrion Road",2.823041509552928
+7113,"Ballymun Road",424,"Merrion Road",10.850275715285697
+7113,"Ballymun Road",424,"Merrion Road",10.850275715285697
+7113,"Ballymun Road",424,"Merrion Road",10.850275715285697
+7113,"Ballymun Road",424,"Merrion Road",10.850275715285697
+7113,"Ballymun Road",424,"Merrion Road",10.850275715285697
+7113,"Ballymun Road",424,"Merrion Road",10.744648845333312
+7113,"Ballymun Road",424,"Merrion Road",10.735060672534972
+7113,"Ballymun Road",424,"Merrion Road",10.658848098094357
+7113,"Ballymun Road",424,"Merrion Road",10.471530142737144
+7113,"Ballymun Road",424,"Merrion Road",10.350075189656877
+7113,"Ballymun Road",424,"Merrion Road",10.198716308204013
+113,"Ballymun Road",424,"Merrion Road",9.775691906438952
+113,"Ballymun Road",424,"Merrion Road",9.76093513699188
+147,"Mobhi Road",424,"Merrion Road",7.914811862619638
+147,"Mobhi Road",424,"Merrion Road",7.859676085005216
+147,"Mobhi Road",424,"Merrion Road",7.7999804897143505
+273,"O'Connell St",424,"Merrion Road",5.412748055529477
+273,"O'Connell St",424,"Merrion Road",5.412748055529477
+273,"O'Connell St",424,"Merrion Road",5.412748055529477
+273,"O'Connell St",424,"Merrion Road",5.412748055529477
+273,"O'Connell St",424,"Merrion Road",5.381853061793392
+273,"O'Connell St",424,"Merrion Road",5.25829111718255
+273,"O'Connell St",424,"Merrion Road",5.246643795598527
+273,"O'Connell St",424,"Merrion Road",5.248146562403316
+273,"O'Connell St",424,"Merrion Road",5.234684562636738
+408,"Merrion Sq",424,"Merrion Road",4.505451766480804
+408,"Merrion Sq",424,"Merrion Road",4.368241084599947
+412,"Northumberland Rd",424,"Merrion Road",3.4611765040765627
+414,"Pembroke Road",424,"Merrion Road",3.0316277876068307
+414,"Pembroke Road",424,"Merrion Road",2.9026423373484564
+416,Ballsbridge,424,"Merrion Road",2.56517549750017
+416,Ballsbridge,424,"Merrion Road",2.4972488810587694
+416,Ballsbridge,424,"Merrion Road",2.4364646515133668
+418,"Merrion Road",424,"Merrion Road",2.056787808051613
+418,"Merrion Road",424,"Merrion Road",1.9420941991864213
+422,"Merrion Road",424,"Merrion Road",0.8423257828523707
+422,"Merrion Road",424,"Merrion Road",0.8423257828523707
+422,"Merrion Road",424,"Merrion Road",0.6823699816438232
+426,"Rock Road",424,"Merrion Road",0.25408411902276873
+426,"Rock Road",424,"Merrion Road",0.5356911402443505
+428,"Rock Road",424,"Merrion Road",1.0703026074087003
+428,"Rock Road",424,"Merrion Road",1.2484608937964017
+6334,"Frascati Road",424,"Merrion Road",1.870564495355761
+6334,"Frascati Road",424,"Merrion Road",1.870564495355761
+6334,"Frascati Road",424,"Merrion Road",1.956340843005392
+6334,"Frascati Road",424,"Merrion Road",1.9633152173058888
+6334,"Frascati Road",424,"Merrion Road",2.160838780367172
+6334,"Frascati Road",424,"Merrion Road",2.4274894595369187
+6334,"Frascati Road",424,"Merrion Road",2.5845694028365918
+6334,"Frascati Road",424,"Merrion Road",2.5845694028365918
+6334,"Frascati Road",424,"Merrion Road",2.5845694028365918
+6334,"Frascati Road",424,"Merrion Road",2.673059529510463
+7113,"Ballymun Road",426,"Rock Road",11.099601338384776
+7113,"Ballymun Road",426,"Rock Road",11.099601338384776
+7113,"Ballymun Road",426,"Rock Road",11.099601338384776
+7113,"Ballymun Road",426,"Rock Road",11.099601338384776
+7113,"Ballymun Road",426,"Rock Road",11.099601338384776
+7113,"Ballymun Road",426,"Rock Road",10.994103653916387
+7113,"Ballymun Road",426,"Rock Road",10.984516404157684
+7113,"Ballymun Road",426,"Rock Road",10.908301885005889
+7113,"Ballymun Road",426,"Rock Road",10.72120513905239
+7113,"Ballymun Road",426,"Rock Road",10.60000553290776
+7113,"Ballymun Road",426,"Rock Road",10.448966545885112
+113,"Ballymun Road",426,"Rock Road",10.026687572029568
+113,"Ballymun Road",426,"Rock Road",10.011956677393792
+147,"Mobhi Road",426,"Rock Road",8.168822813231886
+147,"Mobhi Road",426,"Rock Road",8.113749300428054
+147,"Mobhi Road",426,"Rock Road",8.054047045978203
+273,"O'Connell St",426,"Rock Road",5.662705565271393
+273,"O'Connell St",426,"Rock Road",5.662705565271393
+273,"O'Connell St",426,"Rock Road",5.662705565271393
+273,"O'Connell St",426,"Rock Road",5.662705565271393
+273,"O'Connell St",426,"Rock Road",5.6316954241312756
+273,"O'Connell St",426,"Rock Road",5.508007766672487
+273,"O'Connell St",426,"Rock Road",5.495442271657085
+273,"O'Connell St",426,"Rock Road",5.496633574102813
+273,"O'Connell St",426,"Rock Road",5.482374198212463
+408,"Merrion Sq",426,"Rock Road",4.754709115800377
+408,"Merrion Sq",426,"Rock Road",4.617870582994049
+412,"Northumberland Rd",426,"Rock Road",3.712135085868868
+414,"Pembroke Road",426,"Rock Road",3.2805405031763755
+414,"Pembroke Road",426,"Rock Road",3.1511919087319957
+416,Ballsbridge,426,"Rock Road",2.8142418556647244
+416,Ballsbridge,426,"Rock Road",2.746753499952536
+416,Ballsbridge,426,"Rock Road",2.686380621143569
+418,"Merrion Road",426,"Rock Road",2.306876087075362
+418,"Merrion Road",426,"Rock Road",2.1922083823827134
+422,"Merrion Road",426,"Rock Road",1.0937405818587345
+422,"Merrion Road",426,"Rock Road",1.0937405818587345
+422,"Merrion Road",426,"Rock Road",0.9358094344713481
+424,"Merrion Road",426,"Rock Road",0.5926916475692555
+424,"Merrion Road",426,"Rock Road",0.4694798177129844
+424,"Merrion Road",426,"Rock Road",0.41905343219475427
+424,"Merrion Road",426,"Rock Road",0.25408411902276873
+428,"Rock Road",426,"Rock Road",0.826740959676138
+428,"Rock Road",426,"Rock Road",1.0033669252262185
+6334,"Frascati Road",426,"Rock Road",1.625248847409401
+6334,"Frascati Road",426,"Rock Road",1.625248847409401
+6334,"Frascati Road",426,"Rock Road",1.7105661437742508
+6334,"Frascati Road",426,"Rock Road",1.7175578221474788
+6334,"Frascati Road",426,"Rock Road",1.9155119838747892
+6334,"Frascati Road",426,"Rock Road",2.1850435656501603
+6334,"Frascati Road",426,"Rock Road",2.342110144483506
+6334,"Frascati Road",426,"Rock Road",2.342110144483506
+6334,"Frascati Road",426,"Rock Road",2.342110144483506
+6334,"Frascati Road",426,"Rock Road",2.430166238301734
+7113,"Ballymun Road",426,"Rock Road",11.358562085722598
+7113,"Ballymun Road",426,"Rock Road",11.358562085722598
+7113,"Ballymun Road",426,"Rock Road",11.358562085722598
+7113,"Ballymun Road",426,"Rock Road",11.358562085722598
+7113,"Ballymun Road",426,"Rock Road",11.358562085722598
+7113,"Ballymun Road",426,"Rock Road",11.253386424100572
+7113,"Ballymun Road",426,"Rock Road",11.24380221398356
+7113,"Ballymun Road",426,"Rock Road",11.167589302795873
+7113,"Ballymun Road",426,"Rock Road",10.981050399412375
+7113,"Ballymun Road",426,"Rock Road",10.860496505371813
+7113,"Ballymun Road",426,"Rock Road",10.710282645428151
+113,"Ballymun Road",426,"Rock Road",10.290015643754137
+113,"Ballymun Road",426,"Rock Road",10.275357034485163
+147,"Mobhi Road",426,"Rock Road",8.444309873351541
+147,"Mobhi Road",426,"Rock Road",8.390297518901948
+147,"Mobhi Road",426,"Rock Road",8.33201058850787
+273,"O'Connell St",426,"Rock Road",5.947786163856018
+273,"O'Connell St",426,"Rock Road",5.947786163856018
+273,"O'Connell St",426,"Rock Road",5.947786163856018
+273,"O'Connell St",426,"Rock Road",5.947786163856018
+273,"O'Connell St",426,"Rock Road",5.916824607171202
+273,"O'Connell St",426,"Rock Road",5.793186612410847
+273,"O'Connell St",426,"Rock Road",5.780920055482507
+273,"O'Connell St",426,"Rock Road",5.782187895032124
+273,"O'Connell St",426,"Rock Road",5.76807662558042
+408,"Merrion Sq",426,"Rock Road",5.040044286009447
+408,"Merrion Sq",426,"Rock Road",4.903073372216662
+412,"Northumberland Rd",426,"Rock Road",3.9966619486464925
+414,"Pembroke Road",426,"Rock Road",3.565953022788193
+414,"Pembroke Road",426,"Rock Road",3.4366953930189044
+416,Ballsbridge,426,"Rock Road",3.0995951555058
+416,Ballsbridge,426,"Rock Road",3.0319601896343893
+416,Ballsbridge,426,"Rock Road",2.9714252276982402
+418,"Merrion Road",426,"Rock Road",2.5918289517903195
+418,"Merrion Road",426,"Rock Road",2.477143333111524
+422,"Merrion Road",426,"Rock Road",1.3778430061117795
+422,"Merrion Road",426,"Rock Road",1.3778430061117795
+422,"Merrion Road",426,"Rock Road",1.217694803014952
+424,"Merrion Road",426,"Rock Road",0.8675415014448266
+424,"Merrion Road",426,"Rock Road",0.745383557051071
+424,"Merrion Road",426,"Rock Road",0.6960873103868968
+424,"Merrion Road",426,"Rock Road",0.5356911402443505
+428,"Rock Road",426,"Rock Road",0.5422608505622848
+428,"Rock Road",426,"Rock Road",0.7179813513579566
+6334,"Frascati Road",426,"Rock Road",1.3395931909429861
+6334,"Frascati Road",426,"Rock Road",1.3395931909429861
+6334,"Frascati Road",426,"Rock Road",1.4248273170057333
+6334,"Frascati Road",426,"Rock Road",1.4318206831330755
+6334,"Frascati Road",426,"Rock Road",1.6298190673711508
+6334,"Frascati Road",426,"Rock Road",1.900010109009923
+6334,"Frascati Road",426,"Rock Road",2.0570395749807617
+6334,"Frascati Road",426,"Rock Road",2.0570395749807617
+6334,"Frascati Road",426,"Rock Road",2.0570395749807617
+6334,"Frascati Road",426,"Rock Road",2.1449522775147214
+7113,"Ballymun Road",428,"Rock Road",11.82367027676396
+7113,"Ballymun Road",428,"Rock Road",11.82367027676396
+7113,"Ballymun Road",428,"Rock Road",11.82367027676396
+7113,"Ballymun Road",428,"Rock Road",11.82367027676396
+7113,"Ballymun Road",428,"Rock Road",11.82367027676396
+7113,"Ballymun Road",428,"Rock Road",11.71925797904982
+7113,"Ballymun Road",428,"Rock Road",11.709684614684962
+7113,"Ballymun Road",428,"Rock Road",11.633507766325087
+7113,"Ballymun Road",428,"Rock Road",11.448296012797847
+7113,"Ballymun Road",428,"Rock Road",11.329240129178249
+7113,"Ballymun Road",428,"Rock Road",11.180943692637133
+113,"Ballymun Road",428,"Rock Road",10.765400288916167
+113,"Ballymun Road",428,"Rock Road",10.750911880633778
+147,"Mobhi Road",428,"Rock Road",8.949053670427478
+147,"Mobhi Road",428,"Rock Road",8.89771852967627
+147,"Mobhi Road",428,"Rock Road",8.843074118077068
+273,"O'Connell St",428,"Rock Road",6.480974940806458
+273,"O'Connell St",428,"Rock Road",6.480974940806458
+273,"O'Connell St",428,"Rock Road",6.480974940806458
+273,"O'Connell St",428,"Rock Road",6.480974940806458
+273,"O'Connell St",428,"Rock Road",6.450236395908503
+273,"O'Connell St",428,"Rock Road",6.326845069562405
+273,"O'Connell St",428,"Rock Road",6.316100766692622
+273,"O'Connell St",428,"Rock Road",6.317823260862295
+273,"O'Connell St",428,"Rock Road",6.304759576344961
+408,"Merrion Sq",428,"Rock Road",5.574577114671138
+408,"Merrion Sq",428,"Rock Road",5.437000130318492
+412,"Northumberland Rd",428,"Rock Road",4.52815790365041
+414,"Pembroke Road",428,"Rock Road",4.101217439033636
+414,"Pembroke Road",428,"Rock Road",3.972471341350374
+416,Ballsbridge,428,"Rock Road",3.634741392537333
+416,Ballsbridge,428,"Rock Road",3.5664884872370277
+416,Ballsbridge,428,"Rock Road",3.5053267129096404
+418,"Merrion Road",428,"Rock Road",3.125620578118185
+418,"Merrion Road",428,"Rock Road",3.010955781369911
+422,"Merrion Road",428,"Rock Road",1.910830779219226
+422,"Merrion Road",428,"Rock Road",1.910830779219226
+422,"Merrion Road",428,"Rock Road",1.7467015908734325
+424,"Merrion Road",428,"Rock Road",1.389544423664286
+424,"Merrion Road",428,"Rock Road",1.270712190634386
+424,"Merrion Road",428,"Rock Road",1.2235248286013418
+424,"Merrion Road",428,"Rock Road",1.0703026074087003
+426,"Rock Road",428,"Rock Road",0.826740959676138
+426,"Rock Road",428,"Rock Road",0.5422608505622848
+6334,"Frascati Road",428,"Rock Road",0.8003348606975058
+6334,"Frascati Road",428,"Rock Road",0.8003348606975058
+6334,"Frascati Road",428,"Rock Road",0.8862497803274623
+6334,"Frascati Road",428,"Rock Road",0.8932134911998757
+6334,"Frascati Road",428,"Rock Road",1.0905655109107335
+6334,"Frascati Road",428,"Rock Road",1.3583561889770877
+6334,"Frascati Road",428,"Rock Road",1.5154365706199067
+6334,"Frascati Road",428,"Rock Road",1.5154365706199067
+6334,"Frascati Road",428,"Rock Road",1.5154365706199067
+6334,"Frascati Road",428,"Rock Road",1.60360372360256
+7113,"Ballymun Road",428,"Rock Road",11.994205992982698
+7113,"Ballymun Road",428,"Rock Road",11.994205992982698
+7113,"Ballymun Road",428,"Rock Road",11.994205992982698
+7113,"Ballymun Road",428,"Rock Road",11.994205992982698
+7113,"Ballymun Road",428,"Rock Road",11.994205992982698
+7113,"Ballymun Road",428,"Rock Road",11.88994444110825
+7113,"Ballymun Road",428,"Rock Road",11.880373742334994
+7113,"Ballymun Road",428,"Rock Road",11.804208684827488
+7113,"Ballymun Road",428,"Rock Road",11.619257707787344
+7113,"Ballymun Road",428,"Rock Road",11.500487814412246
+7113,"Ballymun Road",428,"Rock Road",11.352553405054277
+113,"Ballymun Road",428,"Rock Road",10.937886089746332
+113,"Ballymun Road",428,"Rock Road",10.923428687952867
+147,"Mobhi Road",428,"Rock Road",9.126147283891006
+147,"Mobhi Road",428,"Rock Road",9.075135789245548
+147,"Mobhi Road",428,"Rock Road",9.02089693482676
+273,"O'Connell St",428,"Rock Road",6.659737060338096
+273,"O'Connell St",428,"Rock Road",6.659737060338096
+273,"O'Connell St",428,"Rock Road",6.659737060338096
+273,"O'Connell St",428,"Rock Road",6.659737060338096
+273,"O'Connell St",428,"Rock Road",6.628981544909108
+273,"O'Connell St",428,"Rock Road",6.505569357408287
+273,"O'Connell St",428,"Rock Road",6.494671093178097
+273,"O'Connell St",428,"Rock Road",6.49633532618435
+273,"O'Connell St",428,"Rock Road",6.483110417375949
+408,"Merrion Sq",428,"Rock Road",5.753211166710797
+408,"Merrion Sq",428,"Rock Road",5.615691043289956
+412,"Northumberland Rd",428,"Rock Road",4.706998013268465
+414,"Pembroke Road",428,"Rock Road",4.279738003772624
+414,"Pembroke Road",428,"Rock Road",4.150919633259973
+416,Ballsbridge,428,"Rock Road",3.813261617930284
+416,Ballsbridge,428,"Rock Road",3.745077555729161
+416,Ballsbridge,428,"Rock Road",3.6839765442645627
+418,"Merrion Road",428,"Rock Road",3.304264835215258
+418,"Merrion Road",428,"Rock Road",3.189592430973133
+422,"Merrion Road",428,"Rock Road",2.089444981249019
+422,"Merrion Road",428,"Rock Road",2.089444981249019
+422,"Merrion Road",428,"Rock Road",1.9255306829199788
+424,"Merrion Road",428,"Rock Road",1.5684666114718924
+424,"Merrion Road",428,"Rock Road",1.4495746423700806
+424,"Merrion Road",428,"Rock Road",1.4023053018840732
+424,"Merrion Road",428,"Rock Road",1.2484608937964017
+426,"Rock Road",428,"Rock Road",1.0033669252262185
+426,"Rock Road",428,"Rock Road",0.7179813513579566
+6334,"Frascati Road",428,"Rock Road",0.6221867957567484
+6334,"Frascati Road",428,"Rock Road",0.6221867957567484
+6334,"Frascati Road",428,"Rock Road",0.7078814015886821
+6334,"Frascati Road",428,"Rock Road",0.7148569193910724
+6334,"Frascati Road",428,"Rock Road",0.9124985810393968
+6334,"Frascati Road",428,"Rock Road",1.1821421004070662
+6334,"Frascati Road",428,"Rock Road",1.3391342399767687
+6334,"Frascati Road",428,"Rock Road",1.3391342399767687
+6334,"Frascati Road",428,"Rock Road",1.3391342399767687
+6334,"Frascati Road",428,"Rock Road",1.4269789890110653
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.46351131602357
+7113,"Ballymun Road",6334,"Frascati Road",12.453954539750779
+7113,"Ballymun Road",6334,"Frascati Road",12.377859342906177
+7113,"Ballymun Road",6334,"Frascati Road",12.194091517809364
+7113,"Ballymun Road",6334,"Frascati Road",12.076603347986993
+7113,"Ballymun Road",6334,"Frascati Road",11.93029855621668
+113,"Ballymun Road",6334,"Frascati Road",11.519627944165462
+113,"Ballymun Road",6334,"Frascati Road",11.505313060716166
+147,"Mobhi Road",6334,"Frascati Road",9.730589862537217
+147,"Mobhi Road",6334,"Frascati Road",9.681416735606842
+147,"Mobhi Road",6334,"Frascati Road",9.629613427236027
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.250087833362972
+273,"O'Connell St",6334,"Frascati Road",7.126762973547678
+273,"O'Connell St",6334,"Frascati Road",7.116315674199127
+273,"O'Connell St",6334,"Frascati Road",7.118095130057491
+273,"O'Connell St",6334,"Frascati Road",7.105094124214741
+408,"Merrion Sq",6334,"Frascati Road",6.3747051237100205
+408,"Merrion Sq",6334,"Frascati Road",6.237015040311064
+412,"Northumberland Rd",6334,"Frascati Road",5.3276077154319665
+414,"Pembroke Road",6334,"Frascati Road",4.901491022192183
+414,"Pembroke Road",6334,"Frascati Road",4.772787085517463
+416,Ballsbridge,6334,"Frascati Road",4.435018101014073
+416,Ballsbridge,6334,"Frascati Road",4.366699844190538
+416,Ballsbridge,6334,"Frascati Road",4.305451402455576
+418,"Merrion Road",6334,"Frascati Road",3.925761767754523
+418,"Merrion Road",6334,"Frascati Road",3.8111113013955333
+422,"Merrion Road",6334,"Frascati Road",2.711045847710463
+422,"Merrion Road",6334,"Frascati Road",2.711045847710463
+422,"Merrion Road",6334,"Frascati Road",2.546403267732943
+424,"Merrion Road",6334,"Frascati Road",2.1883026732694533
+424,"Merrion Road",6334,"Frascati Road",2.07032404269348
+424,"Merrion Road",6334,"Frascati Road",2.0234856713813985
+424,"Merrion Road",6334,"Frascati Road",1.870564495355761
+426,"Rock Road",6334,"Frascati Road",1.625248847409401
+426,"Rock Road",6334,"Frascati Road",1.3395931909429861
+428,"Rock Road",6334,"Frascati Road",0.8003348606975058
+428,"Rock Road",6334,"Frascati Road",0.6221867957567484
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.567091607835186
+7113,"Ballymun Road",6334,"Frascati Road",12.46351131602357
+7113,"Ballymun Road",6334,"Frascati Road",12.453954539750779
+7113,"Ballymun Road",6334,"Frascati Road",12.377859342906177
+7113,"Ballymun Road",6334,"Frascati Road",12.194091517809364
+7113,"Ballymun Road",6334,"Frascati Road",12.076603347986993
+7113,"Ballymun Road",6334,"Frascati Road",11.93029855621668
+113,"Ballymun Road",6334,"Frascati Road",11.519627944165462
+113,"Ballymun Road",6334,"Frascati Road",11.505313060716166
+147,"Mobhi Road",6334,"Frascati Road",9.730589862537217
+147,"Mobhi Road",6334,"Frascati Road",9.681416735606842
+147,"Mobhi Road",6334,"Frascati Road",9.629613427236027
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.280766274325115
+273,"O'Connell St",6334,"Frascati Road",7.250087833362972
+273,"O'Connell St",6334,"Frascati Road",7.126762973547678
+273,"O'Connell St",6334,"Frascati Road",7.116315674199127
+273,"O'Connell St",6334,"Frascati Road",7.118095130057491
+273,"O'Connell St",6334,"Frascati Road",7.105094124214741
+408,"Merrion Sq",6334,"Frascati Road",6.3747051237100205
+408,"Merrion Sq",6334,"Frascati Road",6.237015040311064
+412,"Northumberland Rd",6334,"Frascati Road",5.3276077154319665
+414,"Pembroke Road",6334,"Frascati Road",4.901491022192183
+414,"Pembroke Road",6334,"Frascati Road",4.772787085517463
+416,Ballsbridge,6334,"Frascati Road",4.435018101014073
+416,Ballsbridge,6334,"Frascati Road",4.366699844190538
+416,Ballsbridge,6334,"Frascati Road",4.305451402455576
+418,"Merrion Road",6334,"Frascati Road",3.925761767754523
+418,"Merrion Road",6334,"Frascati Road",3.8111113013955333
+422,"Merrion Road",6334,"Frascati Road",2.711045847710463
+422,"Merrion Road",6334,"Frascati Road",2.711045847710463
+422,"Merrion Road",6334,"Frascati Road",2.546403267732943
+424,"Merrion Road",6334,"Frascati Road",2.1883026732694533
+424,"Merrion Road",6334,"Frascati Road",2.07032404269348
+424,"Merrion Road",6334,"Frascati Road",2.0234856713813985
+424,"Merrion Road",6334,"Frascati Road",1.870564495355761
+426,"Rock Road",6334,"Frascati Road",1.625248847409401
+426,"Rock Road",6334,"Frascati Road",1.3395931909429861
+428,"Rock Road",6334,"Frascati Road",0.8003348606975058
+428,"Rock Road",6334,"Frascati Road",0.6221867957567484
+7113,"Ballymun Road",6334,"Frascati Road",12.650954495549227
+7113,"Ballymun Road",6334,"Frascati Road",12.650954495549227
+7113,"Ballymun Road",6334,"Frascati Road",12.650954495549227
+7113,"Ballymun Road",6334,"Frascati Road",12.650954495549227
+7113,"Ballymun Road",6334,"Frascati Road",12.650954495549227
+7113,"Ballymun Road",6334,"Frascati Road",12.547433591805929
+7113,"Ballymun Road",6334,"Frascati Road",12.537878159297655
+7113,"Ballymun Road",6334,"Frascati Road",12.461790216164873
+7113,"Ballymun Road",6334,"Frascati Road",12.278124846838613
+7113,"Ballymun Road",6334,"Frascati Road",12.16074518843695
+7113,"Ballymun Road",6334,"Frascati Road",12.014576757282558
+113,"Ballymun Road",6334,"Frascati Road",11.604233541492896
+113,"Ballymun Road",6334,"Frascati Road",11.58993010569329
+147,"Mobhi Road",6334,"Frascati Road",9.816734915384158
+147,"Mobhi Road",6334,"Frascati Road",9.767648889838505
+147,"Mobhi Road",6334,"Frascati Road",9.715946289653559
+273,"O'Connell St",6334,"Frascati Road",7.366932571449141
+273,"O'Connell St",6334,"Frascati Road",7.366932571449141
+273,"O'Connell St",6334,"Frascati Road",7.366932571449141
+273,"O'Connell St",6334,"Frascati Road",7.366932571449141
+273,"O'Connell St",6334,"Frascati Road",7.336239504639098
+273,"O'Connell St",6334,"Frascati Road",7.212896816964342
+273,"O'Connell St",6334,"Frascati Road",7.202333159526566
+273,"O'Connell St",6334,"Frascati Road",7.204072010823965
+273,"O'Connell St",6334,"Frascati Road",7.1909644564606205
+408,"Merrion Sq",6334,"Frascati Road",6.460765958435662
+408,"Merrion Sq",6334,"Frascati Road",6.323118127200418
+412,"Northumberland Rd",6334,"Frascati Road",5.4138344681883925
+414,"Pembroke Road",6334,"Frascati Road",4.987465986974792
+414,"Pembroke Road",6334,"Frascati Road",4.858714995905813
+416,Ballsbridge,6334,"Frascati Road",4.520990228069363
+416,Ballsbridge,6334,"Frascati Road",4.452716944904356
+416,Ballsbridge,6334,"Frascati Road",4.391510003821399
+418,"Merrion Road",6334,"Frascati Road",4.011812308559243
+418,"Merrion Road",6334,"Frascati Road",3.8971551949401357
+422,"Merrion Road",6334,"Frascati Road",2.797056470231666
+422,"Merrion Road",6334,"Frascati Road",2.797056470231666
+422,"Merrion Road",6334,"Frascati Road",2.6325630179342667
+424,"Merrion Road",6334,"Frascati Road",2.2745755983940343
+424,"Merrion Road",6334,"Frascati Road",2.1564887228834184
+424,"Merrion Road",6334,"Frascati Road",2.109578407286572
+424,"Merrion Road",6334,"Frascati Road",1.956340843005392
+426,"Rock Road",6334,"Frascati Road",1.7105661437742508
+426,"Rock Road",6334,"Frascati Road",1.4248273170057333
+428,"Rock Road",6334,"Frascati Road",0.8862497803274623
+428,"Rock Road",6334,"Frascati Road",0.7078814015886821
+7113,"Ballymun Road",6334,"Frascati Road",12.657233789533084
+7113,"Ballymun Road",6334,"Frascati Road",12.657233789533084
+7113,"Ballymun Road",6334,"Frascati Road",12.657233789533084
+7113,"Ballymun Road",6334,"Frascati Road",12.657233789533084
+7113,"Ballymun Road",6334,"Frascati Road",12.657233789533084
+7113,"Ballymun Road",6334,"Frascati Road",12.553721618054242
+7113,"Ballymun Road",6334,"Frascati Road",12.54416638586885
+7113,"Ballymun Road",6334,"Frascati Road",12.468079527686466
+7113,"Ballymun Road",6334,"Frascati Road",12.284429353242524
+7113,"Ballymun Road",6334,"Frascati Road",12.1670659404405
+7113,"Ballymun Road",6334,"Frascati Road",12.02091819026194
+113,"Ballymun Road",6334,"Frascati Road",11.610626024879549
+113,"Ballymun Road",6334,"Frascati Road",11.596324413432223
+147,"Mobhi Road",6334,"Frascati Road",9.82342405696529
+147,"Mobhi Road",6334,"Frascati Road",9.774362997826513
+147,"Mobhi Road",6334,"Frascati Road",9.722693992512658
+273,"O'Connell St",6334,"Frascati Road",7.373876474826393
+273,"O'Connell St",6334,"Frascati Road",7.373876474826393
+273,"O'Connell St",6334,"Frascati Road",7.373876474826393
+273,"O'Connell St",6334,"Frascati Road",7.373876474826393
+273,"O'Connell St",6334,"Frascati Road",7.343185149950639
+273,"O'Connell St",6334,"Frascati Road",7.2198444935106325
+273,"O'Connell St",6334,"Frascati Road",7.209292219721994
+273,"O'Connell St",6334,"Frascati Road",7.211034412242054
+273,"O'Connell St",6334,"Frascati Road",7.197934454940254
+408,"Merrion Sq",6334,"Frascati Road",6.467721071292216
+408,"Merrion Sq",6334,"Frascati Road",6.330069055967784
+412,"Northumberland Rd",6334,"Frascati Road",5.420770239226179
+414,"Pembroke Road",6334,"Frascati Road",4.99442834225572
+414,"Pembroke Road",6334,"Frascati Road",4.865680866986176
+416,Ballsbridge,6334,"Frascati Road",4.527952741118747
+416,Ballsbridge,6334,"Frascati Road",4.4596757667894344
+416,Ballsbridge,6334,"Frascati Road",4.398465100044324
+418,"Merrion Road",6334,"Frascati Road",4.018768086477744
+418,"Merrion Road",6334,"Frascati Road",3.904111553999257
+422,"Merrion Road",6334,"Frascati Road",2.8040154204100967
+422,"Merrion Road",6334,"Frascati Road",2.8040154204100967
+422,"Merrion Road",6334,"Frascati Road",2.6395069928725294
+424,"Merrion Road",6334,"Frascati Road",2.28150354523085
+424,"Merrion Road",6334,"Frascati Road",2.163431860512523
+424,"Merrion Road",6334,"Frascati Road",2.116529419279974
+424,"Merrion Road",6334,"Frascati Road",1.9633152173058888
+426,"Rock Road",6334,"Frascati Road",1.7175578221474788
+426,"Rock Road",6334,"Frascati Road",1.4318206831330755
+428,"Rock Road",6334,"Frascati Road",0.8932134911998757
+428,"Rock Road",6334,"Frascati Road",0.7148569193910724
+7113,"Ballymun Road",6334,"Frascati Road",12.835499062814097
+7113,"Ballymun Road",6334,"Frascati Road",12.835499062814097
+7113,"Ballymun Road",6334,"Frascati Road",12.835499062814097
+7113,"Ballymun Road",6334,"Frascati Road",12.835499062814097
+7113,"Ballymun Road",6334,"Frascati Road",12.835499062814097
+7113,"Ballymun Road",6334,"Frascati Road",12.732231722337158
+7113,"Ballymun Road",6334,"Frascati Road",12.722682267035937
+7113,"Ballymun Road",6334,"Frascati Road",12.646627354982778
+7113,"Ballymun Road",6334,"Frascati Road",12.463403220835932
+7113,"Ballymun Road",6334,"Frascati Road",12.346493237765436
+7113,"Ballymun Road",6334,"Frascati Road",12.200922463337573
+113,"Ballymun Road",6334,"Frascati Road",11.79205478742282
+113,"Ballymun Road",6334,"Frascati Road",11.77780405091643
+147,"Mobhi Road",6334,"Frascati Road",10.013083930940182
+147,"Mobhi Road",6334,"Frascati Road",9.96471066528817
+147,"Mobhi Road",6334,"Frascati Road",9.913966218867559
+273,"O'Connell St",6334,"Frascati Road",7.570531527134008
+273,"O'Connell St",6334,"Frascati Road",7.570531527134008
+273,"O'Connell St",6334,"Frascati Road",7.570531527134008
+273,"O'Connell St",6334,"Frascati Road",7.570531527134008
+273,"O'Connell St",6334,"Frascati Road",7.539887385765185
+273,"O'Connell St",6334,"Frascati Road",7.4166021961831605
+273,"O'Connell St",6334,"Frascati Road",7.406356569871481
+273,"O'Connell St",6334,"Frascati Road",7.408188598279437
+273,"O'Connell St",6334,"Frascati Road",7.395292528118215
+408,"Merrion Sq",6334,"Frascati Road",6.664683085833516
+408,"Merrion Sq",6334,"Frascati Road",6.526919576308958
+412,"Northumberland Rd",6334,"Frascati Road",5.617222338171415
+414,"Pembroke Road",6334,"Frascati Road",5.191593741819844
+414,"Pembroke Road",6334,"Frascati Road",5.0629405069134785
+416,Ballsbridge,6334,"Frascati Road",4.725126374042493
+416,Ballsbridge,6334,"Frascati Road",4.656752508243099
+416,Ballsbridge,6334,"Frascati Road",4.595443988869466
+418,"Merrion Road",6334,"Frascati Road",4.215769925311328
+418,"Merrion Road",6334,"Frascati Road",4.101130429369066
+422,"Merrion Road",6334,"Frascati Road",3.001123354949707
+422,"Merrion Road",6334,"Frascati Road",3.001123354949707
+422,"Merrion Road",6334,"Frascati Road",2.836234414044054
+424,"Merrion Road",6334,"Frascati Road",2.4778384157533524
+424,"Merrion Road",6334,"Frascati Road",2.360160777721318
+424,"Merrion Road",6334,"Frascati Road",2.3134602378608236
+424,"Merrion Road",6334,"Frascati Road",2.160838780367172
+426,"Rock Road",6334,"Frascati Road",1.9155119838747892
+426,"Rock Road",6334,"Frascati Road",1.6298190673711508
+428,"Rock Road",6334,"Frascati Road",1.0905655109107335
+428,"Rock Road",6334,"Frascati Road",0.9124985810393968
+7113,"Ballymun Road",6334,"Frascati Road",13.048072722105191
+7113,"Ballymun Road",6334,"Frascati Road",13.048072722105191
+7113,"Ballymun Road",6334,"Frascati Road",13.048072722105191
+7113,"Ballymun Road",6334,"Frascati Road",13.048072722105191
+7113,"Ballymun Road",6334,"Frascati Road",13.048072722105191
+7113,"Ballymun Road",6334,"Frascati Road",12.945338266004182
+7113,"Ballymun Road",6334,"Frascati Road",12.935802487131498
+7113,"Ballymun Road",6334,"Frascati Road",12.85982683963306
+7113,"Ballymun Road",6334,"Frascati Road",12.677534415997446
+7113,"Ballymun Road",6334,"Frascati Road",12.561608443489314
+7113,"Ballymun Road",6334,"Frascati Road",12.41729630260802
+113,"Ballymun Road",6334,"Frascati Road",12.011579838514557
+113,"Ballymun Road",6334,"Frascati Road",11.997442590236902
+147,"Mobhi Road",6334,"Frascati Road",10.2521345794879
+147,"Mobhi Road",6334,"Frascati Road",10.205542097033298
+147,"Mobhi Road",6334,"Frascati Road",10.157254448734909
+273,"O'Connell St",6334,"Frascati Road",7.831328347460285
+273,"O'Connell St",6334,"Frascati Road",7.831328347460285
+273,"O'Connell St",6334,"Frascati Road",7.831328347460285
+273,"O'Connell St",6334,"Frascati Road",7.831328347460285
+273,"O'Connell St",6334,"Frascati Road",7.800889900307911
+273,"O'Connell St",6334,"Frascati Road",7.677859931601544
+273,"O'Connell St",6334,"Frascati Road",7.66901005954107
+273,"O'Connell St",6334,"Frascati Road",7.671276095426872
+273,"O'Connell St",6334,"Frascati Road",7.659423682175701
+408,"Merrion Sq",6334,"Frascati Road",6.9269527953113945
+408,"Merrion Sq",6334,"Frascati Road",6.788707070965872
+412,"Northumberland Rd",6334,"Frascati Road",5.877502443340677
+414,"Pembroke Road",6334,"Frascati Road",5.4550777422425085
+414,"Pembroke Road",6334,"Frascati Road",5.326914985044398
+416,Ballsbridge,6334,"Frascati Road",4.9887603791643045
+416,Ballsbridge,6334,"Frascati Road",4.919947575021382
+416,Ballsbridge,6334,"Frascati Road",4.858209945219894
+418,"Merrion Road",6334,"Frascati Road",4.4787574168951805
+418,"Merrion Road",6334,"Frascati Road",4.364234095758716
+422,"Merrion Road",6334,"Frascati Road",3.2651408333812872
+422,"Merrion Road",6334,"Frascati Road",3.2651408333812872
+422,"Merrion Road",6334,"Frascati Road",3.0987616139830836
+424,"Merrion Road",6334,"Frascati Road",2.73920472852831
+424,"Merrion Road",6334,"Frascati Road",2.6231209872821193
+424,"Merrion Road",6334,"Frascati Road",2.5772723941187694
+424,"Merrion Road",6334,"Frascati Road",2.4274894595369187
+426,"Rock Road",6334,"Frascati Road",2.1850435656501603
+426,"Rock Road",6334,"Frascati Road",1.900010109009923
+428,"Rock Road",6334,"Frascati Road",1.3583561889770877
+428,"Rock Road",6334,"Frascati Road",1.1821421004070662
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.089685151174677
+7113,"Ballymun Road",6334,"Frascati Road",13.08015433021356
+7113,"Ballymun Road",6334,"Frascati Road",13.004208372920537
+7113,"Ballymun Road",6334,"Frascati Road",12.82223129880252
+7113,"Ballymun Road",6334,"Frascati Road",12.706632721934959
+7113,"Ballymun Road",6334,"Frascati Road",12.562735954603788
+113,"Ballymun Road",6334,"Frascati Road",12.158045120152995
+113,"Ballymun Road",6334,"Frascati Road",12.143944337093874
+147,"Mobhi Road",6334,"Frascati Road",10.40429816661678
+147,"Mobhi Road",6334,"Frascati Road",10.358156410877616
+147,"Mobhi Road",6334,"Frascati Road",10.310468544676667
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.957453280408539
+273,"O'Connell St",6334,"Frascati Road",7.834454441219215
+273,"O'Connell St",6334,"Frascati Road",7.825753800574136
+273,"O'Connell St",6334,"Frascati Road",7.828061703057222
+273,"O'Connell St",6334,"Frascati Road",7.816300762266528
+408,"Merrion Sq",6334,"Frascati Road",7.083666543646059
+408,"Merrion Sq",6334,"Frascati Road",6.945372383979632
+412,"Northumberland Rd",6334,"Frascati Road",6.034013895648047
+414,"Pembroke Road",6334,"Frascati Road",5.611926022387106
+414,"Pembroke Road",6334,"Frascati Road",5.483804793221521
+416,Ballsbridge,6334,"Frascati Road",5.145629065130286
+416,Ballsbridge,6334,"Frascati Road",5.076781296990518
+416,Ballsbridge,6334,"Frascati Road",5.015007438539374
+418,"Merrion Road",6334,"Frascati Road",4.63558360463603
+418,"Merrion Road",6334,"Frascati Road",4.521073090576526
+422,"Merrion Road",6334,"Frascati Road",3.4220815759801235
+422,"Merrion Road",6334,"Frascati Road",3.4220815759801235
+422,"Merrion Road",6334,"Frascati Road",3.2556004115319044
+424,"Merrion Road",6334,"Frascati Road",2.8959685232604944
+424,"Merrion Road",6334,"Frascati Road",2.780020256029682
+424,"Merrion Road",6334,"Frascati Road",2.7342300638674923
+424,"Merrion Road",6334,"Frascati Road",2.5845694028365918
+426,"Rock Road",6334,"Frascati Road",2.342110144483506
+426,"Rock Road",6334,"Frascati Road",2.0570395749807617
+428,"Rock Road",6334,"Frascati Road",1.5154365706199067
+428,"Rock Road",6334,"Frascati Road",1.3391342399767687
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.089685151174677
+7113,"Ballymun Road",6334,"Frascati Road",13.08015433021356
+7113,"Ballymun Road",6334,"Frascati Road",13.004208372920537
+7113,"Ballymun Road",6334,"Frascati Road",12.82223129880252
+7113,"Ballymun Road",6334,"Frascati Road",12.706632721934959
+7113,"Ballymun Road",6334,"Frascati Road",12.562735954603788
+113,"Ballymun Road",6334,"Frascati Road",12.158045120152995
+113,"Ballymun Road",6334,"Frascati Road",12.143944337093874
+147,"Mobhi Road",6334,"Frascati Road",10.40429816661678
+147,"Mobhi Road",6334,"Frascati Road",10.358156410877616
+147,"Mobhi Road",6334,"Frascati Road",10.310468544676667
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.957453280408539
+273,"O'Connell St",6334,"Frascati Road",7.834454441219215
+273,"O'Connell St",6334,"Frascati Road",7.825753800574136
+273,"O'Connell St",6334,"Frascati Road",7.828061703057222
+273,"O'Connell St",6334,"Frascati Road",7.816300762266528
+408,"Merrion Sq",6334,"Frascati Road",7.083666543646059
+408,"Merrion Sq",6334,"Frascati Road",6.945372383979632
+412,"Northumberland Rd",6334,"Frascati Road",6.034013895648047
+414,"Pembroke Road",6334,"Frascati Road",5.611926022387106
+414,"Pembroke Road",6334,"Frascati Road",5.483804793221521
+416,Ballsbridge,6334,"Frascati Road",5.145629065130286
+416,Ballsbridge,6334,"Frascati Road",5.076781296990518
+416,Ballsbridge,6334,"Frascati Road",5.015007438539374
+418,"Merrion Road",6334,"Frascati Road",4.63558360463603
+418,"Merrion Road",6334,"Frascati Road",4.521073090576526
+422,"Merrion Road",6334,"Frascati Road",3.4220815759801235
+422,"Merrion Road",6334,"Frascati Road",3.4220815759801235
+422,"Merrion Road",6334,"Frascati Road",3.2556004115319044
+424,"Merrion Road",6334,"Frascati Road",2.8959685232604944
+424,"Merrion Road",6334,"Frascati Road",2.780020256029682
+424,"Merrion Road",6334,"Frascati Road",2.7342300638674923
+424,"Merrion Road",6334,"Frascati Road",2.5845694028365918
+426,"Rock Road",6334,"Frascati Road",2.342110144483506
+426,"Rock Road",6334,"Frascati Road",2.0570395749807617
+428,"Rock Road",6334,"Frascati Road",1.5154365706199067
+428,"Rock Road",6334,"Frascati Road",1.3391342399767687
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.192238378499255
+7113,"Ballymun Road",6334,"Frascati Road",13.089685151174677
+7113,"Ballymun Road",6334,"Frascati Road",13.08015433021356
+7113,"Ballymun Road",6334,"Frascati Road",13.004208372920537
+7113,"Ballymun Road",6334,"Frascati Road",12.82223129880252
+7113,"Ballymun Road",6334,"Frascati Road",12.706632721934959
+7113,"Ballymun Road",6334,"Frascati Road",12.562735954603788
+113,"Ballymun Road",6334,"Frascati Road",12.158045120152995
+113,"Ballymun Road",6334,"Frascati Road",12.143944337093874
+147,"Mobhi Road",6334,"Frascati Road",10.40429816661678
+147,"Mobhi Road",6334,"Frascati Road",10.358156410877616
+147,"Mobhi Road",6334,"Frascati Road",10.310468544676667
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.987866991411506
+273,"O'Connell St",6334,"Frascati Road",7.957453280408539
+273,"O'Connell St",6334,"Frascati Road",7.834454441219215
+273,"O'Connell St",6334,"Frascati Road",7.825753800574136
+273,"O'Connell St",6334,"Frascati Road",7.828061703057222
+273,"O'Connell St",6334,"Frascati Road",7.816300762266528
+408,"Merrion Sq",6334,"Frascati Road",7.083666543646059
+408,"Merrion Sq",6334,"Frascati Road",6.945372383979632
+412,"Northumberland Rd",6334,"Frascati Road",6.034013895648047
+414,"Pembroke Road",6334,"Frascati Road",5.611926022387106
+414,"Pembroke Road",6334,"Frascati Road",5.483804793221521
+416,Ballsbridge,6334,"Frascati Road",5.145629065130286
+416,Ballsbridge,6334,"Frascati Road",5.076781296990518
+416,Ballsbridge,6334,"Frascati Road",5.015007438539374
+418,"Merrion Road",6334,"Frascati Road",4.63558360463603
+418,"Merrion Road",6334,"Frascati Road",4.521073090576526
+422,"Merrion Road",6334,"Frascati Road",3.4220815759801235
+422,"Merrion Road",6334,"Frascati Road",3.4220815759801235
+422,"Merrion Road",6334,"Frascati Road",3.2556004115319044
+424,"Merrion Road",6334,"Frascati Road",2.8959685232604944
+424,"Merrion Road",6334,"Frascati Road",2.780020256029682
+424,"Merrion Road",6334,"Frascati Road",2.7342300638674923
+424,"Merrion Road",6334,"Frascati Road",2.5845694028365918
+426,"Rock Road",6334,"Frascati Road",2.342110144483506
+426,"Rock Road",6334,"Frascati Road",2.0570395749807617
+428,"Rock Road",6334,"Frascati Road",1.5154365706199067
+428,"Rock Road",6334,"Frascati Road",1.3391342399767687
+7113,"Ballymun Road",6334,"Frascati Road",13.279069242287315
+7113,"Ballymun Road",6334,"Frascati Road",13.279069242287315
+7113,"Ballymun Road",6334,"Frascati Road",13.279069242287315
+7113,"Ballymun Road",6334,"Frascati Road",13.279069242287315
+7113,"Ballymun Road",6334,"Frascati Road",13.279069242287315
+7113,"Ballymun Road",6334,"Frascati Road",13.176578311745851
+7113,"Ballymun Road",6334,"Frascati Road",13.167049225416326
+7113,"Ballymun Road",6334,"Frascati Road",13.091113748719154
+7113,"Ballymun Road",6334,"Frascati Road",12.90924420574962
+7113,"Ballymun Road",6334,"Frascati Road",12.793755813562234
+7113,"Ballymun Road",6334,"Frascati Road",12.649997191997493
+113,"Ballymun Road",6334,"Frascati Road",12.24563928064044
+113,"Ballymun Road",6334,"Frascati Road",12.231550097677506
+147,"Mobhi Road",6334,"Frascati Road",10.49342009302574
+147,"Mobhi Road",6334,"Frascati Road",10.44736252671464
+147,"Mobhi Road",6334,"Frascati Road",10.399772700876559
+273,"O'Connell St",6334,"Frascati Road",8.077045554643936
+273,"O'Connell St",6334,"Frascati Road",8.077045554643936
+273,"O'Connell St",6334,"Frascati Road",8.077045554643936
+273,"O'Connell St",6334,"Frascati Road",8.077045554643936
+273,"O'Connell St",6334,"Frascati Road",8.046618535878503
+273,"O'Connell St",6334,"Frascati Road",7.923602015326813
+273,"O'Connell St",6334,"Frascati Road",7.914799280606634
+273,"O'Connell St",6334,"Frascati Road",7.917071724128543
+273,"O'Connell St",6334,"Frascati Road",7.9052175384913195
+408,"Merrion Sq",6334,"Frascati Road",7.172735148715781
+408,"Merrion Sq",6334,"Frascati Road",7.034475310031289
+412,"Northumberland Rd",6334,"Frascati Road",6.123205447363297
+414,"Pembroke Road",6334,"Frascati Road",5.700875091365052
+414,"Pembroke Road",6334,"Frascati Road",5.572706818739538
+416,Ballsbridge,6334,"Frascati Road",5.234555890068499
+416,Ballsbridge,6334,"Frascati Road",5.165745466292166
+416,Ballsbridge,6334,"Frascati Road",5.104006419570652
+418,"Merrion Road",6334,"Frascati Road",4.724555302602625
+418,"Merrion Road",6334,"Frascati Road",4.610031910157614
+422,"Merrion Road",6334,"Frascati Road",3.510917263876508
+422,"Merrion Road",6334,"Frascati Road",3.510917263876508
+422,"Merrion Road",6334,"Frascati Road",3.344559499758673
+424,"Merrion Road",6334,"Frascati Road",2.984995861710033
+424,"Merrion Road",6334,"Frascati Road",2.8689122961438427
+424,"Merrion Road",6334,"Frascati Road",2.823041509552928
+424,"Merrion Road",6334,"Frascati Road",2.673059529510463
+426,"Rock Road",6334,"Frascati Road",2.430166238301734
+426,"Rock Road",6334,"Frascati Road",2.1449522775147214
+428,"Rock Road",6334,"Frascati Road",1.60360372360256
+428,"Rock Road",6334,"Frascati Road",1.4269789890110653
