@@ -120,22 +120,19 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <form class="navbar-form navbar-left">
+              <form method="post" class="navbar-form navbar-left">
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Start">
-                  <input type="text" class="form-control" placeholder="End">
+                  <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
+                  <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
                 </div>
-                  <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Now <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Now</a></li>
-                            <li><a href="#">Arrive By</a></li>
-                            <li><a href="#">Leave At</a></li>
-                        </ul>
-                  </div>
-                <button type="button" class="btn btn-default btn-circle">GO!</button>
+                  <div class="form-group">
+                      <select class="form-control" id="now_arrive_depart">
+                            <option>Now</option>
+                            <option>Arrive By</option>
+                            <option>Leave At</option>
+                      </select>
+                </div>
+                <button type="submit" class="btn btn-default btn-circle">GO!</button>
               </form>
               <ul class="nav navbar-nav navbar-right">
                 <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
