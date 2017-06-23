@@ -49,14 +49,15 @@ def extract_holidays():
     '''Returns a list of school holidays'''
     stop_info = open('static/school_holidays_2017.csv', 'r')
     reader = csv.reader(stop_info)
-
+    next(reader)
     holidays = []
 
     for row in reader:
         holidays += row
 
-    print(holidays)
+    holidays = [datetime.datetime.strptime(x, '%d/%m/%Y').date() for x in holidays]
 
+    return(holidays)
 
 
 # --------------------------------------------------------------------------#
@@ -64,7 +65,7 @@ def extract_holidays():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     predictor = joblib.load('static/rf_regressor.pkl')
-    extract_holidays()
+
 
     if request.method == 'POST':
         origin_stop_id = request.form['origin']
@@ -73,7 +74,15 @@ def index():
         # current_temp = weather[0]
         # current_rain = weather[1]
         current_hour = datetime.datetime.now().hour
-        if datetime.datetime.now().weekday() < 5:
+
+        current_date = datetime.datetime.now().date()
+        if current_date in extract_holidays():
+            is_school_holiday = 1
+        else:
+            is_school_holiday = 0
+
+        current_weekday = datetime.datetime.now().weekday()
+        if current_weekday < 5:
             is_weekend = 0
         else:
             is_weekend = 1
