@@ -34,15 +34,11 @@
 
         <!--Our functions-->
         <script type="text/javascript">
-            
+
         // Google Map
         function myMap() {
-            $.getJSON('http://localhost:5000/api/routes/42', function(json) {
+            $.getJSON('http://localhost:5000/api/routes/{{users_route}}', function(json) {
                 // Looping through elements in JSON file.
-                // Set at route 42 for now. This will be changeable
-
-                // Make empty marker array to put the markers for the marker clustering
-                var markers = [];
 
                 for (var i = 0; i < json.stops.length; i++) {
                     // Creating Marker
@@ -57,9 +53,6 @@
                             scale: 8
                         },
                         map: map});
-                    
-                    // Push the marker into the marker array for clustering
-                    markers.push(marker);
 
                     // Create infowindow on mouseover
                     var infowindow = new google.maps.InfoWindow();
@@ -79,10 +72,6 @@
                         infowindow.open(map, this);
                     });
                 }
-                
-                // Add a marker clusterer to manage the markers.
-                var markerCluster = new MarkerClusterer(map, markers,
-                    {imagePath: '../static/marker_clustering/images/m'});
             });
 
 
@@ -94,12 +83,26 @@
 
             // Map options
             var mapOptions = {
-                center: myCenter, 
+                center: myCenter,
                 zoom: 13
             };
 
             // Creating map
             var map = new google.maps.Map(mapCanvas, mapOptions);
+        }
+
+        // This function adds all of the routes to the routes textbox so we can autocomplete them
+        // Currently takes the route from a CSV which can probably be done in a cleaner way
+        function dataList() {
+            var url, routeInfo;
+            url = 'http://localhost:5000/api/all_routes';
+
+            $.getJSON(url, function(data) {
+                $(data.route).each(function() {
+                    routeInfo = "<option value=" + this.route + "></option>";
+                    $('#routes').append(routeInfo);
+                });
+            });
         }
 
         </script>
@@ -119,25 +122,28 @@
               <a class="navbar-brand" href="#">Dublin Bus</a>
             </div>
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <form method="post" class="navbar-form navbar-left">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
-                  <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
-                </div>
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form method="post" class="navbar-form navbar-left">
                   <div class="form-group">
-                      <select class="form-control" id="now_arrive_depart">
-                            <option>Now</option>
-                            <option>Arrive By</option>
-                            <option>Leave At</option>
-                      </select>
-                </div>
-                <button type="submit" class="btn btn-default btn-circle">GO!</button>
-              </form>
-              <ul class="nav navbar-nav navbar-right">
-                <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
+                    <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
+                    <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
+                    <input type="text" class="form-control" id="user_route" name="user_route" list="routes" placeholder="Route">
+                      <datalist id="routes"></datalist>
+                      <!--This calls the script to add all of the routes to the textbox for autocomplete-->
+                      <script>window.onload=dataList();</script>
 
-              </ul>
+                      <select class="form-control" name="now_arrive_depart" id="now_arrive_depart">
+                          <option>Now</option>
+                          <option>Arrive By</option>
+                          <option>Leave At</option>
+                      </select>
+
+                  <button type="submit" class="btn btn-default btn-circle">GO!</button>
+                  </div>
+              </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
+                </ul>
             </div>
           </div>
         </nav>
