@@ -74,7 +74,12 @@ def index():
         # weather = scrape_weather()
         # current_temp = weather[0]
         # current_rain = weather[1]
-        current_hour = datetime.datetime.now().hour
+        current_time = datetime.datetime.now()
+        current_hour = current_time.hour
+
+        time_range = []
+        for i in range(6):
+            time_range.append(current_time + datetime.timedelta(minutes=i * 30))
 
         current_date = datetime.datetime.now().date()
         if current_date in extract_holidays():

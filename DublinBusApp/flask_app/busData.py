@@ -15,7 +15,7 @@ class BusDB:
         headings = next(reader)
         for row in reader:
 
-            routes = row[8].split(",")
+            routes = row[8].split(", ")
 
             if route_num in routes:
 
