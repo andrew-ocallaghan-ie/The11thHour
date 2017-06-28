@@ -7,7 +7,7 @@ class BusDB:
     def __init__(self):
         pass
 
-    def route_info(self, route_num):
+    def bus_stop_info(self, route_num):
         stop_info = open('static/busstopinfo_bac_only.csv', 'r')
         reader = csv.reader(stop_info)
         stops = []
@@ -15,7 +15,7 @@ class BusDB:
         headings = next(reader)
         for row in reader:
 
-            routes = row[8].split(",")
+            routes = row[8].split(", ")
 
             if route_num in routes:
 
@@ -32,3 +32,21 @@ class BusDB:
 
         # Returning info
         return jsonify({'stops': stops})
+
+    # --------------------------------------------------------------------------#
+
+
+    def bus_route_info(self):
+        stop_info = open('static/all_routes.csv', 'r')
+        reader = csv.reader(stop_info)
+        routes = []
+
+        for row in reader:
+
+            route = {
+                'route': row[0]
+            }
+            routes.append(route)
+
+        # Returning info
+        return jsonify({'route': routes})

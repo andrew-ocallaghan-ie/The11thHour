@@ -19,30 +19,23 @@
         <meta charset="utf-8">
 
         <!--Bootstrap CSS Links-->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="../static/bootstrap/js/bootstrap.min.js"></script>
         
         <!--Our Stylesheet, goes at bottom of CSS sheets to ensure precedence-->
         <link href='../static/style.css' rel='stylesheet' type="text/css">
-        
-        <!--Google charts API-->
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         
         <!--ChartJS-->
         <script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>
 
         <!--Our functions-->
         <script type="text/javascript">
-            
+
         // Google Map
         function myMap() {
-            $.getJSON('http://localhost:5000/api/routes/42', function(json) {
+            $.getJSON('http://localhost:5000/api/routes/{{users_route}}', function(json) {
                 // Looping through elements in JSON file.
-                // Set at route 42 for now. This will be changeable
-
-                // Make empty marker array to put the markers for the marker clustering
-                var markers = [];
 
                 for (var i = 0; i < json.stops.length; i++) {
                     // Creating Marker
@@ -57,9 +50,6 @@
                             scale: 8
                         },
                         map: map});
-                    
-                    // Push the marker into the marker array for clustering
-                    markers.push(marker);
 
                     // Create infowindow on mouseover
                     var infowindow = new google.maps.InfoWindow();
@@ -79,10 +69,6 @@
                         infowindow.open(map, this);
                     });
                 }
-                
-                // Add a marker clusterer to manage the markers.
-                var markerCluster = new MarkerClusterer(map, markers,
-                    {imagePath: '../static/marker_clustering/images/m'});
             });
 
 
@@ -94,12 +80,44 @@
 
             // Map options
             var mapOptions = {
-                center: myCenter, 
-                zoom: 13
+                center: myCenter,
+                zoom: 12
             };
 
             // Creating map
             var map = new google.maps.Map(mapCanvas, mapOptions);
+        }
+
+        // This function adds all of the routes to the routes textbox so we can autocomplete them
+        // Currently takes the route from a CSV which can probably be done in a cleaner way
+        function dataList() {
+            var url, routeInfo;
+            url = 'http://localhost:5000/api/all_routes';
+
+            $.getJSON(url, function(data) {
+                $(data.route).each(function() {
+                    routeInfo = "<option value=" + this.route + "></option>";
+                    $('#routes').append(routeInfo);
+                });
+            });
+        }
+
+        // Made this function to get the mid point of a bus route so that the Map would center on it
+        // Not sure exactly how it will work yet
+        function midLatLong(lat1, long1, lat2, long2) {
+            var longDiff = Math.toRadians(long2 - long1);
+
+            //convert to radians
+            lat1 = Math.toRadians(lat1);
+            lat2 = Math.toRadians(lat2);
+            long1 = Math.toRadians(long1);
+
+            var Bx = Math.cos(lat2) * Math.cos(longDiff);
+            var By = Math.cos(lat2) * Math.sin(longDiff);
+            var midLat = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+            var midLong = long1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+            return [Math.toDegrees(midLat), Math.toDegrees(midLong)];
         }
 
         </script>
@@ -119,25 +137,28 @@
               <a class="navbar-brand" href="#">Dublin Bus</a>
             </div>
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <form method="post" class="navbar-form navbar-left">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
-                  <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
-                </div>
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form method="post" class="navbar-form navbar-left">
                   <div class="form-group">
-                      <select class="form-control" id="now_arrive_depart">
-                            <option>Now</option>
-                            <option>Arrive By</option>
-                            <option>Leave At</option>
-                      </select>
-                </div>
-                <button type="submit" class="btn btn-default btn-circle">GO!</button>
-              </form>
-              <ul class="nav navbar-nav navbar-right">
-                <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
+                    <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
+                    <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
+                    <input type="text" class="form-control" id="user_route" name="user_route" list="routes" placeholder="Route">
+                      <datalist id="routes"></datalist>
+                      <!--This calls the script to add all of the routes to the textbox for autocomplete-->
+                      <script>window.onload=dataList();</script>
 
-              </ul>
+                      <select class="form-control" name="now_arrive_depart" id="now_arrive_depart">
+                          <option>Now</option>
+                          <option>Arrive By</option>
+                          <option>Leave At</option>
+                      </select>
+
+                  <button type="submit" class="btn btn-default btn-circle">GO!</button>
+                  </div>
+              </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
+                </ul>
             </div>
           </div>
         </nav>
@@ -167,7 +188,6 @@
         <!--Script for the chart. Currently uses manual input-->
         <!--Will be cleaner once we have data going in from API-->
         <!--Has to go at the bottom-->
-
 
         <script>
             var ctx = document.getElementById("busChart");

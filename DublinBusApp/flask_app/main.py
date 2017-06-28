@@ -67,14 +67,19 @@ def extract_holidays():
 def index():
     predictor = joblib.load('static/rf_regressor.pkl')
 
-
     if request.method == 'POST':
         origin_stop_id = request.form['origin']
         desination_stop_id = request.form['destination']
+        users_route = request.form['user_route']
         # weather = scrape_weather()
         # current_temp = weather[0]
         # current_rain = weather[1]
-        current_hour = datetime.datetime.now().hour
+        current_time = datetime.datetime.now()
+        current_hour = current_time.hour
+
+        time_range = []
+        for i in range(6):
+            time_range.append(current_time + datetime.timedelta(minutes=i * 30))
 
         current_date = datetime.datetime.now().date()
         if current_date in extract_holidays():
@@ -83,10 +88,6 @@ def index():
             is_school_holiday = 0
 
         current_weekday = datetime.datetime.now().weekday()
-        if current_weekday < 5:
-            is_weekend = 0
-        else:
-            is_weekend = 1
 
 
     # x will be a list of inputs that we give to the predictor: time, rain etc.
@@ -106,10 +107,18 @@ def index():
 #   - /api/routes/routenum     -> returns all stops associated with route
 # --------------------------------------------------------------------------#
 # --------------------------------------------------------------------------#
+
 # API - Returns JSON file with stop info for bus route.
 @app.route('/api/routes/<string:routenum>', methods=['GET'])
-def get_route_info(routenum):
-    return BusDB().route_info(routenum)
+def get_stop_info(routenum):
+    return BusDB().bus_stop_info(routenum)
+
+# --------------------------------------------------------------------------#
+
+
+@app.route('/api/all_routes/', methods=['GET'])
+def get_route_info():
+    return BusDB().bus_route_info()
 
 # --------------------------------------------------------------------------#
 # Setting app to run only if this file is run directly.
