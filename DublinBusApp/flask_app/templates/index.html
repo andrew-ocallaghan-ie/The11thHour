@@ -84,6 +84,48 @@
                 var markerCluster = new MarkerClusterer(map, markers,
                     {imagePath: '../static/marker_clustering/images/m'});
             });
+            
+            
+            //dublin bike
+             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};       jQuery.getJSON($SCRIPT_ROOT+"/all",null,function(data){
+           //window.alert(JSON.stringify(data));
+            var stations = data.stations;
+           //window.alert(JSON.stringify(stations));
+            _.forEach(stations,function(station){
+                var marker = new google.maps.Marker({
+                    position:{
+                        lat:station.Position_lat,
+                        lng:station.Position_lng
+                    },
+                    icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor:'#123456',
+                            strokeWeight: 1.5,
+                            fillColor: '#123456',
+                            fillOpacity: 0.4,
+                            scale: 8
+                        },
+                    map:map,
+                    title:station.Name,
+                    station_number:station.Number
+                });
+                
+            
+                infowindow = new google.maps.InfoWindow();
+                
+                
+                marker.addListener("click",function(){
+                 
+                
+                var contentString='Dublin Bike'+'</br>'+'station no.'+station.Number+'</br>' +station.Name
+                infowindow.setContent(contentString);
+                infowindow.open(map, this);
+                }); 
+                        
+                 
+            })
+            
+    });
 
 
             // Centre of map
@@ -204,6 +246,11 @@
             });
         </script>
 
+        <!--import Lodash-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+        
+        <!--import Jquery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     
         <!--Google Maps API script-->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
