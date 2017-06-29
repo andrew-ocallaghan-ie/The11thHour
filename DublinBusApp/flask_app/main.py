@@ -2,6 +2,8 @@
 from flask import Flask, render_template, request, g, jsonify
 from flask_cors import CORS
 from busData import BusDB
+from dart import dart
+from luas import luas
 from sklearn.externals import joblib
 import requests
 import traceback
@@ -121,6 +123,13 @@ def get_stop_info(routenum):
 def get_route_info():
     return BusDB().bus_route_info()
 
+@app.route('/dart', methods=['GET'])
+def get_dart_info():
+    return dart().dart_stop_info()
+
+@app.route('/luas', methods=['GET'])
+def get_luas_info():
+    return luas().luas_info()
 
 # =================================== EC2 ==================================#
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
