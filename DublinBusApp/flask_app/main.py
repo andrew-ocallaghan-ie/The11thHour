@@ -1,12 +1,15 @@
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, g, jsonify
 from flask_cors import CORS
 from busData import BusDB
+from dart import dart
+from luas import luas
 from sklearn.externals import joblib
 import requests
 import traceback
 import datetime
 import csv
+from sqlalchemy import create_engine
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
@@ -119,6 +122,46 @@ def get_stop_info(routenum):
 @app.route('/api/all_routes/', methods=['GET'])
 def get_route_info():
     return BusDB().bus_route_info()
+
+@app.route('/dart', methods=['GET'])
+def get_dart_info():
+    return dart().dart_stop_info()
+
+@app.route('/luas', methods=['GET'])
+def get_luas_info():
+    return luas().luas_info()
+
+# =================================== EC2 ==================================#
+URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
+PORT = "3306"
+DB = "dbikes"
+USER = "teamgosky"
+PASSWORD = "teamgosky"
+# =================================== EC2 ==================================#
+
+
+def connect_to_database():
+    db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
+    engine = create_engine(db_str.format(USER, PASSWORD, URI, PORT, DB), echo=True)
+    return engine
+#    db = MySQLdb.connect(host="localhost",user="teamgosky",passwd="teamgosky",db="dbikes")
+#    return db
+
+def get_db():
+    engine = getattr(g, 'engine', None)
+    if engine is None:
+        engine = g.engine = connect_to_database()
+    return engine
+
+@app.route("/all")
+#@functools.lru_cache(maxsize=128)
+def get_station():
+    engine=get_db()
+    sql="select * from station;"
+    rows = engine.execute(sql).fetchall()
+    print('#found{}stations',len(rows))
+    return jsonify(stations=[dict(row.items()) for row in rows])
+    
 
 # --------------------------------------------------------------------------#
 # Setting app to run only if this file is run directly.
