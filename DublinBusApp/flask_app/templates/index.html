@@ -59,16 +59,19 @@
           marker.mycategory = category;                                 
           marker.myname = name;
           markers.push(marker);
-          infowindow = new google.maps.InfoWindow();
+          markers.infowindow = new google.maps.InfoWindow();
                 
                 
             marker.addListener("click",function(){
 
 
             var contentString='<h3>'+name+'</h3>'+marker.mycategory
-            infowindow.setContent(contentString);
-            infowindow.open(map, this);
+            markers.infowindow.setContent(contentString);
+            markers.infowindow.open(map, this);
             }); 
+            for(var i=0; i<markers.length; i++){
+                markers[i].infowindow = new google.maps.InfoWindow();
+            }
 
         } // end createMarker
             
@@ -91,6 +94,14 @@
           }
         }
             
+        function closeInfowindow(category){
+        for (var i=0; i<markers.length; i++){
+        if (markers[i].mycategory == category){
+        markers[i].infowindow.close();
+        }
+        }
+        }
+            
         // == a checkbox has been clicked ==
         function boxclick(box,category) {
             //window.alert(1);
@@ -98,6 +109,7 @@
             show(category);
           } else {
             hide(category);
+            closeInfowindow(category);
           }
         }
             
