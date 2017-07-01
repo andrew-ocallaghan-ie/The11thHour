@@ -4,6 +4,7 @@ from flask_cors import CORS
 from busData import BusDB
 from dart import dart
 from luas import luas
+from db_luas_dart import alldublinstation
 from sklearn.externals import joblib
 import requests
 import traceback
@@ -130,6 +131,10 @@ def get_dart_info():
 @app.route('/luas', methods=['GET'])
 def get_luas_info():
     return luas().luas_info()
+
+@app.route('/stations', methods=['GET'])
+def get_all_info():
+    return alldublinstation().all_stop_info()
 
 # =================================== EC2 ==================================#
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"

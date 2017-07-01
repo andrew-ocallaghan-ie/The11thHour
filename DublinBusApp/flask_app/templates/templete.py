@@ -34,87 +34,14 @@
 
         <!--Our functions-->
         <script type="text/javascript">
-         var markers = [];
-        
-              
             
-        function createMarker(lat,lng,name,category,color) {
-
-          var marker = new google.maps.Marker({
-            position: {lat:lat, lng:lng},
-            map: map,
-            icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            strokeColor:color,
-            strokeWeight: 1.5,
-            fillColor: color,
-            fillOpacity: 0.4,
-            scale: 8
-        },
-            title:name
-          });
-            marker.setMap(map);
-
-          // === Store the category and name info as a marker properties ===
-          marker.mycategory = category;                                 
-          marker.myname = name;
-          markers.push(marker);
-          infowindow = new google.maps.InfoWindow();
-                
-                
-            marker.addListener("click",function(){
-
-
-            var contentString='<h3>'+name+'</h3>'+marker.mycategory
-            infowindow.setContent(contentString);
-            infowindow.open(map, this);
-            }); 
-
-        } // end createMarker
-            
-       // == shows all markers of a particular category, and ensures the checkbox is checked ==
-        function show(category) {
-          for (var i=0; i<markers.length; i++) {
-            if (markers[i].mycategory == category) {
-              markers[i].setVisible(true);
-            }
-          }
-          
-        }
-            
-        // == hides all markers of a particular category, and ensures the checkbox is cleared ==
-        function hide(category) {
-          for (var i=0; i<markers.length; i++) {
-            if (markers[i].mycategory == category) {
-              markers[i].setVisible(false);
-            }
-          }
-        }
-            
-        // == a checkbox has been clicked ==
-        function boxclick(box,category) {
-            //window.alert(1);
-          if (box.checked) {
-            show(category);
-          } else {
-            hide(category);
-          }
-        }
-            
-        function myclick(i) {
-  google.maps.event.trigger(markers[i],"click");  
-}
-
-
         // Google Map
         function myMap() {
-            
             $.getJSON('http://localhost:5000/api/routes/42', function(json) {
                 // Looping through elements in JSON file.
                 // Set at route 42 for now. This will be changeable
                 // Make empty marker array to put the markers for the marker clustering
                 var markers = [];
-                //window.alert(1)
                 for (var i = 0; i < json.stops.length; i++) {
                     // Creating Marker
                     var marker = new google.maps.Marker({
@@ -153,40 +80,144 @@
             });
             
             
-            
-             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};       
-            
-            //all
-     jQuery.getJSON($SCRIPT_ROOT+"/stations",null,function(data){
+            //dublin bike
+             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};       jQuery.getJSON($SCRIPT_ROOT+"/all",null,function(data){
            //window.alert(JSON.stringify(data));
-            var stations = data.stops;
+            var stations = data.stations;
            //window.alert(JSON.stringify(stations));
             _.forEach(stations,function(station){
-                var lat = station.latitude;
-                var lng = station.longitude;
-                var name = station.name;
-                var category = station.category;
-                var color = station.color;
-                var marker = createMarker(lat,lng,name,category,color);
+                var marker = new google.maps.Marker({
+                    position:{
+                        lat:station.Position_lat,
+                        lng:station.Position_lng
+                    },
+                    icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor:'#123456',
+                            strokeWeight: 1.5,
+                            fillColor: '#123456',
+                            fillOpacity: 0.4,
+                            scale: 8
+                        },
+                    map:map,
+                    title:station.Name,
+                    station_number:station.Number
+                });
+                
+            
+                infowindow = new google.maps.InfoWindow();
+                
+                
+                marker.addListener("click",function(){
+                 
+                
+                var contentString='<h3>'+station.Name+'</h3>'
+                infowindow.setContent(contentString);
+                infowindow.open(map, this);
+                }); 
                         
                  
             })
             
-            hide("dublinbike")
-            hide("luas")
-            hide("dart")
+    });
+            
+            
+            //Dart
+     jQuery.getJSON($SCRIPT_ROOT+"/dart",null,function(data){
+           //window.alert(JSON.stringify(data));
+            var stations = data.stops;
+           //window.alert(JSON.stringify(stations));
+            _.forEach(stations,function(station){
+                var marker = new google.maps.Marker({
+                    position:{
+                        lat:station.latitude,
+                        lng:station.longitude
+                    },
+                    icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor:'#0000FF',
+                            strokeWeight: 1.5,
+                            fillColor: '#0000FF',
+                            fillOpacity: 0.4,
+                            scale: 8
+                        },
+                    map:map,
+                    title:station.Name,
+                    station_number:station.Number
+                });
+                
+            
+                infowindow = new google.maps.InfoWindow();
+                
+                
+                marker.addListener("click",function(){
+                 
+                
+                var contentString='<h3>'+station.name+'</h3>'
+                infowindow.setContent(contentString);
+                infowindow.open(map, this);
+                }); 
+                        
+                 
+            })
+            
+    });
+            
+            
+            //Luas
+      jQuery.getJSON($SCRIPT_ROOT+"/luas",null,function(data){
+           //window.alert(JSON.stringify(data));
+            var stations = data.stops;
+           //window.alert(JSON.stringify(stations));
+            _.forEach(stations,function(station){
+                var marker = new google.maps.Marker({
+                    position:{
+                        lat:station.latitude,
+                        lng:station.longitude
+                    },
+                    icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor:'#808000',
+                            strokeWeight: 1.5,
+                            fillColor: '#808000',
+                            fillOpacity: 0.4,
+                            scale: 8
+                        },
+                    map:map,
+                    title:station.Name,
+                    station_number:station.Number
+                });
+                
+            
+                infowindow = new google.maps.InfoWindow();
+                
+                
+                marker.addListener("click",function(){
+                 
+                
+                var contentString='<h3>'+station.name+'</h3>'
+                infowindow.setContent(contentString);
+                infowindow.open(map, this);
+                }); 
+                        
+                 
+            })
             
     });
             
             
             
-            var myOptions = {
-            zoom: 13,
-            center: new google.maps.LatLng(53.3498,-6.2603),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            streetViewControl: false
-          }
-          map = new google.maps.Map(document.getElementById("map"), myOptions);
+            // Centre of map
+            var myCenter = new google.maps.LatLng(53.3498,-6.2603);
+            // Initializing canvas
+            var mapCanvas = document.getElementById("map");
+            // Map options
+            var mapOptions = {
+                center: myCenter, 
+                zoom: 13
+            };
+            // Creating map
+            var map = new google.maps.Map(mapCanvas, mapOptions);
         }
         </script>
     
@@ -210,9 +241,9 @@
                 <div class="form-group">
                   <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
                   <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
-        Dublin Bike: <input type="checkbox" id="dublinbikebox" onclick="boxclick(this,'dublinbike')" />
-      Dart: <input type="checkbox" id="dartbox"  onclick="boxclick(this,'dart')" />
-      Luas: <input type="checkbox" id="Luasbox" onclick="boxclick(this,'luas')" />
+        Dublin Bike: <input type="checkbox" id="db" onclick="boxclick(this.'bike')" /> &nbsp;&nbsp;
+      Dart: <input type="checkbox" id="dart"  onclick="boxclick(this.'dart')" /> &nbsp;&nbsp;
+      Luas: <input type="checkbox" id="Luas" onclick="boxclick(this.'luas')" />
                 </div>
                   <div class="form-group">
                       <select class="form-control" id="now_arrive_depart">
