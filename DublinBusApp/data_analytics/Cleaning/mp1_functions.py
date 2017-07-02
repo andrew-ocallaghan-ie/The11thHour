@@ -11,10 +11,17 @@ import numpy as np
 
 
 
+
+
+
+
+
+#===================================Section 1==========================================#
 def fix_JPID(vjids, day, dataframe):
     loc = dataframe.loc
     total = len(vjids)
     current = 0
+    
     for run in vjids:
         current+=100
         print(current//total,"% Reconstructed for ", day)
@@ -43,12 +50,11 @@ def fix_JPID(vjids, day, dataframe):
                          "Journey_Pattern_ID" ] = re_construct[1]
                     
     return dataframe
-                
 
 
-    
+
+
 def wrap_JPID(dataframe):
-    #every day
     time_frames = set(dataframe[ dataframe["Journey_Pattern_ID"] == "null" ].Timeframe.unique())
     total1=len(time_frames)
     
@@ -130,7 +136,15 @@ def make_stops_made(dataframe):
 
 def drop_middle(dataframe):
     concat = pd.concat
-    stops = pd.read_csv("stops.csv", encoding="utf-8", converters={"First_1":str, "First_2":str, "First_3":str, "Last_1":str, "Last_2":str, "Last_3":str})
+    stops = pd.read_csv("stops.csv",
+                        encoding="utf-8", 
+                        converters={"First_1":str, 
+                                    "First_2":str, 
+                                    "First_3":str, 
+                                    "Last_1":str, 
+                                    "Last_2":str, 
+                                    "Last_3":str})
+    
     col1 = stops.First_1.unique()
     col2 = stops.First_2.unique()
     col3 = stops.First_3.unique()
@@ -168,7 +182,16 @@ def re_construct(path, files, month, columns):
     
     for file in files:
         print("Reconstructing", file)
-        modify_me = read(path+"\\"+file, index_col=None, header=0, encoding="utf-8", converters = {"Journey_Pattern_ID":str, "LineID":str, "Direction":str, "Stop_ID":str })
+        
+        read_address = os.path.join(path, file)
+        modify_me = read(address, 
+                         index_col=None, 
+                         header=0, 
+                         encoding="utf-8", 
+                         converters = {"Journey_Pattern_ID":str,
+                                       "LineID":str,
+                                       "Direction":str,
+                                       "Stop_ID":str })
         
         modify_me.columns = columns
         modify_me = drop_columns(modify_me)
@@ -194,17 +217,17 @@ def re_construct(path, files, month, columns):
         modify_me = drop_middle(modify_me)
         print("Dropped Middle of each journey")
         
-        modify_me.to_csv("re_constructed_"+month+"\\re_con_"+file, encoding = "utf-8", index=False)
+        write_address = os.path.join( "re_constructed_" + month, "re_con" + file )
+        modify_me.to_csv( write_address, encoding = "utf-8", index=False)
         print("\tSaved!")
         
         
 
         
 def wrap_re_construct(month):
-    path = os.getcwd()
-    path = path +"\\"+month+"DayRawCopy"
-    contents = os.listdir(path)
     
+    path = os.path.join(os.getcwd(), month + "DayRawCopy")
+    contents = os.listdir(path)
     columns   =    ["Timestamp",
                     "LineID", 
                     "Direction",
@@ -225,8 +248,17 @@ def wrap_re_construct(month):
     iter1 = set(contents[:total2//2])
     iter2 = set(contents[total2//2:])
         
-    thread1 = threading.Thread(target = re_construct, kwargs=dict(path=path, files=iter1, month=month, columns=columns))
-    thread2 = threading.Thread(target = re_construct, kwargs=dict(path=path, files=iter2, month=month, columns=columns))
+    thread1 = threading.Thread(target = re_construct, 
+                               kwargs=dict(path=path,                       
+                                           files=iter1,
+                                           month=month, 
+                                           columns=columns))
+    
+    thread2 = threading.Thread(target = re_construct, 
+                               kwargs=dict(path=path, 
+                                           files=iter2, 
+                                           month=month, 
+                                           columns=columns))
         
     thread1.start()
     thread2.start()
@@ -241,30 +273,32 @@ def wrap_re_construct(month):
 
     
     
+
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+#===============================Section 2 ======================#    
 def extract_route(path, route):
     read = pd.read_csv
     concat = pd.concat
     contents = os.listdir(path)
     content_length = len(contents)
-   
-    accumulator = read(path+"\\"+contents[0], index_col=None, header=0, encoding="utf-8")
-    
+
+    read_address = os.path.join(path, contents[0])
+    accumulator = read(read_address,
+                       index_col=None,
+                       header=0,
+                       encoding="utf-8")
+     
     for i in range(content_length):
         print("extracting", route, "from file", i)
-        next_df = read(path+"\\"+contents[i], index_col=None, header=0)
+        
+        next_read_address = os.path.join(path, contents[i])
+        next_df = read(next_read_address,
+                       index_col=None,
+                       header=0, 
+                       encoding = "utf-8")
+        
         accumulator, next_df = accumulator.align(next_df, axis=1)
         accumulator = concat([accumulator[( accumulator["LineID"] == route)], \
                                  next_df [(   next_df["LineID"]   == route)]] \
@@ -280,13 +314,23 @@ def find_routes(path):
     contents = os.listdir(path)
     content_length = len(contents)
     
-    accumulator = read(path+"\\"+contents[0], index_col=None, header=0, encoding="utf-8")
-    
+    read_address = os.path.join(path, contents[0])
+    accumulator = read(read_address,
+                       index_col=None,
+                       header=0,
+                       encoding="utf-8")
+
     set_of_routes = set(accumulator.LineID.unique())
     unite = set_of_routes.union
     
     for i in range(1,content_length):
-        next_df = read(path+"\\"+contents[i], index_col=None, header=0, encoding ="utf-8")
+        
+        next_read_address = os.path.join(path, contents[i])
+        next_df = read(next_read_address,
+                       index_col=None,
+                       header=0,
+                       encoding ="utf-8")
+        
         next_set_of_routes = set(next_df.LineID.unique())
         set_of_routes = unite(next_set_of_routes)
         print("Constructing Route Set... Current File:", i)
@@ -301,11 +345,14 @@ def find_routes(path):
 
 
 def complete_extraction(month):
-    path = os.getcwd() + "\\re_constructed_" + month
+    
+    path = os.path.join(os.getcwd(), "re_constructed_" + month)
     all_routes = find_routes(path)
     
     for route in all_routes:
+        
         dataframe = extract_route(path, route)
-        dataframe.to_csv(month+"_routes\\alpha-"+route+".csv")
+        write_address = os.path.join(month + "_routes", "alpha" + route + ".csv")
+        dataframe.to_csv(write_address)
 
     return "Success"
