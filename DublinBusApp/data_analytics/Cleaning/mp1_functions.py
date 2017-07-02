@@ -184,7 +184,7 @@ def re_construct(path, files, month, columns):
         print("Reconstructing", file)
         
         read_address = os.path.join(path, file)
-        modify_me = read(address, 
+        modify_me = read(read_address, 
                          index_col=None, 
                          header=0, 
                          encoding="utf-8", 
