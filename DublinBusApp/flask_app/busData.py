@@ -37,14 +37,17 @@ class BusDB:
 
 
     def bus_route_info(self):
-        stop_info = open('static/all_routes.csv', 'r')
+        stop_info = open('static/all_route_names.csv', 'r')
         reader = csv.reader(stop_info)
         routes = []
+
+        headings = next(reader)
 
         for row in reader:
 
             route = {
-                'route': row[0]
+                'route': row[0],
+                'name': row[1]
             }
             routes.append(route)
 

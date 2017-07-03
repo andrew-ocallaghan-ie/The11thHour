@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div id="map"></div>
+
+<div class="container">
+    <div class="row" id="inputs">
+        <div class="col-sm-6">
+            <form method="POST">
+                <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
+                <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
+
+                <select class="form-control" name="now_arrive_depart" id="now_arrive_depart">
+                  <option>Now</option>
+                  <option>Arrive By</option>
+                  <option>Leave At</option>
+                </select>
+
+              <button type="submit" class="btn btn-default btn-circle">GO!</button>
+          </form>
+        </div>
+
+        <div class="col-sm-6">
+            <h2>{{origin}} to {{destination}}</h2>
+            <h4>Estimated journey time is: </h4>
+            <h4>You will arrive in {{destination}} at: </h4>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+  <div id="map"></div>
+
+        <div class="container">
+            <div class="row" id="inputs">
+
+                <div class="col-sm-6">
+
+                    <form method="POST">
+
+                        <div class="btn-group" id="hide_show_box" aria-label="...">
+                            <div class="btn-group transport_checkbox" role="group">
+                                <input type="checkbox" class="btn btn-default" id="dublinbikebox" onclick="boxclick(this,'dublinbike')">
+                                <label class="ck-button" for="dublinbikebox"><img src="../static/images/bike.png"></label>
+                            </div>
+                            <div class="btn-group transport_checkbox" role="group">
+                                <input type="checkbox" class="btn btn-default" id="dartbox"  onclick="boxclick(this,'dart')">
+                                <label class="ck-button" id="example" for="dartbox"><img src="../static/images/dart.png"></label>
+                            </div>
+                            <div class="btn-group transport_checkbox" role="group">
+                                <input type="checkbox" class="btn btn-default" id="Luasbox" onclick="boxclick(this,'luas')" value="Luas">
+                                <label class="ck-button" for="Luasbox"><img src="../static/images/luas.png"></label>
+                            </div>
+                        </div>
+
+                        <input type="text" class="form-control" id="user_route" name="user_route" list="routes" placeholder="Route">
+                          <datalist id="routes"></datalist>
+                          <!--This calls the script to add all of the routes to the textbox for autocomplete-->
+                          <script>window.onload=dataList();</script>
+
+                        <input type="checkbox" data-toggle="toggle" data-on="Southbound" data-off="Northbound" data-size="mini" id="north_south" name="direction">
+
+                        <button type="submit" class="btn btn-default btn-circle">GO!</button>
+                  </form>
+                </div>
+
+                <!--There'll probably need to be an API call here to get the route info-->
+
+                <div class="col-sm-6">
+                    <h2>Route {{users_route}} Stops</h2>
+                    <div id="bus_stops">
+                        <div id="bus_num">4</div>
+                        <div><a href="bus_stop/4">Merrion St.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

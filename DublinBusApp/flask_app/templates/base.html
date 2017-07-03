@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        <title>Dublin Bus Predictions</title>
+
+        <!-- Add icon library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!--Google Fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+
+        <!--Responsive Design-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!--Encoding-->
+        <meta charset="utf-8">
+
+        <!--Bootstrap CSS Links-->
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+
+        <!--Our Stylesheet, goes at bottom of CSS sheets to ensure precedence-->
+        <link href="{{ url_for('static', filename='../static/style.css') }}" rel="stylesheet" type="text/css">
+
+        <!--ChartJS-->
+        <script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>
+
+        <!--Button Toggling Library-->
+        <link href="../static/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="../static/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+
+       <!--Our functions-->
+        <script type="text/javascript">
+
+            // This is the url i.e. localhost:5000 etc.
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }}
+
+            //map functions
+            var markers = [];
+
+            function createMarker(lat,lng,name,category,color) {
+              var marker = new google.maps.Marker({
+                position: {lat:lat, lng:lng},
+                map: map,
+                icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                strokeColor:color,
+                strokeWeight: 1.5,
+                fillColor: color,
+                fillOpacity: 0.4,
+                scale: 6
+                },
+                  title:name
+              });
+              marker.setMap(map);
+              // === Store the category and name info as a marker properties ===
+              marker.mycategory = category;
+              marker.myname = name;
+              markers.push(marker);
+              markers.infowindow = new google.maps.InfoWindow();
+
+
+              marker.addListener("click",function(){
+                  var contentString='<h3>'+name+'</h3>'+marker.mycategory
+                  markers.infowindow.setContent(contentString);
+                  markers.infowindow.open(map, this);
+              });
+              for(var i=0; i<markers.length; i++){
+                  markers[i].infowindow = new google.maps.InfoWindow();
+              }
+            } // end createMarker
+
+           // == shows all markers of a particular category, and ensures the checkbox is checked ==
+            function show(category) {
+              for (var i=0; i<markers.length; i++) {
+                if (markers[i].mycategory == category) {
+                  markers[i].setVisible(true);
+                }
+              }
+            }
+
+            // == hides all markers of a particular category, and ensures the checkbox is cleared ==
+            function hide(category) {
+                for (var i=0; i<markers.length; i++) {
+                    if (markers[i].mycategory == category) {
+                        markers[i].setVisible(false);
+                    }
+                }
+            }
+
+            function closeInfowindow(category){
+                for (var i=0; i<markers.length; i++){
+                    if (markers[i].mycategory == category){
+                        markers[i].infowindow.close();
+                    }
+                }
+            }
+
+            // == a checkbox has been clicked ==
+            function boxclick(box,category) {
+                if (box.checked) {
+                    show(category);
+                } else {
+                    hide(category);
+                    closeInfowindow(category);
+                }
+            }
+
+            function myclick(i) {
+                google.maps.event.trigger(markers[i],"click");
+            }
+
+            // Google Map
+            function myMap() {
+
+                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}', function(json) {
+                    // Looping through elements in JSON file.
+
+
+                    for (var i = 0; i < json.stops.length; i++) {
+                        // Creating Marker
+                        var marker = new google.maps.Marker({
+                            position: {lat: parseFloat(json.stops[i].latitude), lng: parseFloat(json.stops[i].longitude)},
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#4682b4',
+                                strokeWeight: 1.5,
+                                fillColor: '#4682b4',
+                                fillOpacity: 0.4,
+                                scale: 7
+                            },
+                            map: map});
+
+                        // Create infowindow on mouseover
+                        var infowindow = new google.maps.InfoWindow();
+
+                        // Contents of infowindow
+                        var html = '<a href=stop/' + json.stops[i].display_stop_id + '><h4>' + json.stops[i].shortname + '</h4></a>' + '<table>' +
+                        "<tr><td>Other info</td><td></td></tr>" +
+                        "<tr><td>about bus stop</td><td></td></tr>" +
+                        "<tr><td>to go here</td><td></td></tr>" +
+                        '</table>';
+                        marker.html = html;
+
+                        // Name of station
+                        marker.name = json.stops[i].shortname;
+
+                        // Mouse Over Functionality
+                        google.maps.event.addListener(marker,'mouseover',function() {
+                            // Set contents
+                            infowindow.setContent(this.html);
+                            // Open infowindow
+                            infowindow.open(map, this);
+                        });
+                    }
+
+                });
+
+                // Centre of map
+                var myCenter = new google.maps.LatLng(53.3498,-6.2603);
+
+                // Initializing canvas
+                var mapCanvas = document.getElementById("map");
+
+                //all
+                jQuery.getJSON($SCRIPT_ROOT+"/stations",null,function(data){
+                    var stations = data.stops;
+                    _.forEach(stations,function(station){
+                        var lat = station.latitude;
+                        var lng = station.longitude;
+                        var name = station.name;
+                        var category = station.category;
+                        var color = station.color;
+                        var marker = createMarker(lat,lng,name,category,color);
+                    });
+
+                    hide("dublinbike");
+                    hide("luas");
+                    hide("dart");
+                });
+
+                // Map options
+                var mapOptions = {
+                    center: myCenter,
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    streetViewControl: false
+                };
+
+                // Creating map
+                map = new google.maps.Map(mapCanvas, mapOptions);
+
+            }
+
+            // This function adds all of the routes to the routes textbox so we can autocomplete them
+            // Currently takes the route from a CSV which can probably be done in a cleaner way
+            function dataList() {
+                var url, routeInfo;
+                url = $SCRIPT_ROOT+'/api/all_routes';
+
+                $.getJSON(url, function(data) {
+                    $(data.route).each(function() {
+                        routeInfo = "<option value=" + this.route + "></option>";
+                        $('#routes').append(routeInfo);
+                    });
+                });
+            }
+
+            // Made this function to get the mid point of a bus route so that the Map would center on it
+            // Not sure exactly how it will work yet
+            function midLatLong(lat1, long1, lat2, long2) {
+                var longDiff = Math.toRadians(long2 - long1);
+
+                //convert to radians
+                lat1 = Math.toRadians(lat1);
+                lat2 = Math.toRadians(lat2);
+                long1 = Math.toRadians(long1);
+
+                var Bx = Math.cos(lat2) * Math.cos(longDiff);
+                var By = Math.cos(lat2) * Math.sin(longDiff);
+                var midLat = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+                var midLong = long1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+                return [Math.toDegrees(midLat), Math.toDegrees(midLong)];
+            }
+
+        </script>
+
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Dublin Bus</a>
+              </div>
+
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                      <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
+                      <li><a href="stop_search">Search by stop</a></li>
+                      <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Sign up</a>
+                          <div class="dropdown-menu">
+                              <form class="form-horizontal"  method="post" accept-charset="UTF-8">
+                                  <input id="signup_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
+                                  <input id="signup_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
+                                  <input class="btn btn-primary" type="submit" name="submit" value="Sign up" />
+                              </form>
+                          </div>
+                      </li>
+                      <li class="dropdown" id="login"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                          <div class="dropdown-menu">
+                              <form class="form-horizontal"  method="post" accept-charset="UTF-8">
+                                  <input id="login_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
+                                  <input id="login_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
+                                  <input class="btn btn-primary" type="submit" name="submit" value="Login" /><br>
+                                  <input type="checkbox" checked="checked"> Remember me
+                              </form>
+                          </div>
+                      </li>
+                      <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
+                  </ul>
+
+              </div>
+            </div>
+        </nav>
+
+        {% block content %}{% endblock %}
+
+        <!--Script for the chart. Currently uses manual input-->
+        <!--Will be cleaner once we have data going in from API-->
+        <!--Has to go at the bottom-->
+
+        <script>
+        var ctx = document.getElementById("busChart");
+        var chartDemo = new Chart(ctx, {
+         type: 'line',
+         data: {
+         labels: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00"],
+         datasets: [{
+             fill: true,
+             label: '42a',
+             data: [48,23,32,55,13,33,22,15],
+             backgroundColor: 'rgba(255, 99, 132, 0.2)',
+             borderColor:'rgba(255,99,132,1)',
+             borderWidth: 1
+                    },
+                   {
+            fill: true,
+            label: '37',
+            data: [12,13,22,8,43,33,23,17],
+            backgroundColor: 'rgba(0, 102, 255, 0.2)',
+            borderColor:'rgba(0, 102, 255,1)',
+            borderWidth: 1}]
+                },
+         options: {
+             maintainAspectRatio: false,
+             responsive: true,
+             title: {
+                fontSize: 15,
+                fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
+                display: true,
+                text: "Your Route Travel Times"
+             }
+         }
+        });
+        </script>
+
+        <!--import Lodash-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+        <!--Google Maps API script-->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
+
+        <!--Google Maps marker clustering script-->
+        <script src="../static/marker_clustering/markerclusterer.js"></script>
+
+    </body>
+
+</html>

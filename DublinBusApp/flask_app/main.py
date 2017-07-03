@@ -70,9 +70,8 @@ def index():
     predictor = joblib.load('static/rf_regressor.pkl')
 
     if request.method == 'POST':
-        origin_stop_id = request.form['origin']
-        desination_stop_id = request.form['destination']
-        users_route = request.form['user_route']
+        origin = request.form['origin']
+        destination = request.form['destination']
         # weather = scrape_weather()
         # current_temp = weather[0]
         # current_rain = weather[1]
@@ -100,7 +99,42 @@ def index():
     # delay = predictor.predict(x)
 
     # this needs to be changed to only return the delay value
-    return render_template('index.html', **locals())
+    return render_template('home.html', **locals())
+
+# --------------------------------------------------------------------------#
+# Search for Route Page
+@app.route('/route_search', methods=['GET', 'POST'])
+def route_search():
+
+    if request.method == 'POST':
+        users_route = request.form['user_route']
+        if request.form.get('direction') == 'on':
+            direction = "Southbound"
+        else:
+            direction = "Northbound"
+
+    return render_template('route_search.html', **locals())
+
+
+# --------------------------------------------------------------------------#
+# Search for Stop Page
+@app.route('/stop_search', methods=['GET', 'POST'])
+def stop_search():
+
+    if request.method == 'POST':
+        users_route = request.form['user_stop']
+
+    return render_template('stop_search.html', **locals())
+
+
+# --------------------------------------------------------------------------#
+# Stop Info Page
+@app.route('/stop/<string:stopnum>', methods=['GET', 'POST'])
+def stop_info(stopnum):
+
+    stop_num = stopnum
+
+    return render_template('bus_stop.html', **locals())
 
 
 # =================================== API ==================================#
@@ -122,6 +156,8 @@ def get_stop_info(routenum):
 def get_route_info():
     return BusDB().bus_route_info()
 
+# --------------------------------------------------------------------------#
+
 
 @app.route('/stations', methods=['GET'])
 def get_all_info():
@@ -136,30 +172,6 @@ PASSWORD = "teamgosky"
 # =================================== EC2 ==================================#
 
 
-def connect_to_database():
-    db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
-    engine = create_engine(db_str.format(USER, PASSWORD, URI, PORT, DB), echo=True)
-    return engine
-#    db = MySQLdb.connect(host="localhost",user="teamgosky",passwd="teamgosky",db="dbikes")
-#    return db
-
-def get_db():
-    engine = getattr(g, 'engine', None)
-    if engine is None:
-        engine = g.engine = connect_to_database()
-    return engine
-
-@app.route("/all")
-#@functools.lru_cache(maxsize=128)
-def get_station():
-    engine=get_db()
-    sql="select * from station;"
-    rows = engine.execute(sql).fetchall()
-    print('#found{}stations',len(rows))
-    return jsonify(stations=[dict(row.items()) for row in rows])
-    
-
-# --------------------------------------------------------------------------#
 # Setting app to run only if this file is run directly.
 if __name__ == '__main__':
     app.run(debug=True)

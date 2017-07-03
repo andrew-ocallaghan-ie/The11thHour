@@ -3,42 +3,127 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-.navbar-default{
-/*    background-color: #15ABE9;*/
-/*    width: 100%;*/
-/*    height: 40px;*/
-}
-
-.navbar-brand{
-    color: white;
+#map a{
+    text-decoration: none;
 }
 
 #weather{
-    float: right;
     height: 40px;
-    margin-right: 30px;
+    margin-top: 5px;
 }
 
-
 .btn-circle {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 15px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
 
 #map{
     height: 400px;
+    width: 100%;
+    margin-top: 0;
 }
 
+#now_arrive_depart{
+    color: white;
+}
+
+#inputs input, #inputs select, #inputs button{
+    margin-top: 8px;
+    display: block;
+}
+
+#bus_stops div{
+    display: inline-block;
+}
+
+#bus_stops a{
+    text-decoration: none;
+}
+
+.navbar-fixed-top .nav {
+    padding: 15px 0;
+}
+
+.navbar-fixed-top .navbar-brand {
+    padding: 0 150px;
+}
+
+.login {
+margin-bottom:5px;
+}
+
+.dropdown-menu {
+    width: 300px !important;
+}
+
+#signup div, #login div{
+    padding: 15px;
+    padding-bottom: 10px;
+}
+
+.ck-button{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.ck-button:hover{
+    background-color: #e6e6e6;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+
+.ck-button:enabled{
+    background-color: black
+}
+
+.ck-button img{
+    height: 25px;
+    width: 25px;
+    margin-top: 4px;
+}
+
+#hide_show_box{
+    width: 100%;
+}
+
+.transport_checkbox{
+    width: 33.4%;
+    background-color: #f8f8f8;
+    display: inline-block;
+    height: 35px;
+    border-left: solid #e7e7e7 1px;
+    border-right: solid #e7e7e7 1px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+#hide_show_box input[type=checkbox]{
+    display: none;
+}
+
+input#user_route{
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-radius: 0 0 4px 4px;
+}
 
 /* Landscape phones and down */
 @media (max-width: 768px) {
+    body {
+        padding-top: 0; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    }
+    .navbar-fixed-top .navbar-brand {
+        padding: 15px 0;
+    }
     #map{
-        height: 150px;
+        height: 300px;
     }
 }
 
