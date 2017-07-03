@@ -3,33 +3,6 @@
 <html>
     
     <head>
-        <style>
-        .navbar-fixed-top .nav {
-    padding: 15px 0;
-}
-
-        .navbar-fixed-top .navbar-brand {
-            padding: 0 150px;
-        }
-
-        @media(min-width:768px) {
-            body {
-                padding-top: 0px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
-            }
-
-            .navbar-fixed-top .navbar-brand {
-                padding: 15px 0;
-            }
-        }
-
-        .login {
-        margin-bottom:5px;
-        }
-
-        .dropdown-menu {
-            width: 300px !important;
-        }
-        </style>
         
         <title>Dublin Bus Predictions</title>
         
@@ -47,29 +20,24 @@
 
         <!--Bootstrap CSS Links-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
         <!--Our Stylesheet, goes at bottom of CSS sheets to ensure precedence-->
         <link href='../static/style.css' rel='stylesheet' type="text/css">
         
-        
         <!--Google charts API-->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         
         <!--ChartJS-->
         <script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>
-        
-
 
         <!--Our functions-->
         <script type="text/javascript">
+         var markers = [];
+        
+              
             
-            
-        //map functions    
-        var markers = [];
-           
         function createMarker(lat,lng,name,category,color) {
 
           var marker = new google.maps.Marker({
@@ -254,10 +222,9 @@
                 <div class="form-group">
                   <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
                   <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
-                    Dublin Bike: <input type="checkbox" id="dublinbikebox" onclick="boxclick(this,'dublinbike')" />
-                    Dart: <input type="checkbox" id="dartbox"  onclick="boxclick(this,'dart')" />
-                    Luas: <input type="checkbox" id="Luasbox" onclick="boxclick(this,'luas')" />
-                    
+        Dublin Bike: <input type="checkbox" id="dublinbikebox" onclick="boxclick(this,'dublinbike')" />
+      Dart: <input type="checkbox" id="dartbox"  onclick="boxclick(this,'dart')" />
+      Luas: <input type="checkbox" id="Luasbox" onclick="boxclick(this,'luas')" />
                 </div>
                   <div class="form-group">
                       <select class="form-control" id="now_arrive_depart">
@@ -268,29 +235,6 @@
                 </div>
                 <button type="submit" class="btn btn-default btn-circle">GO!</button>
               </form>
-            
-        <ul class="nav navbar-nav navbar-right">
-			<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Sign up</a>
-				<div class="dropdown-menu" style="padding: 15px; padding-bottom: 10px;">
-				<form class="form-horizontal"  method="post" accept-charset="UTF-8">
-				  <input id="sp_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
-				  <input id="sp_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
-				  <input class="btn btn-primary" type="submit" name="submit" value="Sign up" />
-				</form>
-				</div>
-			</li>
-			<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-				<div class="dropdown-menu" style="padding: 15px; padding-bottom: 10px;">
-				<form class="form-horizontal"  method="post" accept-charset="UTF-8">
-				  <input id="sp_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
-				  <input id="sp_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
-				  <input class="btn btn-primary" type="submit" name="submit" value="login" /><br>
-                  <input type="checkbox" checked="checked"> Remember me
-				</form>
-				</div>
-			</li>
-		</ul>
-
               <ul class="nav navbar-nav navbar-right">
                 <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
 

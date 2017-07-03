@@ -1,13 +1,17 @@
 from flask import jsonify
 import csv
 
-class luas:
+class alldublinstation:
     '''Class that deals with querying DB.'''
 
-    def luas_info(self):
-        stop_info = open('static/luas.csv', 'r', encoding='UTF-8', errors='ignore')
+    def __init__(self):
+        pass
+
+    def all_stop_info(self):
+        stop_info = open('static/dublinbike_dart_luas.csv', 'r', errors='ignore')
         reader = csv.reader(stop_info)
         stops = []
+
         headings = next(reader)
         for row in reader:
 
@@ -15,6 +19,8 @@ class luas:
                 'name': row[0],
                 'latitude': float(row[1]),
                 'longitude': float(row[2]),
+                'category': row[3],
+                'color': row[4]
             }
             stops.append(stop)
 
