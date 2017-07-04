@@ -64,7 +64,7 @@
               markers.infowindow = new google.maps.InfoWindow();
 
 
-              marker.addListener("click",function(){
+              marker.addListener("mouseover",function(){
                   var contentString='<h3>'+name+'</h3>'+marker.mycategory
                   markers.infowindow.setContent(contentString);
                   markers.infowindow.open(map, this);
