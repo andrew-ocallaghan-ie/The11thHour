@@ -78,6 +78,10 @@ def index():
         current_time = datetime.datetime.now()
         current_hour = current_time.hour
 
+        html1 = origin + " to " + destination
+        html2 = "Estimated journey time is: "
+        html3 = "You will arrive in " + destination + " at:"
+
         time_range = []
         for i in range(6):
             time_range.append(current_time + datetime.timedelta(minutes=i * 30))
@@ -109,9 +113,9 @@ def route_search():
     if request.method == 'POST':
         users_route = request.form['user_route']
         if request.form.get('direction') == 'on':
-            direction = "Southbound"
+            direction = "southbound"
         else:
-            direction = "Northbound"
+            direction = "northbound"
 
     return render_template('route_search.html', **locals())
 
@@ -141,20 +145,21 @@ def stop_info(stopnum):
 # An API is used to allow the website to dynamically query the DB without
 # having to be refreshed.
 #   - /api/routes/routenum     -> returns all stops associated with route
-# --------------------------------------------------------------------------#
-# --------------------------------------------------------------------------#
-
-# API - Returns JSON file with stop info for bus route.
-@app.route('/api/routes/<string:routenum>', methods=['GET'])
-def get_stop_info(routenum):
-    return BusDB().bus_stop_info(routenum)
-
+#   - /api/routes/all_routes     -> returns all routes
+#   - /api/routes/stations     -> returns all stations (Luas, Dart, Bike)
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/all_routes/', methods=['GET'])
 def get_route_info():
     return BusDB().bus_route_info()
+
+# --------------------------------------------------------------------------#
+
+
+@app.route('/api/routes/<string:routenum>/<string:direction>/', methods=['GET'])
+def get_stop_info(routenum, direction):
+    return BusDB().bus_stop_info_for_route(routenum, direction)
 
 # --------------------------------------------------------------------------#
 

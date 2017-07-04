@@ -7,35 +7,6 @@ class BusDB:
     def __init__(self):
         pass
 
-    def bus_stop_info(self, route_num):
-        stop_info = open('static/busstopinfo_bac_only.csv', 'r')
-        reader = csv.reader(stop_info)
-        stops = []
-
-        headings = next(reader)
-        for row in reader:
-
-            routes = row[8].split(", ")
-
-            if route_num in routes:
-
-                stop = {
-                    'stop_id': row[0],
-                    'display_stop_id': row[1],
-                    'shortname': row[2],
-                    'fullname': row[3],
-                    'latitude': float(row[4]),
-                    'longitude': float(row[5]),
-                    'route': routes
-                }
-                stops.append(stop)
-
-        # Returning info
-        return jsonify({'stops': stops})
-
-    # --------------------------------------------------------------------------#
-
-
     def bus_route_info(self):
         stop_info = open('static/all_route_names.csv', 'r')
         reader = csv.reader(stop_info)
@@ -53,3 +24,29 @@ class BusDB:
 
         # Returning info
         return jsonify({'route': routes})
+
+        # --------------------------------------------------------------------------#
+
+
+    def bus_stop_info_for_route(self, routenum, direction):
+        route_info = open('static/' + direction + '_stops.csv', 'r', encoding = "ISO-8859-1")
+        reader = csv.reader(route_info)
+        stops = []
+
+        headings = next(reader)
+
+        for row in reader:
+
+            if row[0] == routenum:
+                stop = {
+                    'id': row[1],
+                    'name': row[2],
+                    'lat': row[3],
+                    'lon': row[4],
+                    'order': row[5],
+                    'other_routes': row[7]
+                }
+                stops.append(stop)
+
+        # Returning info
+        return jsonify({'stops': stops})

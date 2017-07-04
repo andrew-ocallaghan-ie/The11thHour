@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-
-
 {% block content %}
   <div id="map"></div>
 
@@ -10,7 +8,7 @@
 
                 <div class="col-sm-6">
 
-                    <form method="POST">
+                    <form method="POST" onsubmit="routeStuff()">
 
                         <div class="btn-group" id="hide_show_box" aria-label="...">
                             <div class="btn-group transport_checkbox" role="group">
@@ -38,13 +36,11 @@
                   </form>
                 </div>
 
-                <!--There'll probably need to be an API call here to get the route info-->
-
                 <div class="col-sm-6">
                     <h2>Route {{users_route}} Stops</h2>
                     <div id="bus_stops">
                         <div id="bus_num">4</div>
-                        <div><a href="bus_stop/4">Merrion St.</div>
+                        <div><a href="bus_stop/4">Merrion St.</a></div>
                     </div>
                 </div>
             </div>

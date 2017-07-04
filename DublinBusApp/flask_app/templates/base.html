@@ -27,7 +27,7 @@
         <link href="{{ url_for('static', filename='../static/style.css') }}" rel="stylesheet" type="text/css">
 
         <!--ChartJS-->
-        <script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>
+        <!--<script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>-->
 
         <!--Button Toggling Library-->
         <link href="../static/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -110,21 +110,17 @@
                 }
             }
 
-            function myclick(i) {
-                google.maps.event.trigger(markers[i],"click");
-            }
-
             // Google Map
             function myMap() {
 
-                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}', function(json) {
+                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function(json) {
                     // Looping through elements in JSON file.
 
 
                     for (var i = 0; i < json.stops.length; i++) {
                         // Creating Marker
                         var marker = new google.maps.Marker({
-                            position: {lat: parseFloat(json.stops[i].latitude), lng: parseFloat(json.stops[i].longitude)},
+                            position: {lat: parseFloat(json.stops[i].lat), lng: parseFloat(json.stops[i].lon)},
                             icon: {
                                 path: google.maps.SymbolPath.CIRCLE,
                                 strokeColor: '#4682b4',
@@ -139,7 +135,7 @@
                         var infowindow = new google.maps.InfoWindow();
 
                         // Contents of infowindow
-                        var html = '<a href=stop/' + json.stops[i].display_stop_id + '><h4>' + json.stops[i].shortname + '</h4></a>' + '<table>' +
+                        var html = '<a href=stop/' + json.stops[i].id + '><h4>' + json.stops[i].name + '</h4></a>' + '<table>' +
                         "<tr><td>Other info</td><td></td></tr>" +
                         "<tr><td>about bus stop</td><td></td></tr>" +
                         "<tr><td>to go here</td><td></td></tr>" +
@@ -147,7 +143,7 @@
                         marker.html = html;
 
                         // Name of station
-                        marker.name = json.stops[i].shortname;
+                        marker.name = json.stops[i].name;
 
                         // Mouse Over Functionality
                         google.maps.event.addListener(marker,'mouseover',function() {
@@ -284,40 +280,40 @@
         <!--Will be cleaner once we have data going in from API-->
         <!--Has to go at the bottom-->
 
-        <script>
-        var ctx = document.getElementById("busChart");
-        var chartDemo = new Chart(ctx, {
-         type: 'line',
-         data: {
-         labels: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00"],
-         datasets: [{
-             fill: true,
-             label: '42a',
-             data: [48,23,32,55,13,33,22,15],
-             backgroundColor: 'rgba(255, 99, 132, 0.2)',
-             borderColor:'rgba(255,99,132,1)',
-             borderWidth: 1
-                    },
-                   {
-            fill: true,
-            label: '37',
-            data: [12,13,22,8,43,33,23,17],
-            backgroundColor: 'rgba(0, 102, 255, 0.2)',
-            borderColor:'rgba(0, 102, 255,1)',
-            borderWidth: 1}]
-                },
-         options: {
-             maintainAspectRatio: false,
-             responsive: true,
-             title: {
-                fontSize: 15,
-                fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
-                display: true,
-                text: "Your Route Travel Times"
-             }
-         }
-        });
-        </script>
+        <!--<script>-->
+        <!--var ctx = document.getElementById("busChart");-->
+        <!--var chartDemo = new Chart(ctx, {-->
+         <!--type: 'line',-->
+         <!--data: {-->
+         <!--labels: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00"],-->
+         <!--datasets: [{-->
+             <!--fill: true,-->
+             <!--label: '42a',-->
+             <!--data: [48,23,32,55,13,33,22,15],-->
+             <!--backgroundColor: 'rgba(255, 99, 132, 0.2)',-->
+             <!--borderColor:'rgba(255,99,132,1)',-->
+             <!--borderWidth: 1-->
+                    <!--},-->
+                   <!--{-->
+            <!--fill: true,-->
+            <!--label: '37',-->
+            <!--data: [12,13,22,8,43,33,23,17],-->
+            <!--backgroundColor: 'rgba(0, 102, 255, 0.2)',-->
+            <!--borderColor:'rgba(0, 102, 255,1)',-->
+            <!--borderWidth: 1}]-->
+                <!--},-->
+         <!--options: {-->
+             <!--maintainAspectRatio: false,-->
+             <!--responsive: true,-->
+             <!--title: {-->
+                <!--fontSize: 15,-->
+                <!--fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",-->
+                <!--display: true,-->
+                <!--text: "Your Route Travel Times"-->
+             <!--}-->
+         <!--}-->
+        <!--});-->
+        <!--</script>-->
 
         <!--import Lodash-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
