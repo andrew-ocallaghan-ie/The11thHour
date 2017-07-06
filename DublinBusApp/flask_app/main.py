@@ -1,4 +1,4 @@
-import MySQLdb
+# import MySQLdb
 from flask import Flask, render_template, request, g, jsonify, flash, redirect, url_for, session, logging
 from flask_cors import CORS
 from busData import BusDB
@@ -11,6 +11,8 @@ import csv
 from sqlalchemy import create_engine
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+
+
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
 # Creating Flask App
@@ -20,7 +22,8 @@ CORS(app)
 
 # --------------------------------------------------------------------------#
 
-#class for form
+
+# Class for form
 class RegisterForm(Form):
     name = StringField('Name', [validators.length(min=1, max=50)])
     username  = StringField('Username', [validators.length(min=4, max=25)])
@@ -196,7 +199,7 @@ def get_stop_info(routenum, direction):
 # --------------------------------------------------------------------------#
 
 
-@app.route('/stations/', methods=['GET'])
+@app.route('/api/stations/', methods=['GET'])
 def get_all_info():
     return alldublinstation().all_stop_info()
 

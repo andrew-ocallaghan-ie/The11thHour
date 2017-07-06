@@ -163,7 +163,7 @@
                 var mapCanvas = document.getElementById("map");
 
                 //all
-                jQuery.getJSON($SCRIPT_ROOT+"/stations",null,function(data){
+                jQuery.getJSON($SCRIPT_ROOT+"/api/stations",null,function(data){
                     var stations = data.stops;
                     _.forEach(stations,function(station){
                         var lat = station.latitude;
