@@ -183,27 +183,12 @@
                 var mapOptions = {
                     center: myCenter,
                     zoom: 12,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    streetViewControl: false
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
 
                 // Creating map
                 map = new google.maps.Map(mapCanvas, mapOptions);
 
-            }
-
-            // This function adds all of the routes to the routes textbox so we can autocomplete them
-            // Currently takes the route from a CSV which can probably be done in a cleaner way
-            function dataList() {
-                var url, routeInfo;
-                url = $SCRIPT_ROOT+'/api/all_routes';
-
-                $.getJSON(url, function(data) {
-                    $(data.route).each(function() {
-                        routeInfo = "<option value=" + this.route + "></option>";
-                        $('#routes').append(routeInfo);
-                    });
-                });
             }
 
             // Made this function to get the mid point of a bus route so that the Map would center on it
@@ -317,9 +302,6 @@
 
         <!--import Lodash-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-
-        <!--Google Maps API script-->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
 
         <!--Google Maps marker clustering script-->
         <script src="../static/marker_clustering/markerclusterer.js"></script>

@@ -82,10 +82,6 @@ def index():
         html2 = "Estimated journey time is: "
         html3 = "You will arrive in " + destination + " at:"
 
-        time_range = []
-        for i in range(6):
-            time_range.append(current_time + datetime.timedelta(minutes=i * 30))
-
         current_date = datetime.datetime.now().date()
         if current_date in extract_holidays():
             is_school_holiday = 1
@@ -126,7 +122,10 @@ def route_search():
 def stop_search():
 
     if request.method == 'POST':
-        users_route = request.form['user_stop']
+        stop_num = request.form['user_stop']
+
+
+        return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())
 
@@ -144,9 +143,10 @@ def stop_info(stopnum):
 # =================================== API ==================================#
 # An API is used to allow the website to dynamically query the DB without
 # having to be refreshed.
-#   - /api/routes/routenum     -> returns all stops associated with route
-#   - /api/routes/all_routes     -> returns all routes
-#   - /api/routes/stations     -> returns all stations (Luas, Dart, Bike)
+
+#   - /api/routes/all_routes             -> returns all routes
+#   - /api/routes/routenum/direction     -> returns all stops associated with route in a given direction
+#   - /api/routes/stations               -> returns all stations (Luas, Dart, Bike)
 # --------------------------------------------------------------------------#
 
 
@@ -164,17 +164,19 @@ def get_stop_info(routenum, direction):
 # --------------------------------------------------------------------------#
 
 
-@app.route('/stations', methods=['GET'])
+@app.route('/stations/', methods=['GET'])
 def get_all_info():
     return alldublinstation().all_stop_info()
 
-# =================================== EC2 ==================================#
-URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
-PORT = "3306"
-DB = "dbikes"
-USER = "teamgosky"
-PASSWORD = "teamgosky"
-# =================================== EC2 ==================================#
+# --------------------------------------------------------------------------#
+
+
+@app.route('/api/stops/', methods=['GET'])
+def get_all_stop_info():
+    return BusDB().all_bus_stop_info()
+
+# --------------------------------------------------------------------------#
+
 
 
 # Setting app to run only if this file is run directly.

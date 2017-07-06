@@ -29,6 +29,12 @@ body {
     margin-top: 0;
 }
 
+#panomap, #pano{
+    float: left;
+    height: 400px;
+    width: 50%;
+}
+
 #now_arrive_depart{
     color: white;
 }
@@ -112,6 +118,12 @@ input#user_route{
     margin-top: 0;
     margin-bottom: 5px;
     border-radius: 0 0 4px 4px;
+}
+
+#list_the_bus_stops{
+    height: 250px;
+    overflow: auto;
+    margin-top: 20px;
 }
 
 /* Landscape phones and down */

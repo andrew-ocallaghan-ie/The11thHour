@@ -1,6 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script>
+    function populateStopInfo(){
+
+        $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function(json) {
+            var bus_stop_info = '';
+            for (var i = 0; i < json.stops.length; i++) {
+                bus_stop_info += "<p><a href=stop/" + json.stops[i].id + ">" + json.stops[i].id + "</a>" + " - " + json.stops[i].name + "</p>"
+            }
+            document.getElementById("bus_stops").innerHTML = bus_stop_info
+        });
+    }
+
+    // This function adds all of the routes to the routes textbox so we can autocomplete them
+    // Currently takes the route from a CSV which can probably be done in a cleaner way
+     function dataList() {
+        var routeInfo;
+
+        $.getJSON($SCRIPT_ROOT+'/api/all_routes', function(data) {
+            $(data.route).each(function() {
+                routeInfo = "<option value=" + this.route + ">" + this.origin + " &#8644 " + this.destination + "</option>";
+                $('#routes').append(routeInfo);
+            });
+        });
+    }
+</script>
+
   <div id="map"></div>
 
         <div class="container">
@@ -8,7 +34,7 @@
 
                 <div class="col-sm-6">
 
-                    <form method="POST" onsubmit="routeStuff()">
+                    <form method="POST">
 
                         <div class="btn-group" id="hide_show_box" aria-label="...">
                             <div class="btn-group transport_checkbox" role="group">
@@ -36,13 +62,14 @@
                   </form>
                 </div>
 
-                <div class="col-sm-6">
-                    <h2>Route {{users_route}} Stops</h2>
-                    <div id="bus_stops">
-                        <div id="bus_num">4</div>
-                        <div><a href="bus_stop/4">Merrion St.</a></div>
-                    </div>
+                <h2>Route {{users_route}} Stops {{direction}}</h2>
+                <div class="col-sm-6" id="list_the_bus_stops">
+                    <div id="bus_stops"></div>
+                    <script>window.onload = populateStopInfo();</script>
                 </div>
             </div>
         </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
+
 {% endblock %}
