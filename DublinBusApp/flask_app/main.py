@@ -1,4 +1,4 @@
-import MySQLdb
+
 from flask import Flask, render_template, request, g, jsonify, flash, redirect, url_for, session, logging
 from flask_cors import CORS
 from busData import BusDB
