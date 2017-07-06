@@ -233,14 +233,14 @@
                       <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
-                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Sign up</a>
-                          <div class="dropdown-menu">
+                      <li class="dropdown" id="signup"><a href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a>
+                          <!--<div class="dropdown-menu">
                               <form class="form-horizontal"  method="post" accept-charset="UTF-8">
                                   <input id="signup_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
                                   <input id="signup_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
                                   <input class="btn btn-primary" type="submit" name="submit" value="Sign up" />
                               </form>
-                          </div>
+                          </div> -->
                       </li>
                       <li class="dropdown" id="login"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                           <div class="dropdown-menu">
@@ -258,47 +258,8 @@
               </div>
             </div>
         </nav>
-
+        {% include 'includes/_messages.html' %}
         {% block content %}{% endblock %}
-
-        <!--Script for the chart. Currently uses manual input-->
-        <!--Will be cleaner once we have data going in from API-->
-        <!--Has to go at the bottom-->
-
-        <!--<script>-->
-        <!--var ctx = document.getElementById("busChart");-->
-        <!--var chartDemo = new Chart(ctx, {-->
-         <!--type: 'line',-->
-         <!--data: {-->
-         <!--labels: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00"],-->
-         <!--datasets: [{-->
-             <!--fill: true,-->
-             <!--label: '42a',-->
-             <!--data: [48,23,32,55,13,33,22,15],-->
-             <!--backgroundColor: 'rgba(255, 99, 132, 0.2)',-->
-             <!--borderColor:'rgba(255,99,132,1)',-->
-             <!--borderWidth: 1-->
-                    <!--},-->
-                   <!--{-->
-            <!--fill: true,-->
-            <!--label: '37',-->
-            <!--data: [12,13,22,8,43,33,23,17],-->
-            <!--backgroundColor: 'rgba(0, 102, 255, 0.2)',-->
-            <!--borderColor:'rgba(0, 102, 255,1)',-->
-            <!--borderWidth: 1}]-->
-                <!--},-->
-         <!--options: {-->
-             <!--maintainAspectRatio: false,-->
-             <!--responsive: true,-->
-             <!--title: {-->
-                <!--fontSize: 15,-->
-                <!--fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",-->
-                <!--display: true,-->
-                <!--text: "Your Route Travel Times"-->
-             <!--}-->
-         <!--}-->
-        <!--});-->
-        <!--</script>-->
 
         <!--import Lodash-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
