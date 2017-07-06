@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html>
+{% block content %}
     <h1>Register</h1>
     {% from "includes/_formhelpers.html" import render_field %}
     <form method="Post" action="">
@@ -22,5 +22,4 @@
     <p><input type="submit" class="btn btn-primary" valuue="Submit"></p>
     </form>
 
-    
-</html>
+{% endblock %}

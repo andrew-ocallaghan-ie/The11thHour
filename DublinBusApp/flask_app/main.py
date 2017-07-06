@@ -1,5 +1,5 @@
-
-from flask import Flask, render_template, request, g, jsonify
+import MySQLdb
+from flask import Flask, render_template, request, g, jsonify, flash, redirect, url_for, session, logging
 from flask_cors import CORS
 from busData import BusDB
 from db_luas_dart import alldublinstation
@@ -9,7 +9,8 @@ import traceback
 import datetime
 import csv
 from sqlalchemy import create_engine
-
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from passlib.hash import sha256_crypt
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
 # Creating Flask App
@@ -168,15 +169,53 @@ def get_stop_info(routenum, direction):
 def get_all_info():
     return alldublinstation().all_stop_info()
 
-# =================================== EC2 ==================================#
+#class for form
+class RegisterForm(Form):
+    name = StringField('Name', [validators.length(min=1, max=50)])
+    username  = StringField('Username', [validators.length(min=4, max=25)])
+    email = StringField('Email', [validators.length(min=4, max=50)])
+    password = PasswordField('Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message = 'Passwords do not match')
+        ])
+    confirm = PasswordField('Confirm Password')
+
+    
+@app.route('/register', methods=['GET','POST'])
+def register():
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        name = form.name.data
+        email = form.email.data
+        username = form.username.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+        
+        engine=get_db()
+        sql="INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)"
+        engine.execute(sql,(name, email, username, password))
+        flash('You are successfully registered, now you can log in','success')
+    return render_template('register.html', form=form)
+
+# =================================== DB ==================================#
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
 PORT = "3306"
-DB = "dbikes"
+DB = "All_routes"
 USER = "teamgosky"
 PASSWORD = "teamgosky"
-# =================================== EC2 ==================================#
 
+def connect_to_database():
+    db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
+    engine = create_engine(db_str.format(USER, PASSWORD, URI, PORT, DB), echo=True)
+    return engine
+
+def get_db():
+    engine = getattr(g, 'engine', None)
+    if engine is None:
+        engine = g.engine = connect_to_database()
+    return engine
+# =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.
 if __name__ == '__main__':
+    app.secret_key='secret123'
     app.run(debug=True)

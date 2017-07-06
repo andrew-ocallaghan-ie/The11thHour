@@ -248,14 +248,14 @@
                       <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
-                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Sign up</a>
-                          <div class="dropdown-menu">
+                      <li class="dropdown" id="signup"><a href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a>
+                          <!--<div class="dropdown-menu">
                               <form class="form-horizontal"  method="post" accept-charset="UTF-8">
                                   <input id="signup_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
                                   <input id="signup_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
                                   <input class="btn btn-primary" type="submit" name="submit" value="Sign up" />
                               </form>
-                          </div>
+                          </div> -->
                       </li>
                       <li class="dropdown" id="login"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                           <div class="dropdown-menu">
@@ -273,7 +273,7 @@
               </div>
             </div>
         </nav>
-
+        {% include 'includes/_messages.html' %}
         {% block content %}{% endblock %}
 
         <!--Script for the chart. Currently uses manual input-->

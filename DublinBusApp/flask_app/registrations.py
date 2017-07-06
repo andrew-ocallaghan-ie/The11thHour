@@ -44,7 +44,7 @@ def register():
         engine=get_db()
         sql="INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)"
         engine.execute(sql,(name, email, username, password))
-        flash('You are registered')
+        flash('You are registered','success')
     return render_template('register.html', form=form)
     
 if __name__ == '__main__':
