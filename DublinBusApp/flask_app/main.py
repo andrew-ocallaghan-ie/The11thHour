@@ -1,4 +1,3 @@
-import MySQLdb
 from flask import Flask, render_template, request, g, jsonify, flash, redirect, url_for, session, logging
 from flask_cors import CORS
 from busData import BusDB
@@ -195,6 +194,8 @@ def register():
         engine.execute(sql,(name, email, username, password))
         flash('You are successfully registered, now you can log in','success')
     return render_template('register.html', form=form)
+
+
 
 # =================================== DB ==================================#
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
