@@ -10,12 +10,13 @@
         var stopInfo;
 
         $.getJSON($SCRIPT_ROOT+'/api/stops/', function(data) {
-            $(data.stops).each(function() {
-                stopInfo = "<option value=" + this.id + ">" + this.name + "</option>";
+            for (var key in data.stops) {
+                var name = data.stops[key][0];
+                stopInfo = "<option value=" + key + ">" + name + "</option>";
                 $('#stops').append(stopInfo);
-            });
+            }
         });
-    }
+     }
 </script>
 
   <div id="map"></div>
@@ -36,6 +37,8 @@
             </div>
         </div>
 
+<!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
+<!--stop info page-->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
 
 {% endblock %}

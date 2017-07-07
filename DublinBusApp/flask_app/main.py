@@ -11,7 +11,8 @@ import csv
 from sqlalchemy import create_engine
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
-
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
@@ -99,29 +100,23 @@ def index():
         html2 = "Estimated journey time is: "
         html3 = "You will arrive in " + destination + " at:"
 
-        current_date = datetime.datetime.now().date()
-        if current_date in extract_holidays():
-            is_school_holiday = 1
-        else:
-            is_school_holiday = 0
-
+        # current_date = datetime.datetime.now().date()
+        # if current_date in extract_holidays():
+        #     is_school_holiday = 1
+        # else:
+        #     is_school_holiday = 0
+        #
         current_weekday = datetime.datetime.now().weekday()
 
 
-    # x will be a list of inputs that we give to the predictor: time, rain etc.
-    # we then run this through the predictor model to get a predicted delay
-    # to send to flask and display to the user
-
-    # x = [1, current_temp, current_rain, current_hour, 0]
-    # delay = predictor.predict(x)
-
-    # this needs to be changed to only return the delay value
+    # this needs to be changed to return the delay value
     return render_template('home.html', **locals())
 
 # --------------------------------------------------------------------------#
 # Search for Route Page
 @app.route('/route_search', methods=['GET', 'POST'])
 def route_search():
+    """Takes the input from the user for route number and direction"""
 
     if request.method == 'POST':
         users_route = request.form['user_route']
@@ -137,11 +132,11 @@ def route_search():
 # Search for Stop Page
 @app.route('/stop_search', methods=['GET', 'POST'])
 def stop_search():
+    """Initially this loads the stop_search page. If there is a POST request i.e. the user inputs something
+    it will open the stop page of the requested stop"""
 
     if request.method == 'POST':
         stop_num = request.form['user_stop']
-
-
         return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())
@@ -151,7 +146,7 @@ def stop_search():
 # Stop Info Page
 @app.route('/stop/<string:stopnum>', methods=['GET', 'POST'])
 def stop_info(stopnum):
-
+    """Displays the stop info page. It is activated from the links on the route_search page."""
     stop_num = stopnum
 
     return render_template('bus_stop.html', **locals())
@@ -182,6 +177,7 @@ def register():
 #   - /api/routes/all_routes             -> returns all routes
 #   - /api/routes/routenum/direction     -> returns all stops associated with route in a given direction
 #   - /api/routes/stations               -> returns all stations (Luas, Dart, Bike)
+#   - /api/routes/stops                  -> returns all stops for the stop_search autocomplete
 # --------------------------------------------------------------------------#
 
 

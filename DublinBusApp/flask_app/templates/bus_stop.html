@@ -3,24 +3,64 @@
 {% block content %}
 
 <script>
+
+    // Function to make the street view map for this page
+    // Need to create a map object to map it to first
+    // JSON call returns the location of the selected stop which is fed into the map
     function pano_initialize() {
-        var fenway = {lat: 42.345573, lng: -71.098326};
 
-        var map = new google.maps.Map(document.getElementById('panomap'), {
-          center: fenway,
-          zoom: 14
-        });
+        $.getJSON($SCRIPT_ROOT + '/api/stops', function (json) {
+            var users_stop = json.stops[{{stop_num}}];
+            var user_lat = parseFloat(users_stop[1]);
+            var user_long = parseFloat(users_stop[2]);
 
-        var panorama = new google.maps.StreetViewPanorama(
-            document.getElementById('pano'), {
-              position: fenway,
-              pov: {
-                heading: 34,
-                pitch: 10
-              }
+            var stop_location = {lat: user_lat, lng: user_long};
+
+            var map = new google.maps.Map(document.getElementById('panomap'), {
+              center: stop_location,
+              zoom: 16
             });
-        map.setStreetView(panorama);
+
+            var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'), {
+                  position: stop_location,
+                  pov: {
+                    heading: 34,
+                    pitch: 1
+                  }
+                });
+            map.setStreetView(panorama);
+        });
     }
+
+    // Gets live data from the live Dublin Bus API and prints it to the bus_stop_info div
+    function liveBusStopInfo(){
+
+        $.getJSON("https://data.dublinked.ie/cgi-bin/rtpi/realtimebusinformation?stopid={{stop_num}}&format=json", function (json) {
+            var bus_stop_info = "<h1>Stop {{stop_num}} Live Info</h1>";
+            var buses = json.results;
+            for (var i = 0; i < buses.length; i++) {
+                bus_stop_info += "<p>" + buses[i].route + " - " + buses[i].origin + " to " + buses[i].destination + " - " + timeFromNow(buses[i].arrivaldatetime) + "mins</p>";
+            }
+            document.getElementById("bus_stop_info").innerHTML = bus_stop_info;
+        });
+    }
+
+    // Used to show the amount of time in minutes until the bus arrives rather than just the arrival time
+    function timeFromNow(input_time){
+        var currentTime = new Date();
+        var arrivalTime = new Date(input_time);
+        var diffTime = arrivalTime - currentTime;
+        var diffMins = Math.round(((diffTime % 86400000) % 3600000) / 60000);
+
+        if (diffMins == 0){
+            return "Due"
+        } else {
+            return diffMins;
+        }
+    }
+
+
 </script>
 
 <div id="panomap"></div>
@@ -29,9 +69,14 @@
 <div class="container">
     <div class="row">
 
-        <div class="col-sm-6">
-            <h1>Information for stop {{stop_num}} will go here</h1>
-
+        <div class="col-sm-6" id="bus_stop_info">
+            <!--This calls the script to fill in the live bus times info in the div-->
+            <script>window.onload = liveBusStopInfo();</script>
+            <!--<div class="info_box">-->
+                <!--<div>4</div>-->
+                <!--<div class="info">Mountjoy Square to Loughlinstown Pk</div>-->
+                <!--<div class="circle"><p>14.23</p></div>-->
+            </div>
         </div>
 
         <div class="col-sm-6">
@@ -40,6 +85,7 @@
     </div>
 </div>
 
+<!--Calls the script to generate the map. Different to the other map calling scripts as this one contains the street view-->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=pano_initialize"></script>
 
 {% endblock %}
