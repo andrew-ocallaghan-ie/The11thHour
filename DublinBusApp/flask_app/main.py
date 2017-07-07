@@ -17,6 +17,19 @@ app = Flask(__name__)
 # Enable Cross Origin Resource Sharing
 CORS(app)
 
+# --------------------------------------------------------------------------#
+
+#class for form
+class RegisterForm(Form):
+    name = StringField('Name', [validators.length(min=1, max=50)])
+    username  = StringField('Username', [validators.length(min=4, max=25)])
+    email = StringField('Email', [validators.length(min=4, max=50)])
+    password = PasswordField('Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message = 'Passwords do not match')
+        ])
+    confirm = PasswordField('Confirm Password')
+
 #--------------------------------------------------------------------------#
 def scrape_weather():
     '''Returns a summary of the current weather from the Wunderground API'''
@@ -82,10 +95,6 @@ def index():
         html2 = "Estimated journey time is: "
         html3 = "You will arrive in " + destination + " at:"
 
-        time_range = []
-        for i in range(6):
-            time_range.append(current_time + datetime.timedelta(minutes=i * 30))
-
         current_date = datetime.datetime.now().date()
         if current_date in extract_holidays():
             is_school_holiday = 1
@@ -126,7 +135,10 @@ def route_search():
 def stop_search():
 
     if request.method == 'POST':
-        users_route = request.form['user_stop']
+        stop_num = request.form['user_stop']
+
+
+        return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())
 
@@ -141,12 +153,31 @@ def stop_info(stopnum):
     return render_template('bus_stop.html', **locals())
 
 
+# --------------------------------------------------------------------------#
+# User Registration Page
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        name = form.name.data
+        email = form.email.data
+        username = form.username.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+
+        engine = get_db()
+        sql = "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)"
+        engine.execute(sql, (name, email, username, password))
+        flash('You are successfully registered, now you can log in', 'success')
+    return render_template('register.html', form=form)
+
+
 # =================================== API ==================================#
 # An API is used to allow the website to dynamically query the DB without
 # having to be refreshed.
-#   - /api/routes/routenum     -> returns all stops associated with route
-#   - /api/routes/all_routes     -> returns all routes
-#   - /api/routes/stations     -> returns all stations (Luas, Dart, Bike)
+
+#   - /api/routes/all_routes             -> returns all routes
+#   - /api/routes/routenum/direction     -> returns all stops associated with route in a given direction
+#   - /api/routes/stations               -> returns all stations (Luas, Dart, Bike)
 # --------------------------------------------------------------------------#
 
 
@@ -164,45 +195,28 @@ def get_stop_info(routenum, direction):
 # --------------------------------------------------------------------------#
 
 
-@app.route('/stations', methods=['GET'])
+@app.route('/stations/', methods=['GET'])
 def get_all_info():
     return alldublinstation().all_stop_info()
 
-#class for form
-class RegisterForm(Form):
-    name = StringField('Name', [validators.length(min=1, max=50)])
-    username  = StringField('Username', [validators.length(min=4, max=25)])
-    email = StringField('Email', [validators.length(min=4, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message = 'Passwords do not match')
-        ])
-    confirm = PasswordField('Confirm Password')
+# --------------------------------------------------------------------------#
 
-    
-@app.route('/register', methods=['GET','POST'])
-def register():
-    form = RegisterForm(request.form)
-    if request.method == 'POST' and form.validate():
-        name = form.name.data
-        email = form.email.data
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
-        
-        engine=get_db()
-        sql="INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)"
-        engine.execute(sql,(name, email, username, password))
-        flash('You are successfully registered, now you can log in','success')
-    return render_template('register.html', form=form)
+
+@app.route('/api/stops/', methods=['GET'])
+def get_all_stop_info():
+    return BusDB().all_bus_stop_info()
+
 
 
 
 # =================================== DB ==================================#
+
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
 PORT = "3306"
 DB = "All_routes"
 USER = "teamgosky"
 PASSWORD = "teamgosky"
+
 
 def connect_to_database():
     db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
@@ -214,6 +228,7 @@ def get_db():
     if engine is None:
         engine = g.engine = connect_to_database()
     return engine
+
 # =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.

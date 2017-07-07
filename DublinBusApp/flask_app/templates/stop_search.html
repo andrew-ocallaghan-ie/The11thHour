@@ -1,5 +1,23 @@
 {% extends "base.html" %}
+
+
 {% block content %}
+
+<script>
+    // This function adds all of the routes to the routes textbox so we can autocomplete them
+    // Currently takes the route from a CSV which can probably be done in a cleaner way
+     function dataList() {
+        var stopInfo;
+
+        $.getJSON($SCRIPT_ROOT+'/api/stops/', function(data) {
+            $(data.stops).each(function() {
+                stopInfo = "<option value=" + this.id + ">" + this.name + "</option>";
+                $('#stops').append(stopInfo);
+            });
+        });
+    }
+</script>
+
   <div id="map"></div>
 
         <div class="container">
@@ -17,4 +35,7 @@
                 </div>
             </div>
         </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=myMap"></script>
+
 {% endblock %}

@@ -1,18 +1,45 @@
 {% extends "base.html" %}
+
 {% block content %}
-  <div id="map"></div>
 
-        <div class="container">
-            <div class="row">
+<script>
+    function pano_initialize() {
+        var fenway = {lat: 42.345573, lng: -71.098326};
 
-                <div class="col-sm-6">
-                    <h1>Information for stop {{stop_num}} will go here</h1>
+        var map = new google.maps.Map(document.getElementById('panomap'), {
+          center: fenway,
+          zoom: 14
+        });
 
-                </div>
+        var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), {
+              position: fenway,
+              pov: {
+                heading: 34,
+                pitch: 10
+              }
+            });
+        map.setStreetView(panorama);
+    }
+</script>
 
-                <div class="col-sm-6">
+<div id="panomap"></div>
+<div id="pano"></div>
 
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-6">
+            <h1>Information for stop {{stop_num}} will go here</h1>
+
         </div>
+
+        <div class="col-sm-6">
+
+        </div>
+    </div>
+</div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkUZsgbKCDZNWjntnPv5mQJplie2G4h64&callback=pano_initialize"></script>
+
 {% endblock %}

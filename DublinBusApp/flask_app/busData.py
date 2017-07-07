@@ -1,5 +1,6 @@
 from flask import jsonify
 import csv
+from operator import itemgetter
 
 class BusDB:
     '''Class that deals with querying DB.'''
@@ -18,7 +19,8 @@ class BusDB:
 
             route = {
                 'route': row[0],
-                'name': row[1]
+                'origin': row[1],
+                'destination': row[2]
             }
             routes.append(route)
 
@@ -39,14 +41,42 @@ class BusDB:
 
             if row[0] == routenum:
                 stop = {
-                    'id': row[1],
+                    'id': int(row[1]),
                     'name': row[2],
                     'lat': row[3],
                     'lon': row[4],
-                    'order': row[5],
+                    'order': int(row[5]),
                     'other_routes': row[7]
                 }
                 stops.append(stop)
+
+        stops = sorted(stops, key=itemgetter('order'))
+
+        # Returning info
+        return jsonify({'stops': stops})
+
+        # --------------------------------------------------------------------------#
+
+
+    def all_bus_stop_info(self):
+        all_stops = open('static/2012_stop_info.csv', 'r', encoding = "ISO-8859-1")
+        reader = csv.reader(all_stops)
+        stops = []
+
+        headings = next(reader)
+
+        for row in reader:
+
+            stop = {
+                'id': int(row[0]),
+                'name': row[1],
+                'lat': row[2],
+                'lon': row[3],
+                'routes': row[4]
+            }
+            stops.append(stop)
+
+        stops = sorted(stops, key=itemgetter('id'))
 
         # Returning info
         return jsonify({'stops': stops})
