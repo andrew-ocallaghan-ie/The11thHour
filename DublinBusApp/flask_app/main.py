@@ -1,3 +1,4 @@
+# import MySQLdb
 from flask import Flask, render_template, request, g, jsonify, flash, redirect, url_for, session, logging
 from flask_cors import CORS
 from busData import BusDB
@@ -10,6 +11,9 @@ import csv
 from sqlalchemy import create_engine
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+import pymysql
+#pymysql.install_as_MySQLdb()
+
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
 # Creating Flask App
@@ -18,10 +22,9 @@ app = Flask(__name__)
 CORS(app)
 
 # --------------------------------------------------------------------------#
-#Config MySQL
-app.config['MYSQL_CURSORCLASS']='DictCursor'
 
-#class for form
+
+# Class for form
 class RegisterForm(Form):
     name = StringField('Name', [validators.length(min=1, max=50)])
     username  = StringField('Username', [validators.length(min=4, max=25)])
@@ -97,29 +100,23 @@ def index():
         html2 = "Estimated journey time is: "
         html3 = "You will arrive in " + destination + " at:"
 
-        current_date = datetime.datetime.now().date()
-        if current_date in extract_holidays():
-            is_school_holiday = 1
-        else:
-            is_school_holiday = 0
-
+        # current_date = datetime.datetime.now().date()
+        # if current_date in extract_holidays():
+        #     is_school_holiday = 1
+        # else:
+        #     is_school_holiday = 0
+        #
         current_weekday = datetime.datetime.now().weekday()
 
 
-    # x will be a list of inputs that we give to the predictor: time, rain etc.
-    # we then run this through the predictor model to get a predicted delay
-    # to send to flask and display to the user
-
-    # x = [1, current_temp, current_rain, current_hour, 0]
-    # delay = predictor.predict(x)
-
-    # this needs to be changed to only return the delay value
+    # this needs to be changed to return the delay value
     return render_template('home.html', **locals())
 
 # --------------------------------------------------------------------------#
 # Search for Route Page
 @app.route('/route_search', methods=['GET', 'POST'])
 def route_search():
+    """Takes the input from the user for route number and direction"""
 
     if request.method == 'POST':
         users_route = request.form['user_route']
@@ -135,11 +132,11 @@ def route_search():
 # Search for Stop Page
 @app.route('/stop_search', methods=['GET', 'POST'])
 def stop_search():
+    """Initially this loads the stop_search page. If there is a POST request i.e. the user inputs something
+    it will open the stop page of the requested stop"""
 
     if request.method == 'POST':
         stop_num = request.form['user_stop']
-
-
         return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())
@@ -149,7 +146,7 @@ def stop_search():
 # Stop Info Page
 @app.route('/stop/<string:stopnum>', methods=['GET', 'POST'])
 def stop_info(stopnum):
-
+    """Displays the stop info page. It is activated from the links on the route_search page."""
     stop_num = stopnum
 
     return render_template('bus_stop.html', **locals())
@@ -172,8 +169,8 @@ def register():
         flash('You are successfully registered, now you can log in', 'success')
     return render_template('register.html', form=form)
 
+
 # --------------------------------------------------------------------------#
-# User Login
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -184,18 +181,26 @@ def login():
         engine = get_db()
         sql = "SELECT * FROM users WHERE username = %s"
         result = engine.execute(sql, [username])
+        all_data=result.fetchall()
         
-        if result > 0:
+        if len(all_data) > 0:
             # Get stored hash
-            data = engine.fetchone()
+            data = all_data[0]
+            print("Hi",all_data)
             password = data['password']
+            print(password)
         
             #Compare passwords
             if sha256_crypt.verify(password_candidate, password):
-                app.logger.info('PASSWORD MATCHED')
+                #Passed
+                pass
+            else:
+                error = 'Invalid login'
+                return render_template('login.html', error=error)
         else:
-            app.loffer.inf('no user')
-    return render_template('base.html')
+            error = 'Username not found'
+            return render_template('login.html', error=error)
+    return render_template('login.html')
 
 
 # =================================== API ==================================#
@@ -205,6 +210,7 @@ def login():
 #   - /api/routes/all_routes             -> returns all routes
 #   - /api/routes/routenum/direction     -> returns all stops associated with route in a given direction
 #   - /api/routes/stations               -> returns all stations (Luas, Dart, Bike)
+#   - /api/routes/stops                  -> returns all stops for the stop_search autocomplete
 # --------------------------------------------------------------------------#
 
 
@@ -222,7 +228,7 @@ def get_stop_info(routenum, direction):
 # --------------------------------------------------------------------------#
 
 
-@app.route('/stations/', methods=['GET'])
+@app.route('/api/stations/', methods=['GET'])
 def get_all_info():
     return alldublinstation().all_stop_info()
 
@@ -232,8 +238,6 @@ def get_all_info():
 @app.route('/api/stops/', methods=['GET'])
 def get_all_stop_info():
     return BusDB().all_bus_stop_info()
-
-
 
 
 # =================================== DB ==================================#

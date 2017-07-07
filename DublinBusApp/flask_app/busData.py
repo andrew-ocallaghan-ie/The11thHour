@@ -9,6 +9,7 @@ class BusDB:
         pass
 
     def bus_route_info(self):
+        """Returns a JSON list of all the bus routes"""
         stop_info = open('static/all_route_names.csv', 'r')
         reader = csv.reader(stop_info)
         routes = []
@@ -31,6 +32,7 @@ class BusDB:
 
 
     def bus_stop_info_for_route(self, routenum, direction):
+        """Returns a JSON list with info about a given stop in a given direction"""
         route_info = open('static/' + direction + '_stops.csv', 'r', encoding = "ISO-8859-1")
         reader = csv.reader(route_info)
         stops = []
@@ -59,24 +61,19 @@ class BusDB:
 
 
     def all_bus_stop_info(self):
+        """Returns the stop information as a JSON dictionary. This is to make it faster to lookup individual stops."""
         all_stops = open('static/2012_stop_info.csv', 'r', encoding = "ISO-8859-1")
         reader = csv.reader(all_stops)
-        stops = []
+        stops = {}
 
         headings = next(reader)
 
         for row in reader:
 
             stop = {
-                'id': int(row[0]),
-                'name': row[1],
-                'lat': row[2],
-                'lon': row[3],
-                'routes': row[4]
+                int(row[0]): (row[1], row[2], row[3], row[4])
             }
-            stops.append(stop)
-
-        stops = sorted(stops, key=itemgetter('id'))
+            stops.update(stop)
 
         # Returning info
         return jsonify({'stops': stops})

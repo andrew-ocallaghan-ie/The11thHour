@@ -113,7 +113,7 @@
             // Google Map
             function myMap() {
 
-                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function(json) {
+                $.getJSON($SCRIPT_ROOT + '/api/routes/{{users_route}}/{{direction}}', function (json) {
                     // Looping through elements in JSON file.
 
 
@@ -129,24 +129,25 @@
                                 fillOpacity: 0.4,
                                 scale: 7
                             },
-                            map: map});
+                            map: map
+                        });
 
                         // Create infowindow on mouseover
                         var infowindow = new google.maps.InfoWindow();
 
                         // Contents of infowindow
                         var html = '<a href=stop/' + json.stops[i].id + '><h4>' + json.stops[i].name + '</h4></a>' + '<table>' +
-                        "<tr><td>Other info</td><td></td></tr>" +
-                        "<tr><td>about bus stop</td><td></td></tr>" +
-                        "<tr><td>to go here</td><td></td></tr>" +
-                        '</table>';
+                            "<tr><td>Other info</td><td></td></tr>" +
+                            "<tr><td>about bus stop</td><td></td></tr>" +
+                            "<tr><td>to go here</td><td></td></tr>" +
+                            '</table>';
                         marker.html = html;
 
                         // Name of station
                         marker.name = json.stops[i].name;
 
                         // Mouse Over Functionality
-                        google.maps.event.addListener(marker,'mouseover',function() {
+                        google.maps.event.addListener(marker, 'mouseover', function () {
                             // Set contents
                             infowindow.setContent(this.html);
                             // Open infowindow
@@ -157,21 +158,21 @@
                 });
 
                 // Centre of map
-                var myCenter = new google.maps.LatLng(53.3498,-6.2603);
+                var myCenter = new google.maps.LatLng(53.3498, -6.2603);
 
                 // Initializing canvas
                 var mapCanvas = document.getElementById("map");
 
                 //all
-                jQuery.getJSON($SCRIPT_ROOT+"/stations",null,function(data){
+                jQuery.getJSON($SCRIPT_ROOT + "/api/stations", null, function (data) {
                     var stations = data.stops;
-                    _.forEach(stations,function(station){
+                    _.forEach(stations, function (station) {
                         var lat = station.latitude;
                         var lng = station.longitude;
                         var name = station.name;
                         var category = station.category;
                         var color = station.color;
-                        var marker = createMarker(lat,lng,name,category,color);
+                        var marker = createMarker(lat, lng, name, category, color);
                     });
 
                     hide("dublinbike");
@@ -189,24 +190,6 @@
                 // Creating map
                 map = new google.maps.Map(mapCanvas, mapOptions);
 
-            }
-
-            // Made this function to get the mid point of a bus route so that the Map would center on it
-            // Not sure exactly how it will work yet
-            function midLatLong(lat1, long1, lat2, long2) {
-                var longDiff = Math.toRadians(long2 - long1);
-
-                //convert to radians
-                lat1 = Math.toRadians(lat1);
-                lat2 = Math.toRadians(lat2);
-                long1 = Math.toRadians(long1);
-
-                var Bx = Math.cos(lat2) * Math.cos(longDiff);
-                var By = Math.cos(lat2) * Math.sin(longDiff);
-                var midLat = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
-                var midLong = long1 + Math.atan2(By, Math.cos(lat1) + Bx);
-
-                return [Math.toDegrees(midLat), Math.toDegrees(midLong)];
             }
 
         </script>
@@ -233,16 +216,10 @@
                       <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
-                      <li class="dropdown" id="signup"><a href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a>
-                          <!--<div class="dropdown-menu">
-                              <form class="form-horizontal"  method="post" accept-charset="UTF-8">
-                                  <input id="signup_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
-                                  <input id="signup_pass" class="form-control login" type="password" name="sp_pass" placeholder="Password.."/>
-                                  <input class="btn btn-primary" type="submit" name="submit" value="Sign up" />
-                              </form>
-                          </div> -->
-                      </li>
-                      <li class="dropdown" id="login"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                      <li class="dropdown" id="signup"><a href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+                      <li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                      <!--<li class="dropdown" id="login"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in">
+                          </span> Login</a>
                           <div class="dropdown-menu">
                               <form class="form-horizontal"  method="post" accept-charset="UTF-8">
                                   <input id="login_uname" class="form-control login" type="text" name="sp_uname" placeholder="Username.." />
@@ -251,7 +228,7 @@
                                   <input type="checkbox" checked="checked"> Remember me
                               </form>
                           </div>
-                      </li>
+                      </li>-->
                       <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
                   </ul>
 
