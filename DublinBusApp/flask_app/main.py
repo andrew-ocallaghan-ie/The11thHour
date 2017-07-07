@@ -12,6 +12,7 @@ from sqlalchemy import create_engine
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 import pymysql
+from functools import wraps
 #pymysql.install_as_MySQLdb()
 
 # View site @ http://localhost:5000/
@@ -171,6 +172,7 @@ def register():
 
 
 # --------------------------------------------------------------------------#
+#user login page
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -186,14 +188,16 @@ def login():
         if len(all_data) > 0:
             # Get stored hash
             data = all_data[0]
-            print("Hi",all_data)
             password = data['password']
-            print(password)
+            
         
             #Compare passwords
             if sha256_crypt.verify(password_candidate, password):
                 #Passed
-                pass
+                session['logged_in'] = True
+                session['username'] = username
+                flash('Your are now logged in','success')
+                return redirect(url_for('myroutes'))
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
@@ -201,6 +205,31 @@ def login():
             error = 'Username not found'
             return render_template('login.html', error=error)
     return render_template('login.html')
+# --------------------------------------------------------------------------#
+#check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+# --------------------------------------------------------------------------#
+#dashboard
+@app.route('/myroutes')
+@is_logged_in
+def myroutes():
+    return render_template('myroutes.html')
+# --------------------------------------------------------------------------#
+#logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You are now logged out','success')
+    return redirect(url_for('login'))
+# --------------------------------------------------------------------------#
 
 
 # =================================== API ==================================#
