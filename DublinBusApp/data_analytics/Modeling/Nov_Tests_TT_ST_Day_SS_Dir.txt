@@ -1,0 +1,393 @@
+
+
+===beta102.csv Random Forest===
+r2 : 0.419424369674
+mse : 191.317225296
+
+===beta104.csv Random Forest===
+r2 : 0.403636728652
+mse : 121.640745146
+
+===beta114.csv Random Forest===
+r2 : 0.451783498516
+mse : 110.101888096
+
+===beta116.csv Random Forest===
+r2 : 0.8744143362
+mse : 32.1711392405
+
+===beta11.csv Random Forest===
+r2 : 0.572115369773
+mse : 243.026983109
+
+===beta120.csv Random Forest===
+r2 : 0.671157633468
+mse : 37.5628145695
+
+===beta122.csv Random Forest===
+r2 : 0.898498229525
+mse : 41.335532995
+
+===beta123.csv Random Forest===
+r2 : 0.885724185248
+mse : 39.9482281716
+
+===beta130.csv Random Forest===
+r2 : 0.808976622837
+mse : 19.4139736842
+
+===beta13.csv Random Forest===
+r2 : 0.767084536033
+mse : 214.04606086
+
+===beta140.csv Random Forest===
+r2 : 0.693145340949
+mse : 117.863802693
+
+===beta145.csv Random Forest===
+r2 : 0.611870941621
+mse : 248.682407875
+
+===beta14C.csv Random Forest===
+r2 : 0.538235708433
+mse : 47.3659769508
+
+===beta14.csv Random Forest===
+r2 : 0.716922602092
+mse : 198.104967909
+
+===beta150.csv Random Forest===
+r2 : 0.856802459301
+mse : 21.4486180162
+
+===beta151.csv Random Forest===
+r2 : 0.896659856879
+mse : 33.7853405674
+
+===beta15A.csv Random Forest===
+r2 : 0.869498231832
+mse : 29.0710162822
+
+===beta15B.csv Random Forest===
+r2 : 0.874756709289
+mse : 39.2367968474
+
+===beta15.csv Random Forest===
+r2 : 0.744212154076
+mse : 186.624207111
+
+===beta161.csv Random Forest===
+r2 : 0.235915842737
+mse : 109.615754581
+
+===beta16C.csv Random Forest===
+r2 : 0.660313153861
+mse : 50.5522093023
+
+===beta16.csv Random Forest===
+r2 : 0.671426360098
+mse : 257.452592081
+
+===beta17A.csv Random Forest===
+r2 : 0.902203851139
+mse : 43.5395205463
+
+===beta17.csv Random Forest===
+r2 : 0.605097738228
+mse : 189.035935539
+
+===beta184.csv Random Forest===
+r2 : 0.456070792122
+mse : 165.375586694
+
+===beta185.csv Random Forest===
+r2 : 0.201653439704
+mse : 95.2995197332
+
+===beta18.csv Random Forest===
+r2 : 0.885825041821
+mse : 45.9345703373
+
+===beta1.csv Random Forest===
+r2 : 0.502270982935
+mse : 154.921472824
+
+===beta220.csv Random Forest===
+r2 : 0.749171122236
+mse : 151.54129272
+
+===beta236.csv Random Forest===
+r2 : 0.452411712404
+mse : 47.6528318584
+
+===beta238.csv Random Forest===
+r2 : 0.715403767839
+mse : 26.4733408088
+
+===beta239.csv Random Forest===
+r2 : 0.348233708826
+mse : 302.053553677
+
+===beta25A.csv Random Forest===
+r2 : 0.855921943245
+mse : 46.3020264457
+
+===beta25B.csv Random Forest===
+r2 : 0.876178565328
+mse : 43.5313428265
+
+===beta25.csv Random Forest===
+r2 : 0.477120430635
+mse : 143.421219466
+
+===beta25X.csv Random Forest===
+r2 : 0.73738947251
+mse : 122.858237488
+
+===beta26.csv Random Forest===
+r2 : 0.437050701459
+mse : 90.6844574159
+
+===beta270.csv Random Forest===
+r2 : 0.243498885701
+mse : 66.2577364739
+
+===beta27A.csv Random Forest===
+r2 : 0.859867469124
+mse : 18.3694624625
+
+===beta27B.csv Random Forest===
+r2 : 0.718665808644
+mse : 59.0453237213
+
+===beta27.csv Random Forest===
+r2 : 0.745153865416
+mse : 262.126646611
+
+===beta29A.csv Random Forest===
+r2 : 0.894345699822
+mse : 18.4210976551
+
+===beta31A.csv Random Forest===
+r2 : 0.535746322659
+mse : 165.856117979
+
+===beta31.csv Random Forest===
+r2 : 0.605374148135
+mse : 77.2212047324
+
+===beta32.csv Random Forest===
+r2 : 0.843039796393
+mse : 33.7325824176
+
+===beta33A.csv Random Forest===
+r2 : 0.847565567906
+mse : 41.5138888889
+
+===beta33B.csv Random Forest===
+r2 : 0.451153016896
+mse : 53.2143279812
+
+===beta33.csv Random Forest===
+r2 : 0.74020956305
+mse : 224.86455789
+
+===beta37.csv Random Forest===
+r2 : 0.897575924646
+mse : 43.0305367654
+
+===beta38A.csv Random Forest===
+r2 : 0.607575917381
+mse : 183.464745887
+
+===beta38B.csv Random Forest===
+r2 : 0.722627879952
+mse : 118.446164847
+
+===beta38.csv Random Forest===
+r2 : 0.642001232749
+mse : 190.623758119
+
+===beta39A.csv Random Forest===
+r2 : 0.711804211679
+mse : 201.497166262
+
+===beta39.csv Random Forest===
+r2 : 0.895463207863
+mse : 67.3308933367
+
+===beta40B.csv Random Forest===
+r2 : 0.457364218992
+mse : 101.918949875
+
+===beta40D.csv Random Forest===
+r2 : 0.886918185481
+mse : 27.3243145549
+
+===beta40.csv Random Forest===
+r2 : 0.90093821752
+mse : 75.8424737424
+
+===beta41A.csv Random Forest===
+r2 : 0.758586142025
+mse : 98.0021022574
+
+===beta41B.csv Random Forest===
+r2 : 0.55031897599
+mse : 163.955302559
+
+===beta41C.csv Random Forest===
+r2 : 0.570153262145
+mse : 161.747188665
+
+===beta41.csv Random Forest===
+r2 : 0.622870665641
+mse : 159.598921664
+
+===beta41X.csv Random Forest===
+r2 : 0.949284132348
+mse : 28.3683076923
+
+===beta42.csv Random Forest===
+r2 : 0.858481814265
+mse : 40.5935102553
+
+===beta43.csv Random Forest===
+r2 : 0.872886815617
+mse : 34.3869347632
+
+===beta44.csv Random Forest===
+r2 : 0.654237423367
+mse : 282.12408947
+
+===beta45A.csv Random Forest===
+r2 : 0.747176637503
+mse : 76.7284949455
+
+===beta46A.csv Random Forest===
+r2 : 0.570063713427
+mse : 256.021599413
+
+===beta47.csv Random Forest===
+r2 : 0.860959688295
+mse : 53.2608899382
+
+===beta49.csv Random Forest===
+r2 : 0.591488476096
+mse : 150.143784207
+
+===beta4.csv Random Forest===
+r2 : 0.884675997908
+mse : 50.8864002517
+
+===beta53.csv Random Forest===
+r2 : 0.127818892564
+mse : 85.337830955
+
+===beta54A.csv Random Forest===
+r2 : 0.57124169064
+mse : 153.449960126
+
+===beta56A.csv Random Forest===
+r2 : 0.782161311615
+mse : 64.8271801041
+
+===beta59.csv Random Forest===
+r2 : 0.629310079299
+mse : 31.5610752626
+
+===beta61.csv Random Forest===
+r2 : 0.514669381587
+mse : 147.438123259
+
+===beta63.csv Random Forest===
+r2 : 0.228327645115
+mse : 218.811874745
+
+===beta65B.csv Random Forest===
+r2 : 0.568306717974
+mse : 196.391009486
+
+===beta65.csv Random Forest===
+r2 : 0.593350576695
+mse : 287.046510653
+
+===beta66A.csv Random Forest===
+r2 : 0.575378902352
+mse : 145.676486995
+
+===beta66.csv Random Forest===
+r2 : 0.902900902166
+mse : 41.8887968774
+
+===beta67.csv Random Forest===
+r2 : 0.881285743515
+mse : 56.2695681762
+
+===beta68A.csv Random Forest===
+r2 : 0.568051548952
+mse : 57.3312710796
+
+===beta68.csv Random Forest===
+r2 : 0.954692303546
+mse : 21.7106233038
+
+===beta69.csv Random Forest===
+r2 : 0.887918599148
+mse : 47.0122313297
+
+===beta69X.csv Random Forest===
+r2 : 0.91027368844
+mse : 34.0244230769
+
+===beta70.csv Random Forest===
+r2 : 0.545122266622
+mse : 218.86085797
+
+===beta747.csv Random Forest===
+r2 : 0.187109607947
+mse : 348.344960178
+
+===beta75.csv Random Forest===
+r2 : 0.635816327694
+mse : 270.922440734
+
+===beta76.csv Random Forest===
+r2 : 0.601042237831
+mse : 98.8566792339
+
+===beta77A.csv Random Forest===
+r2 : 0.87270116014
+mse : 66.6378701887
+
+===beta79A.csv Random Forest===
+r2 : 0.498111360664
+mse : 84.9909606817
+
+===beta79.csv Random Forest===
+r2 : 0.491461334722
+mse : 88.780102877
+
+===beta7D.csv Random Forest===
+r2 : 0.430721490613
+mse : 232.227043634
+
+===beta7.csv Random Forest===
+r2 : 0.738315107715
+mse : 116.541187902
+
+===beta83A.csv Random Forest===
+r2 : 0.660030277868
+mse : 176.847388325
+
+===beta83.csv Random Forest===
+r2 : 0.67565849168
+mse : 192.727224736
+
+===beta84.csv Random Forest===
+r2 : 0.593986250949
+mse : 288.0441765
+
+===beta9.csv Random Forest===
+r2 : 0.713971929148
+mse : 178.720856021

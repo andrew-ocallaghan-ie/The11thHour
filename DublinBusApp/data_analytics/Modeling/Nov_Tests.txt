@@ -1,0 +1,17 @@
+
+
+===beta1.csv Random Forest===
+r2 : 0.502093086322
+mse : 154.97684433
+
+===beta4.csv Random Forest===
+r2 : 0.883771491109
+mse : 51.2855114007
+
+===beta7D.csv Random Forest===
+r2 : 0.376424342412
+mse : 254.376599601
+
+===beta7.csv Random Forest===
+r2 : 0.738147976892
+mse : 116.6156195
