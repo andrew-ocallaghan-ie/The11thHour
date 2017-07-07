@@ -18,6 +18,8 @@ app = Flask(__name__)
 CORS(app)
 
 # --------------------------------------------------------------------------#
+#Config MySQL
+app.config['MYSQL_CURSORCLASS']='DictCursor'
 
 #class for form
 class RegisterForm(Form):
@@ -169,6 +171,31 @@ def register():
         engine.execute(sql, (name, email, username, password))
         flash('You are successfully registered, now you can log in', 'success')
     return render_template('register.html', form=form)
+
+# --------------------------------------------------------------------------#
+# User Login
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        #Get Form Fields
+        username = request.form['username']
+        password_candidate = request.form['password']
+        
+        engine = get_db()
+        sql = "SELECT * FROM users WHERE username = %s"
+        result = engine.execute(sql, [username])
+        
+        if result > 0:
+            # Get stored hash
+            data = engine.fetchone()
+            password = data['password']
+        
+            #Compare passwords
+            if sha256_crypt.verify(password_candidate, password):
+                app.logger.info('PASSWORD MATCHED')
+        else:
+            app.loffer.inf('no user')
+    return render_template('base.html')
 
 
 # =================================== API ==================================#

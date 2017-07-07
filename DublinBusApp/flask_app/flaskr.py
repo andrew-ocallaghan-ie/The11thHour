@@ -9,10 +9,11 @@ from passlib.hash import sha256_crypt
      
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
 PORT = "3306"
-DB = "User"
+DB = "All_routes"
 USER = "teamgosky"
 PASSWORD = "teamgosky"
 app = Flask(__name__)
+app.config['MYSQL_CURSORCLASS']='DictCursor'
 
 def connect_to_database():
     db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
@@ -47,19 +48,6 @@ def add_entry():
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('show_entries'))
-    return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
@@ -83,6 +71,36 @@ def register():
     if request.method == 'POST' and form.validate():
         return render_template('register.html')
     return render_template('register.html', form=form)
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        #Get Form Fields
+        username = request.form['username']
+        password_candidate = request.form['password']
+        
+        engine = get_db()
+        sql = "SELECT * FROM users WHERE username = %s"
+        result = engine.execute(sql, [username])
+        all_data=result.fetchall()
+        
+        if len(all_data) > 0:
+            # Get stored hash
+            data = all_data[0]
+            print("Hi",all_data)
+            password = data['password']
+            print(password)
+        
+            #Compare passwords
+            if sha256_crypt.verify(password_candidate, password):
+                #app.logger.info('PASSWORD MATCHED')
+                print('matched')
+            else:
+                #app.logger.info('PASSWORD not MATCHED')
+                print('not matched')
+        else:
+            print('no user')
+    return render_template('login.html')
 
 
 if __name__ == '__main__':
