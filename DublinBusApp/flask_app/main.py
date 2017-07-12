@@ -39,7 +39,7 @@ def get_common_routes(src_stop_num, dest_stop_num):
     route_options = {}
 
     engine = get_db()
-    sql = "SELECT Route, Direction FROM All_routes.all_routes WHERE Stop_ID = %s AND Route IN (SELECT Route FROM All_routes.all_routes WHERE Stop_ID = %s);"
+    sql = "SELECT * FROM All_routes.Sequence WHERE Stop_ID = %s AND Route IN (SELECT Route FROM All_routes.Sequence WHERE Stop_ID = %s);"
     result = engine.execute(sql, (src_stop_num, dest_stop_num))
     all_data = result.fetchall()
 
@@ -52,12 +52,12 @@ def get_common_routes(src_stop_num, dest_stop_num):
 def stops_between_src_dest(src_stop_num, dest_stop_num, route):
     """Finds out how many stops are between two stops on a given route"""
     engine = get_db()
-    sql = "SELECT Stop_sequence FROM All_routes.all_routes WHERE (Stop_ID = %s AND Route = %s) OR (Stop_ID = %s AND Route = %s);"
+    sql = "SELECT Stop_sequence FROM All_routes.Sequence WHERE (Stop_ID = %s AND Route = %s) OR (Stop_ID = %s AND Route = %s);"
     result = engine.execute(sql, (src_stop_num, int(route), dest_stop_num, int(route)))
     all_data = result.fetchall()
 
-    src_stop_sequence = all_data[0][0]
-    dest_stop_sequence = all_data[1][0]
+    src_stop_sequence = int(all_data[0][0])
+    dest_stop_sequence = int(all_data[1][0])
 
     stops_travelled = dest_stop_sequence - src_stop_sequence
 
