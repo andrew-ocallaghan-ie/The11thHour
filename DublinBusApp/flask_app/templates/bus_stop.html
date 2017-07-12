@@ -40,7 +40,7 @@
             var bus_stop_info = "<h1>Stop {{stop_num}} Live Info</h1>";
             var buses = json.results;
             for (var i = 0; i < buses.length; i++) {
-                bus_stop_info += "<p>" + buses[i].route + " - " + buses[i].origin + " to " + buses[i].destination + " - " + timeFromNow(buses[i].arrivaldatetime) + "mins</p>";
+                bus_stop_info += "<p>" + buses[i].route + " - " + buses[i].origin + "{{x}} to {{y}}" + buses[i].destination + " - " + timeFromNow(buses[i].arrivaldatetime) + "mins</p>";
             }
             document.getElementById("bus_stop_info").innerHTML = bus_stop_info;
         });

@@ -1,5 +1,4 @@
 from flask import jsonify
-import csv
 from operator import itemgetter
 from sqlalchemy import create_engine
 from flask import g
@@ -40,7 +39,7 @@ class InfoDB:
         routes = []
 
         engine = get_db()
-        sql = "SELECT Route, Origin, Destination FROM All_routes.Routes WHERE Direction = 0;"
+        sql = "SELECT Route, Origin, Destination FROM All_routes.Routes WHERE Direction = 0 ORDER BY abs(Route);"
         result = engine.execute(sql)
         all_data = result.fetchall()
 
@@ -93,7 +92,7 @@ class InfoDB:
         """Returns the stop information as a JSON dictionary. This is to make it faster to lookup individual stops."""
 
         engine = get_db()
-        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Routes_serviced FROM All_routes.Stops;"
+        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Routes_serviced FROM All_routes.Stops ORDER BY abs(Stop_ID);"
         result = engine.execute(sql)
         all_data = result.fetchall()
         stops = {}
