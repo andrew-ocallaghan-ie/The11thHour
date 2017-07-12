@@ -1,19 +1,15 @@
-# import MySQLdb
-from flask import Flask, render_template, request, g, jsonify, flash, redirect, url_for, session, logging
+from flask import Flask, render_template, request, g, flash, redirect, url_for, session
 from flask_cors import CORS
-from busData import BusDB
-from db_luas_dart import alldublinstation
-from sklearn.externals import joblib
-import requests
-import traceback
+from busData import InfoDB
 import datetime
-import csv
 from sqlalchemy import create_engine
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 import pymysql
 from functools import wraps
-#pymysql.install_as_MySQLdb()
+import requests
+from sklearn.externals import joblib
+pymysql.install_as_MySQLdb()
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
@@ -23,7 +19,6 @@ app = Flask(__name__)
 CORS(app)
 
 # --------------------------------------------------------------------------#
-
 
 # Class for form
 class RegisterForm(Form):
@@ -36,81 +31,75 @@ class RegisterForm(Form):
         ])
     confirm = PasswordField('Confirm Password')
 
-#--------------------------------------------------------------------------#
-def scrape_weather():
-    '''Returns a summary of the current weather from the Wunderground API'''
-    # API URI
-    api = 'http://api.wunderground.com/api'
-    # API Parameters
-    city = '/IE/Dublin'
-    app_id = '/0d675ef957ce972d'
-    api_type = '/hourly'
 
-    URI = api + app_id + api_type + '/q' + city + '.json'
+# --------------------------------------------------------------------------#
+def get_common_routes(src_stop_num, dest_stop_num):
+    """Finds common routes between two bus stops
+    Returns a dictionary of routes, easier to loop through"""
+    route_options = {}
 
-    # Loading Data
-    try:
-        req = requests.get(URI)
-        data = req.json()
+    engine = get_db()
+    sql = "SELECT Route, Direction FROM All_routes.all_routes WHERE Stop_ID = %s AND Route IN (SELECT Route FROM All_routes.all_routes WHERE Stop_ID = %s);"
+    result = engine.execute(sql, (src_stop_num, dest_stop_num))
+    all_data = result.fetchall()
 
-    except:
-        data = []
-        print(traceback.format_exc())
+    for row in all_data:
+        route_options[row[0].strip('\n')] = (row[1])
 
-    # Temperature
-    current_temp = data['hourly_forecast'][0]['temp']['metric']
-    # Rainfall
-    current_precipitation = data['hourly_forecast'][0]['qpf']['metric']
+    return route_options
 
-    # Returning Summary
-    return (current_temp, current_precipitation)
+# --------------------------------------------------------------------------#
+def stops_between_src_dest(src_stop_num, dest_stop_num, route):
+    """Finds out how many stops are between two stops on a given route"""
+    engine = get_db()
+    sql = "SELECT Stop_sequence FROM All_routes.all_routes WHERE (Stop_ID = %s AND Route = %s) OR (Stop_ID = %s AND Route = %s);"
+    result = engine.execute(sql, (src_stop_num, int(route), dest_stop_num, int(route)))
+    all_data = result.fetchall()
 
+    src_stop_sequence = all_data[0][0]
+    dest_stop_sequence = all_data[1][0]
 
-#--------------------------------------------------------------------------#
-def extract_holidays():
-    '''Returns a list of school holidays'''
-    stop_info = open('static/school_holidays_2017.csv', 'r')
-    reader = csv.reader(stop_info)
-    next(reader)
-    holidays = []
+    stops_travelled = dest_stop_sequence - src_stop_sequence
 
-    for row in reader:
-        holidays += row
-
-    holidays = [datetime.datetime.strptime(x, '%d/%m/%Y').date() for x in holidays]
-
-    return(holidays)
-
+    return stops_travelled
 
 # --------------------------------------------------------------------------#
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    predictor = joblib.load('static/rf_regressor.pkl')
 
     if request.method == 'POST':
         origin = request.form['origin']
         destination = request.form['destination']
-        # weather = scrape_weather()
-        # current_temp = weather[0]
-        # current_rain = weather[1]
+
+        # This will be taken out once we take in addresses rather than bus stop IDs
+        source_num = int(request.form['origin'])
+        dest_num = int(request.form['destination'])
+
         current_time = datetime.datetime.now()
-        current_hour = current_time.hour
-
-        html1 = origin + " to " + destination
-        html2 = "Estimated journey time is: "
-        html3 = "You will arrive in " + destination + " at:"
-
-        # current_date = datetime.datetime.now().date()
-        # if current_date in extract_holidays():
-        #     is_school_holiday = 1
-        # else:
-        #     is_school_holiday = 0
-        #
         current_weekday = datetime.datetime.now().weekday()
 
+        route_options = get_common_routes(source_num, dest_num)
 
-    # this needs to be changed to return the delay value
+        for route, direction in route_options.items():
+
+            predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
+            direction = direction
+            timestamp = 1357044910000000
+            stops_travelled = stops_between_src_dest(source_num, dest_num, route)
+
+            time_pred = predictor.predict([1, current_weekday, direction, timestamp, stops_travelled])
+
+            arrival_time = current_time + datetime.timedelta(minutes = float(time_pred[0]))
+            arrival_time_hours = arrival_time.hour
+            arrival_time_minutes = arrival_time.minute
+
+            # These values are returned from here so that the HTML page doesn't show info until
+            # the user has inputted values
+            html1 = origin + " to " + destination
+            html2 = "Estimated journey time is: " + str(time_pred[0]) + " minutes."
+            html3 = "You will arrive in " + destination + " at: " + str(arrival_time.hour) + ":" + str(arrival_time_minutes)
+
     return render_template('home.html', **locals())
 
 # --------------------------------------------------------------------------#
@@ -121,10 +110,15 @@ def route_search():
 
     if request.method == 'POST':
         users_route = request.form['user_route']
+        # if request.form.get('direction') == 'on':
+        #     direction = "southbound"
+        # else:
+        #     direction = "northbound"
+
         if request.form.get('direction') == 'on':
-            direction = "southbound"
+            direction = 1
         else:
-            direction = "northbound"
+            direction = 0
 
     return render_template('route_search.html', **locals())
 
@@ -172,7 +166,7 @@ def register():
 
 
 # --------------------------------------------------------------------------#
-#user login page
+# User login page
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -205,8 +199,9 @@ def login():
             error = 'Username not found'
             return render_template('login.html', error=error)
     return render_template('login.html')
+
 # --------------------------------------------------------------------------#
-#check if user logged in
+# Check if user logged in
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -216,14 +211,16 @@ def is_logged_in(f):
             flash('Unauthorized, Please login', 'danger')
             return redirect(url_for('login'))
     return wrap
+
 # --------------------------------------------------------------------------#
-#dashboard
+# Dashboard
 @app.route('/myroutes')
 @is_logged_in
 def myroutes():
     return render_template('myroutes.html')
+
 # --------------------------------------------------------------------------#
-#logout
+# Logout
 @app.route('/logout')
 def logout():
     session.clear()
@@ -236,7 +233,7 @@ def logout():
 # An API is used to allow the website to dynamically query the DB without
 # having to be refreshed.
 
-#   - /api/routes/all_routes             -> returns all routes
+#   - /api/routes/all_routes             -> returns all route information
 #   - /api/routes/routenum/direction     -> returns all stops associated with route in a given direction
 #   - /api/routes/stations               -> returns all stations (Luas, Dart, Bike)
 #   - /api/routes/stops                  -> returns all stops for the stop_search autocomplete
@@ -245,28 +242,28 @@ def logout():
 
 @app.route('/api/all_routes/', methods=['GET'])
 def get_route_info():
-    return BusDB().bus_route_info()
+    return InfoDB().bus_route_info()
 
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/routes/<string:routenum>/<string:direction>/', methods=['GET'])
 def get_stop_info(routenum, direction):
-    return BusDB().bus_stop_info_for_route(routenum, direction)
+    return InfoDB().bus_stop_info_for_route(routenum, direction)
 
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/stations/', methods=['GET'])
 def get_all_info():
-    return alldublinstation().all_stop_info()
+    return InfoDB().all_stop_info()
 
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/stops/', methods=['GET'])
 def get_all_stop_info():
-    return BusDB().all_bus_stop_info()
+    return InfoDB().all_bus_stop_info()
 
 
 # =================================== DB ==================================#
