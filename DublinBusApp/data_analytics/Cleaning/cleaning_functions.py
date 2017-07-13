@@ -142,6 +142,9 @@ def all_things_time(dataframe):
     dataframe["Day_Of_Week"] = dataframe["Time"].dt.dayofweek
     dataframe["Hour_Of_Day"] = dataframe["Time"].dt.hour
     dataframe["Min_Of_Hour"] = dataframe["Time"].dt.minute
+    dataframe['Min_Of_Hour30'] = np.where((dataframe['Min_Of_Hour'] > 30), 1, 0)
+    dataframe['Min_Of_Hour15'] = np.where((dataframe['Min_Of_Hour'] > 15), 1, 0)
+    dataframe['Min_Of_Hour45'] = np.where((dataframe['Min_Of_Hour'] > 45), 1, 0)
     
     dataframe["End_Time"] = dataframe.groupby(["Vehicle_Journey_ID",
                                                "Timeframe"])["Timestamp"].transform(max)
@@ -149,9 +152,10 @@ def all_things_time(dataframe):
     dataframe["Start_Time"] = dataframe.groupby(["Vehicle_Journey_ID",
                                                "Timeframe"])["Timestamp"].transform(min)
     
-    dataframe["Late"] = ( (dataframe["End_Time"]) - (dataframe["Start_Time"]) )
     
-    dataframe["Journey_Time"] = pd.to_timedelta(dataframe["Late"], unit="us").astype("timedelta64[m]")
+    dataframe["Journey_Time_Dirty"] = ( (dataframe["End_Time"]) - (dataframe["Start_Time"]) )
+    
+    dataframe["Journey_Time"] = pd.to_timedelta(dataframe["Journey_Time_Dirty"], unit="us").astype("timedelta64[m]")
     
     dataframe["Scheduled_Time_OP"] = 0
     
@@ -205,8 +209,31 @@ def make_speed(dataframe):
                          on=['LineID', 'Stop_ID'])
     
     dataframe["Speed"] = ( (dataframe["Time_Traveling"].astype(int) / (dataframe["Stop_Sequence"].astype(int)) ) ) 
+   
     
     return dataframe
+
+
+def make_scheduled_speed_per_stop(dataframe):
+    #DB's published speed in stops per min for each route by using overall scheduled offpeak time end to end divided by no stops
+    
+    dataframe['Start_Stop'] = dataframe.groupby(['Vehicle_Journey_ID', 'Timeframe'])['Stop_Sequence'].transform(min)
+    
+    dataframe['Max_Stop_Sequence'] = dataframe.groupby(['Direction'])['Stop_Sequence'].transform(max)
+    
+    dataframe['End_Stop'] = dataframe.groupby(['Vehicle_Journey_ID', 'Timeframe'])['Stop_Sequence'].transform(max)
+    
+    dataframe['Stops_Travelled'] = ((dataframe['End_Stop'].astype(int) - dataframe['Start_Stop'].astype(int)) )
+    
+    dataframe['Time_To_Travel_Dirty'] = ((dataframe['End_Time'].astype(int) - dataframe['Timestamp'].astype(int) ) )
+    
+    dataframe['Time_To_Travel'] = pd.to_timedelta(dataframe['Time_To_Travel_Dirty']*1000, unit="ns").astype('timedelta64[m]')
+    
+    dataframe['Scheduled_Speed_Per_Stop'] = dataframe['Scheduled_Time_OP'].astype(int)/dataframe['Max_Stop_Sequence'].astype(int)
+   
+    return dataframe
+        
+        
 
 
 def binning(dataframe):
@@ -237,7 +264,7 @@ def drop_zero_OP_Schedules(dataframe):
     return datafram[dataframe.Schedule_Time_OP == 0 ]
 
 
-
+"""
 def drop_middle(dataframe):
     concat = pd.concat
     stops = pd.read_csv("stops.csv",
@@ -275,7 +302,7 @@ def drop_middle(dataframe):
     
     return refined_frame
 
-
+"""
 #=============================================================================================#
 
 def re_construct(path, files, month, columns):
@@ -309,7 +336,6 @@ def re_construct(path, files, month, columns):
               
         modify_me = fix_lidir(modify_me)
         print("\tDirection & LineID Re-Derived")
-    
         
         modify_me = make_stops_made(modify_me)
         print("\tIdling removed and stops_made column created")
@@ -322,6 +348,9 @@ def re_construct(path, files, month, columns):
         
         modify_me = make_speed(modify_me)
         print("\tSpeed made")
+        
+        modify_me = make_scheduled_speed_per_stop(modify_me)
+        print("\tscheduled speed per stop column created")
         
         modify_me = binning(modify_me)
         print("\tTime Binning Applied")
