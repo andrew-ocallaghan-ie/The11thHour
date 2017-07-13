@@ -39,7 +39,7 @@ def get_common_routes(src_stop_num, dest_stop_num):
     route_options = {}
 
     engine = get_db()
-    sql = "SELECT Route, Direction FROM All_routes.all_routes WHERE Stop_ID = %s AND Route IN (SELECT Route FROM All_routes.all_routes WHERE Stop_ID = %s);"
+    sql = "SELECT * FROM All_routes.Sequence WHERE Stop_ID = %s AND Route IN (SELECT Route FROM All_routes.Sequence WHERE Stop_ID = %s);"
     result = engine.execute(sql, (src_stop_num, dest_stop_num))
     all_data = result.fetchall()
 
@@ -52,16 +52,52 @@ def get_common_routes(src_stop_num, dest_stop_num):
 def stops_between_src_dest(src_stop_num, dest_stop_num, route):
     """Finds out how many stops are between two stops on a given route"""
     engine = get_db()
-    sql = "SELECT Stop_sequence FROM All_routes.all_routes WHERE (Stop_ID = %s AND Route = %s) OR (Stop_ID = %s AND Route = %s);"
+    sql = "SELECT Stop_sequence FROM All_routes.Sequence WHERE (Stop_ID = %s AND Route = %s) OR (Stop_ID = %s AND Route = %s);"
     result = engine.execute(sql, (src_stop_num, int(route), dest_stop_num, int(route)))
     all_data = result.fetchall()
 
-    src_stop_sequence = all_data[0][0]
-    dest_stop_sequence = all_data[1][0]
+    src_stop_sequence = int(all_data[0][0])
+    dest_stop_sequence = int(all_data[1][0])
 
     stops_travelled = dest_stop_sequence - src_stop_sequence
 
     return stops_travelled
+
+# --------------------------------------------------------------------------#
+def nearby_stops(lat,long):
+    """Finds out the nearest stops to a given point
+    Returns stop IDs in a list"""
+    stops = []
+    engine = get_db()
+    radius = 0.3
+    sql = "SELECT Stop_ID, 111.111 * DEGREES( acos ( cos ( radians(%s) ) * cos( radians(Lat) ) * cos( radians(Lon) - radians(%s) ) + sin ( radians(%s) ) * sin( radians( Lat ) ) ) ) AS `distance_in_km` FROM All_routes.Stops HAVING (distance_in_km < %s) ORDER BY distance_in_km;"
+    result = engine.execute(sql, (lat, long, lat, radius))
+    all_data = result.fetchall()
+
+    for row in all_data:
+        stops.append(row[0])
+
+    return stops
+
+# --------------------------------------------------------------------------#
+def location_from_address(address):
+    """Gets latitude & longitude from an address
+    Returns a tuple of lat/long
+    Currently only takes the first search result
+    Should make a way to take many"""
+    address = address.replace(" ", "+")
+    key = "AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc"
+    url = "https://maps.googleapis.com/maps/api/geocode/json?"
+    params = {'address': address, 'region': 'IE', 'components': 'locality:dublin|country:IE', 'key': key}
+
+    r = requests.get(url, params=params)
+    data = r.json()
+
+    lat = data['results'][0]['geometry']['location']['lat']
+    long = data['results'][0]['geometry']['location']['lng']
+
+    location = (lat, long)
+    return location
 
 # --------------------------------------------------------------------------#
 # Index Page
