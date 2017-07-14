@@ -9,7 +9,7 @@ import pymysql
 from functools import wraps
 import requests
 from sklearn.externals import joblib
-pymysql.install_as_MySQLdb()
+#pymysql.install_as_MySQLdb()
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
@@ -253,8 +253,22 @@ def is_logged_in(f):
 @app.route('/myroutes')
 @is_logged_in
 def myroutes():
-    return render_template('myroutes.html')
-
+    username = session['username']
+    engine = get_db()
+    sql = "SELECT * FROM like_stop WHERE username = %s"
+    result = engine.execute(sql, [username])
+    all_data=result.fetchall()
+    print(all_data)
+    stopnamelist=[0] * len(all_data)
+    #print(stopnamelist)
+    Length=len(all_data)
+    for a in range(0,len(all_data)):
+        print(all_data[a]['stop_id'])
+        #stopnamelist[a]=all_data[a]['stop_id']
+        sql = "SELECT Stop_name FROM Stops WHERE Stop_ID = %s"
+        stopnamelist[a] = engine.execute(sql, [all_data[a]['stop_id']]).fetchall()[0][0]
+    print(stopnamelist)
+    return render_template('myroutes.html',**locals())
 # --------------------------------------------------------------------------#
 # Logout
 @app.route('/logout')
@@ -262,8 +276,36 @@ def logout():
     session.clear()
     flash('You are now logged out','success')
     return redirect(url_for('login'))
-# --------------------------------------------------------------------------#
 
+# --------------------------------------------------------------------------#
+#user like function
+@app.route('/likestop', methods=['POST'])
+@is_logged_in
+def likestop():
+    
+    if request.method == 'POST':
+        stop_id = request.form['stopnum']
+    
+        username = session['username'] 
+        
+        print(stop_id,username)
+        engine = get_db()
+        
+        sql = "SELECT * FROM like_stop WHERE username = %s AND stop_id = %s"
+        result = engine.execute(sql, [username,stop_id])
+        all_data=result.fetchall()
+        
+        if len(all_data) >0:
+            flash('You have already added the stop into Myroutes','danger')
+        else:
+            sql = "INSERT INTO like_stop(username, stop_id) VALUES( %s, %s)"
+            engine.execute(sql, (username, stop_id))
+            flash('Congrats! you have added this stop into Myroutes','success')
+            
+        stop_num = stop_id
+        return render_template('bus_stop.html', **locals())
+
+    return render_template('stop_search.html', **locals())
 
 # =================================== API ==================================#
 # An API is used to allow the website to dynamically query the DB without

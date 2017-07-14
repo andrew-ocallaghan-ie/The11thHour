@@ -34,10 +34,15 @@
     }
 
     // Gets live data from the live Dublin Bus API and prints it to the bus_stop_info div
-    function liveBusStopInfo(){
+   function liveBusStopInfo(){
+        {% if session.logged_in %}
+        var like="<form action='{{url_for('likestop')}}' method='post' name='stopnum'><button class='button' value='{{stop_num}}' name='stopnum'><span>Like </span></button></form>";
+        {% else %}
+        var like="<div>Please login to use all functions</div>"
+        {% endif %}
 
         $.getJSON("https://data.dublinked.ie/cgi-bin/rtpi/realtimebusinformation?stopid={{stop_num}}&format=json", function (json) {
-            var bus_stop_info = "<h1>Stop {{stop_num}} Live Info</h1>";
+            var bus_stop_info = like +"<h1>Stop {{stop_num}} Live Info</h1>";
             var buses = json.results;
             for (var i = 0; i < buses.length; i++) {
                 bus_stop_info += "<p>" + buses[i].route + " - " + buses[i].origin + "{{x}} to {{y}}" + buses[i].destination + " - " + timeFromNow(buses[i].arrivaldatetime) + "mins</p>";
@@ -45,6 +50,7 @@
             document.getElementById("bus_stop_info").innerHTML = bus_stop_info;
         });
     }
+
 
     // Used to show the amount of time in minutes until the bus arrives rather than just the arrival time
     function timeFromNow(input_time){

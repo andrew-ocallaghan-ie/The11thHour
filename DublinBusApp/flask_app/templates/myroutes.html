@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Welcome back<br><small> {{session.username}}</small></h1>
+    <h3>Welcome back<br><small> {{session.username}}</small></h3>
+    <p id="demo"></p>
+    <script>
+        var text = "Here are your preferred stops."+"<br>";
+        var a = {{ stopnamelist|tojson }};
+        for(i=0;i<{{Length}};i++) {
+            text += a[i] +"<button class='button' value='{{stop_num}}' name='stopnum'><span>Go </span></button>"+"<br>"
+        }
+    document.getElementById("demo").innerHTML = text;
+
+    </script>
 {% endblock %}
