@@ -210,6 +210,7 @@ def login():
         #Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
+        print(username)
         
         engine = get_db()
         sql = "SELECT * FROM users WHERE username = %s"
@@ -231,10 +232,10 @@ def login():
                 return redirect(url_for('myroutes'))
             else:
                 error = 'Invalid login'
-                return render_template('login.html', error=error)
+                return render_template('home.html', error=error)
         else:
             error = 'Username not found'
-            return render_template('login.html', error=error)
+            return render_template('home.html', error=error)
     return render_template('login.html')
 
 # --------------------------------------------------------------------------#

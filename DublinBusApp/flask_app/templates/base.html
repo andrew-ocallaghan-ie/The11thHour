@@ -224,12 +224,16 @@
                       </div>
                       
                       {% else %}
-                      <li class="dropdown" id="signup"><a href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
-                      <li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                      <!--<li class="dropdown" id="Login"><a class="dropdown-toggle" href="login" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in">
+                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a>
+                      
+                      </li>
+
+
+                      <!--<li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+                      <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in">
                           </span> Login</a>
                           <div class="dropdown-menu">
-                      <form class="form-horizontal"  method="post" accept-charset="UTF-8">
+                         <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
                           <div class="form-group">
                         <label>Username</label>
                         <input type="text" name="username" class="form-control" value={{request.form.username}}>
@@ -239,9 +243,9 @@
                         <input type="password" name="password" class="form-control" value={{request.form.password}}>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button> 
-                              </form>
+                        </form>
                           </div>
-                      </li>-->
+                      </li>
                       {% endif %}
                       <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
                   </ul>
