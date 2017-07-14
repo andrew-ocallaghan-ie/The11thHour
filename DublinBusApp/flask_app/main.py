@@ -168,6 +168,7 @@ def stop_search():
 
     if request.method == 'POST':
         stop_num = request.form['user_stop']
+        print(stop_num)
         return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())
@@ -258,9 +259,12 @@ def myroutes():
     sql = "SELECT * FROM like_stop WHERE username = %s"
     result = engine.execute(sql, [username])
     all_data=result.fetchall()
-    print(all_data)
+    
     stopnamelist=[0] * len(all_data)
+    stopidlist=[0] * len(all_data)
     #print(stopnamelist)
+    for a in range(0,len(all_data)):
+        stopidlist[a]=all_data[a][1]
     Length=len(all_data)
     for a in range(0,len(all_data)):
         print(all_data[a]['stop_id'])
@@ -268,6 +272,7 @@ def myroutes():
         sql = "SELECT Stop_name FROM Stops WHERE Stop_ID = %s"
         stopnamelist[a] = engine.execute(sql, [all_data[a]['stop_id']]).fetchall()[0][0]
     print(stopnamelist)
+    print(stopidlist)
     return render_template('myroutes.html',**locals())
 # --------------------------------------------------------------------------#
 # Logout
@@ -275,7 +280,7 @@ def myroutes():
 def logout():
     session.clear()
     flash('You are now logged out','success')
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 # --------------------------------------------------------------------------#
 #user like function
