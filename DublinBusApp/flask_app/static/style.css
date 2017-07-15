@@ -153,7 +153,7 @@ input#user_route{
 .button {
   display: inline-block;
   border-radius: 4px;
-  background-color: #f4511;
+  background-color: #ABA7A7;
   border: none;
   color: #FFFFFF;
   text-align: center;
@@ -190,9 +190,17 @@ input#user_route{
   right: 0;
 }
 
-.like {
-    height: 10px;
+.button2 {background-color: #CC527A;}
+
+.like1, .like2 {
+    display:inline;
 }
+
+.like1{
+	float: left;
+}
+
+
 
 /* Landscape phones and down */
 @media (max-width: 768px) {

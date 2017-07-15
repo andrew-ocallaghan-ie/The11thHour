@@ -275,6 +275,27 @@ def myroutes():
     print(stopnamelist)
     print(stopidlist)
     return render_template('myroutes.html',**locals())
+
+# --------------------------------------------------------------------------#
+# delete the stop
+@app.route('/delete', methods=['POST'])
+@is_logged_in
+def delete():
+    if request.method == 'POST':
+        username = session['username']
+        print(username) 
+        stop_id = request.form['user_delete']
+        
+        print(stop_id,username)
+        engine = get_db()
+        
+        sql = "DELETE FROM like_stop WHERE username = %s AND stop_id = %s"
+        result = engine.execute(sql, [username,stop_id])
+            
+        return redirect(url_for('myroutes'))
+
+    return redirect(url_for('myroutes'))
+
 # --------------------------------------------------------------------------#
 # Logout
 @app.route('/logout')

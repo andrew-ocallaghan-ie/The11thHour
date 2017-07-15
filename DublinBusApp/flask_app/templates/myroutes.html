@@ -15,7 +15,7 @@
         var c = 2084;
         for(i=0;i<{{Length}};i++) {
             var stop_num = b[i];
-            text += "<form class='like' action='{{url_for('stop_search')}}' method='post'>"+"No" +stop_num + " "+a[i] +"<button class='button' value='" + stop_num + "' name='user_stop'><span>Go </span></button></form>"+"<br>"
+            text += "<form class='like1' action='{{url_for('stop_search')}}' method='post'><button class='button' value='" + stop_num + "' name='user_stop'><span>info </span></button></form><form class='like2' action='{{url_for('delete')}}' method='post'><button class='button button2' value='" + stop_num + "' name='user_delete'><span>delete </span></button>"+"No" +stop_num + " "+a[i] +"</form><br>"
         }
     document.getElementById("demo").innerHTML = text;
 
