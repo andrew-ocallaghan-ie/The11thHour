@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div id="map"></div>
     <h3>Welcome back, <small> {{session.username}}</small></h3>
     <p id="demo"></p>
     <script>
@@ -15,4 +16,5 @@
     document.getElementById("demo").innerHTML = text;
 
     </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
 {% endblock %}

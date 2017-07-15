@@ -219,14 +219,15 @@
                   <ul class="nav navbar-nav navbar-right">
                       {% if session.logged_in %}
                       <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-                      <li class="dropdown" id="My routes"><a href="myroutes"> My routes</a></li>
-                      <div class="dropdown-menu">
-                      </div>
+                      <li class="dropdown" id="My routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a>
+
+                      </li>
+                      
+                      
                       
                       {% else %}
-                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a>
-                      
-                      </li>
+                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+
 
 
                       <!--<li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
@@ -255,7 +256,8 @@
         </nav>
         {% include 'includes/_messages.html' %}
         {% block content %}{% endblock %}
-
+        {% from "includes/_formhelpers.html" import render_field %}
+        
         <!--import Lodash-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 
