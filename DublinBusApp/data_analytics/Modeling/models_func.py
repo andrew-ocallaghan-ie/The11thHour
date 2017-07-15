@@ -103,10 +103,13 @@ def model_file(path, files, month):
                          converters = {"Journey_Pattern_ID":str,
                                        "LineID":str,
                                        "Direction":str,
-                                       "Stop_ID":str })
+                                       "Stop_ID":str,
+                                       "Time_Bin_Start":str,
+                                       "Scheduled_Speed_Per_Stop":float,
+                                       "Stops_To_Travel":int})
         
         
-        y, X = dmatrices('Time_Traveling ~ Day_Of_Week + Direction + Start_Time + Stop_Sequence',
+        y, X = dmatrices('Time_To_Travel ~ Day_Of_Week + Time_Bin_Start + Scheduled_Speed_Per_Stop + Stops_To_Travel + Stop_Sequence',
                          modify_me,
                          return_type="dataframe") 
         y = np.ravel(y)
