@@ -340,23 +340,28 @@ def re_construct(path, files, month, columns):
         modify_me = fix_lidir(modify_me)
         print("\tDirection & LineID Re-Derived")
         
-        modify_me = make_stops_made(modify_me)
-        print("\tIdling removed and stops_made column created")
+        #UNCOMMENT ME WHEN FINISHED!!!!!!
+        #modify_me = make_stops_made(modify_me)
+        #print("\tIdling removed and stops_made column created")
         
         modify_me = modify_me.drop_duplicates(keep="first")
         print("\tDropped Dupes")
         
-        all_things_time(modify_me)
-        print("\tTiming Columns added")
+        #UNCOMMENT ME WHEN FINISHED!!!!!!
+        #all_things_time(modify_me)
+        #print("\tTiming Columns added")
         
-        modify_me = make_speed(modify_me)
-        print("\tSpeed made")
+        #UNCOMMENT ME WHEN FINISHED!!!!!!!
+        #modify_me = make_speed(modify_me)
+        #print("\tSpeed made")
         
-        modify_me = make_scheduled_speed_per_stop(modify_me)
-        print("\tscheduled speed per stop column created")
+        #UNCOMMENT ME WHEN FINISHED!!!!!!
+        #modify_me = make_scheduled_speed_per_stop(modify_me)
+        #print("\tscheduled speed per stop column created")
         
-        modify_me = binning(modify_me)
-        print("\tTime Binning Applied")
+        #UNCOMMENT ME WHEN FINISHED!!!!!!
+        #modify_me = binning(modify_me)
+        #print("\tTime Binning Applied")
         
         modify_me = drop_zero_JTs(modify_me)
         print("\tDrop zero Journey Times")
@@ -503,7 +508,11 @@ def find_routes(path):
     numset = {str(x) for x in set_of_routes if ( isinstance(x, int) or isinstance(x, float) ) }
     strset = {x for x in set_of_routes if isinstance(x, str)}
     set_of_routes = sorted(numset.union(strset), key=str)
-
+    
+    #REMOVE ME WHEN FINISHED!!!!!
+    #PATH WILL PRINT DIRECTLY BELOW IT SHOULD HAVE THE MONTH IN IT!
+    print(set_of_routes,"\n",path)
+    
     return set_of_routes
 
 
@@ -518,11 +527,12 @@ def complete_extraction(month):
     path = os.path.join(os.getcwd(), "re_constructed_" + month)
     all_routes = find_routes(path)
     
-    for route in all_routes:
+    #UNCOMMENT ME WHEN FINISHED!!!!!!
+    #for route in all_routes:
         
-        dataframe = extract_route(path, route)
-        write_address = os.path.join(month + "_routes", "beta" + route + ".csv")
-        dataframe.to_csv(write_address)
+        #dataframe = extract_route(path, route)
+        #write_address = os.path.join(month + "_routes", "beta" + route + ".csv")
+        #dataframe.to_csv(write_address)
 
     return "Success"
 
