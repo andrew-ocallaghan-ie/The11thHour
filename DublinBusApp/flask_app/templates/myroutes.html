@@ -9,15 +9,60 @@
     </div>
     </div>
     <script>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        var map;
         var text = "Here are your preferred stops."+"<br>";
         var a = {{ stopnamelist|tojson }};
         var b = {{ stopidlist|tojson}};
         var c = 2084;
         for(i=0;i<{{Length}};i++) {
             var stop_num = b[i];
-            text += "<form class='info' action='{{url_for('stop_search')}}' method='post'><button class='button' value='" + stop_num + "' name='user_stop'><span>info </span></button></form><form class='go' action='{{url_for('stop_search')}}' method='post'><button class='button button3' value='" + stop_num + "' name='user_stop'><span>Go </span></button></form><form class='delete' action='{{url_for('delete')}}' method='post'><button class='button button2' value='" + stop_num + "' name='user_delete'><span>delete </span></button>"+"No" +stop_num + " "+a[i] +"</form><br>"
-        }
+            text += "<big> No"+b[i]+" "+a[i]+"</big>"+"<br><form class='info' action='{{url_for('stop_search')}}' method='post'><button class='button' value='" + stop_num + "' name='user_stop'><span>info</span></button></form><form class='go' action='{{url_for('stop_search')}}' method='post'><button class='button button3' value='" + stop_num + "' name='user_stop'><span>Go</span></button></form><form class='delete' action='{{url_for('delete')}}' method='post'><button class='button button2' value='" + stop_num + "' name='user_delete'><span>Delete</span></button></form></br>"
+        }    
     document.getElementById("demo").innerHTML = text;
+        
+         jQuery.getJSON($SCRIPT_ROOT+"/api/stops",null,function(data){
+            var stations = data.stops;
+             
+            for (i=0;i<{{Length}};i++){
+                var marker = new google.maps.Marker({
+                    position:{
+                        lat:stations[b[i]][1],
+                        lng:stations[b[i]][2]
+                    },
+                    map:map,
+                    title:stations[b[i]][0],
+                    station_number:b[i],
+                    icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#4682b4',
+                                strokeWeight: 1.5,
+                                fillColor: '#45ADA8',
+                                fillOpacity: 0.4,
+                                scale: 10
+                            }
+                });
+                  
+                
+                // Create infowindow on mouseover
+                        var infowindow = new google.maps.InfoWindow();
+
+                        // Contents of infowindow
+                        var html = "No" + b[i] + " " +stations[b[i]][0] +"<form class='delete' action='{{url_for('stop_search')}}' method='post'><button class='button button2' value='" + b[i] + "' name='user_stop'><span>Go</span></button></form>";
+                        marker.html = html;
+
+
+                        // Mouse Over Functionality
+                        google.maps.event.addListener(marker, 'mouseover', function () {
+                            // Set contents
+                            infowindow.setContent(this.html);
+                            // Open infowindow
+                            infowindow.open(map, this);
+                        }); 
+
+                            
+            }
+          });
 
     </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>

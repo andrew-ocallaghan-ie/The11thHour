@@ -159,7 +159,7 @@ input#user_route{
   text-align: center;
   font-size: 17px;
   padding: 1px;
-  width: 100px;
+  width: 70px;
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
@@ -204,6 +204,9 @@ input#user_route{
 .go{
 	float: left;
 }
+
+
+
 
 
 
