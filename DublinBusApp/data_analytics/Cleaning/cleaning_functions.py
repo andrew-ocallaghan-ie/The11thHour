@@ -148,10 +148,10 @@ def all_things_time(dataframe):
     dataframe['Time_Bin_Start']=dataframe['Time_Bin_Start'].astype('int')
     
     dataframe["End_Time"] = dataframe.groupby(["Vehicle_Journey_ID",
-                                               "Timeframe"])["Timestamp"].transform(max)
+                                               "Timeframe", "Vehicle_ID", "Journey_Pattern_ID"])["Timestamp"].transform(max)
     
     dataframe["Start_Time"] = dataframe.groupby(["Vehicle_Journey_ID",
-                                               "Timeframe"])["Timestamp"].transform(min)
+                                               "Timeframe", "Vehicle_ID", "Journey_Pattern_ID"])["Timestamp"].transform(min)
     
     
     dataframe["Journey_Time_Dirty"] = ( (dataframe["End_Time"]) - (dataframe["Start_Time"]) )
@@ -193,36 +193,38 @@ def make_speed(dataframe):
     dataframe.Stop_ID = dataframe.Stop_ID.astype("str")
  
     sequence_dataframe = pd.read_csv("route_seq.csv",
-                                     encoding = "latin1",
-                                     header = 0,
-                                     index_col = None,
-                                     converters = {"LineID":str,
-                                                   "Stop_ID":str,
-                                                   "Stop_Sequence": str})
-    sequence_dataframe['Max_Stop_Sequence'] = sequence_dataframe.groupby(['LineID', 'Direction'])['Stop_Sequence'].transform(max)
+                     encoding = "latin1",
+                     header = 0,
+                     index_col = None,
+                     converters = {"LineID":str,
+                                   "Stop_ID":str,
+                                   "Direction":str,
+                                    "Stop_Sequence": int})
+    
+    sequence_dataframe['Max_Stop_Sequence'] = sequence_dataframe.groupby(['LineID', 'Direction', "Destination"]).Stop_Sequence.transform(max)
     
     sequence_dataframe = sequence_dataframe[["LineID",
                                              "Stop_ID",
                                              "Stop_Sequence",
-                                             "Max_Stop_Sequence"]]
+                                             "Max_Stop_Sequence",
+                                             "Direction"]]
 
     dataframe = pd.merge(dataframe,
                          sequence_dataframe,
                          how='inner',
-                         on=['LineID', 'Stop_ID'])
+                         on=['LineID', 'Stop_ID', 'Direction'])
     
     dataframe["Speed"] = ( (dataframe["Time_Traveling"].astype(int) / (dataframe["Stop_Sequence"].astype(int)) ) ) 
    
-    
     return dataframe
 
 
 def make_scheduled_speed_per_stop(dataframe):
     #DB's published speed in stops per min for each route by using overall scheduled offpeak time end to end divided by no stops
     
-    dataframe['Start_Stop'] = dataframe.groupby(['LineID', 'Vehicle_Journey_ID', 'Timeframe'])['Stop_Sequence'].transform(min)
+    dataframe['Start_Stop'] = dataframe.groupby(['LineID', 'Vehicle_Journey_ID', 'Timeframe', "Vehicle_ID", "Journey_Pattern_ID"])['Stop_Sequence'].transform(min)
     
-    dataframe['End_Stop'] = dataframe.groupby(['LineID', 'Vehicle_Journey_ID', 'Timeframe'])['Stop_Sequence'].transform(max)
+    dataframe['End_Stop'] = dataframe.groupby(['LineID', 'Vehicle_Journey_ID', 'Timeframe', "Vehicle_ID", "Journey_Pattern_ID"])['Stop_Sequence'].transform(max)
     
     dataframe['Stops_To_Travel'] = ((dataframe['End_Stop'].astype(int) - dataframe['Start_Stop'].astype(int)) )
     
