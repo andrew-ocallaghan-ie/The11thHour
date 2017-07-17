@@ -51,8 +51,7 @@ class RegisterForm(Form):
         validators.EqualTo('confirm', message = 'Passwords do not match')
         ])
     confirm = PasswordField('Confirm Password')
-
-
+    
 # --------------------------------------------------------------------------#
 def get_common_routes(src_stop_num, dest_stop_num):
     """Finds common routes between two bus stops
