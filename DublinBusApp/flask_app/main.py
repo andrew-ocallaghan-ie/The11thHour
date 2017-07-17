@@ -1,15 +1,36 @@
+#http://flask.pocoo.org/
 from flask import Flask, render_template, request, g, flash, redirect, url_for, session
+
+#https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
-from busData import InfoDB
+
+from flask_app.busData import InfoDB
+
+#https://docs.python.org/3/library/datetime.html
 import datetime
+
+#https://www.sqlalchemy.org/
 from sqlalchemy import create_engine
+
+#https://wtforms.readthedocs.io/en/latest/
 from wtforms import Form, StringField, PasswordField, validators
+
+#https://passlib.readthedocs.io/en/stable/
 from passlib.hash import sha256_crypt
+
+#http://pymysql.readthedocs.io/en/latest/index.html
 import pymysql
+
+#https://docs.python.org/3/library/functools.html
 from functools import wraps
+
+#http://www.pythonforbeginners.com/requests/using-requests-in-python
 import requests
+
+#http://scikit-learn.org/stable/
 from sklearn.externals import joblib
-#pymysql.install_as_MySQLdb()
+
+pymysql.install_as_MySQLdb()
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
