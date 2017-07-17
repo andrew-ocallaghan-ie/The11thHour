@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import InfoDB
+from flask_app.busData import api, dbi
 
 #https://docs.python.org/3/library/datetime.html
 import datetime
@@ -52,53 +52,7 @@ class RegisterForm(Form):
         ])
     confirm = PasswordField('Confirm Password')
     
-# --------------------------------------------------------------------------#
-def get_common_routes(src_stop_num, dest_stop_num):
-    """Finds common routes between two bus stops
-    Returns a dictionary of routes, easier to loop through"""
-    route_options = {}
-
-    engine = get_db()
-    sql = "SELECT * FROM All_routes.Sequence WHERE Stop_ID = %s AND Route IN (SELECT Route FROM All_routes.Sequence WHERE Stop_ID = %s);"
-    result = engine.execute(sql, (src_stop_num, dest_stop_num))
-    all_data = result.fetchall()
-
-    for row in all_data:
-        route_options[row[0].strip('\n')] = (row[1])
-
-    return route_options
-
-# --------------------------------------------------------------------------#
-def stops_between_src_dest(src_stop_num, dest_stop_num, route):
-    """Finds out how many stops are between two stops on a given route"""
-    engine = get_db()
-    sql = "SELECT Stop_sequence FROM All_routes.Sequence WHERE (Stop_ID = %s AND Route = %s) OR (Stop_ID = %s AND Route = %s);"
-    result = engine.execute(sql, (src_stop_num, int(route), dest_stop_num, int(route)))
-    all_data = result.fetchall()
-
-    src_stop_sequence = int(all_data[0][0])
-    dest_stop_sequence = int(all_data[1][0])
-
-    stops_travelled = dest_stop_sequence - src_stop_sequence
-
-    return stops_travelled
-
-# --------------------------------------------------------------------------#
-def nearby_stops(lat,long):
-    """Finds out the nearest stops to a given point
-    Returns stop IDs in a list"""
-    stops = []
-    engine = get_db()
-    radius = 0.3
-    sql = "SELECT Stop_ID, 111.111 * DEGREES( acos ( cos ( radians(%s) ) * cos( radians(Lat) ) * cos( radians(Lon) - radians(%s) ) + sin ( radians(%s) ) * sin( radians( Lat ) ) ) ) AS `distance_in_km` FROM All_routes.Stops HAVING (distance_in_km < %s) ORDER BY distance_in_km;"
-    result = engine.execute(sql, (lat, long, lat, radius))
-    all_data = result.fetchall()
-
-    for row in all_data:
-        stops.append(row[0])
-
-    return stops
-
+    
 # --------------------------------------------------------------------------#
 def location_from_address(address):
     """Gets latitude & longitude from an address
@@ -135,14 +89,14 @@ def index():
         current_time = datetime.datetime.now()
         current_weekday = datetime.datetime.now().weekday()
 
-        route_options = get_common_routes(source_num, dest_num)
+        route_options = dbi().get_common_routes(source_num, dest_num)
 
         for route, direction in route_options.items():
 
             predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
             direction = direction
             timestamp = 1357044910000000
-            stops_travelled = stops_between_src_dest(source_num, dest_num, route)
+            stops_travelled = dbi().stops_between_src_dest(source_num, dest_num, route)
 
             time_pred = predictor.predict([1, current_weekday, direction, timestamp, stops_travelled])
 
@@ -367,28 +321,28 @@ def likestop():
 
 @app.route('/api/all_routes/', methods=['GET'])
 def get_route_info():
-    return InfoDB().bus_route_info()
+    return api().bus_route_info()
 
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/routes/<string:routenum>/<string:direction>/', methods=['GET'])
 def get_stop_info(routenum, direction):
-    return InfoDB().bus_stop_info_for_route(routenum, direction)
+    return api().bus_stop_info_for_route(routenum, direction)
 
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/stations/', methods=['GET'])
 def get_all_info():
-    return InfoDB().all_stop_info()
+    return api().all_stop_info()
 
 # --------------------------------------------------------------------------#
 
 
 @app.route('/api/stops/', methods=['GET'])
 def get_all_stop_info():
-    return InfoDB().all_bus_stop_info()
+    return api().all_bus_stop_info()
 
 
 # =================================== DB ==================================#
