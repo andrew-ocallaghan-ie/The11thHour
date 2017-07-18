@@ -5,6 +5,7 @@ import time
 import multiprocessing
 from multiprocessing import Pool
 import threading
+import datetime
 
 import pandas as pd
 import numpy as np
@@ -160,6 +161,11 @@ def all_things_time(dataframe):
     
     dataframe["Scheduled_Time_OP"] = 0
     
+    date_before = datetime.date(2012, 12, 31)
+    date_after = datetime.date(2013, 1, 5)
+    
+    dataframe['Holiday'] = np.where((dataframe['Time'].dt.date < date_after) & (dataframe['Time'].dt.date > date_before), 1, 0)
+    
     dataframe.LineID = dataframe.LineID.astype("str")
     
     times_dataframe = pd.read_csv("route_times.csv",
@@ -218,6 +224,26 @@ def make_speed(dataframe):
    
     return dataframe
 
+def weather(dataframe):
+    
+    dataframe_weather = pd.read_csv('weather.csv', encoding='latin-1', header = 0,
+                     index_col = None,
+                     converters = {
+                                   "Rain":float,
+                                   "Wind_Speed":float,
+                                    "Temperature": float})
+    dataframe_weather["Time"] = pd.to_datetime(dataframe_weather["Time"])
+       
+    dataframe_weather.sort_values(['Time'], ascending=[True], inplace=True)
+    
+    dataframe_weather['Hour_Of_Day'] = dataframe_weather['Time'].dt.hour
+    
+    dataframe.sort_values(['Time'], ascending=[True], inplace=True)
+    dataframe_weather.sort_values(['Time'], ascending=[True], inplace=True)
+    dataframe =  pd.merge_asof(dataframe, dataframe_weather, on='Time')
+    
+    return dataframe
+
 
 def make_scheduled_speed_per_stop(dataframe):
     #DB's published speed in stops per min for each route by using overall scheduled offpeak time end to end divided by no stops
@@ -260,8 +286,9 @@ def delete_excess_columns(dataframe):
 def drop_zero_JTs(dataframe):
     return dataframe[dataframe["Journey_Time"]>0]
 
-def drop_JT_margin(dataframe, margin):
-    return datafram[dataframe.Journey_Time > (dataframe.Scheduled_Time_OP)*margin]
+def drop_JT_margin(dataframe):
+    return dataframe[dataframe.Journey_Time <= (dataframe.Scheduled_Time_OP * 2) ]
+#wrote this back in, switched margin parameter for hardcoding double the scheduled time 
 
 def drop_zero_OP_Schedules(dataframe):
     return datafram[dataframe.Schedule_Time_OP == 0 ]
@@ -361,8 +388,11 @@ def re_construct(path, files, month, columns):
         modify_me = drop_zero_JTs(modify_me)
         print("\tDrop zero Journey Times")
         
-        #modify_me = drop_JT_margin(modify_me, 0.1)
-        #print("\tDropped Improbable Journey_Times")
+        modify_me = weather(modify_me)
+        print ("\tWeather")
+        
+        modify_me = drop_JT_margin(modify_me)
+        print("\tDropped Improbable Journey_Times")
               
         #modify_me = drop_zero_OP_Schedules(modify_me)
         #print("\tDropped Empty Schedule Info")
