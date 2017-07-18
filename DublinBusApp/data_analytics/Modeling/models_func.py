@@ -92,8 +92,7 @@ def model_file(path, files, month):
     
     for data in files:
         print("Modeling", month ,data)
-        test_address = os.path.join(month + "_Tests", data[:-4] + "RF.txt")    
-        f = open(test_address,"w+")
+        test_address = os.path.join(month + "_Tests", data[:-4] + "RF.txt")
         
         read_address = os.path.join(path, data)
         modify_me = read(read_address, 
@@ -103,10 +102,13 @@ def model_file(path, files, month):
                          converters = {"Journey_Pattern_ID":str,
                                        "LineID":str,
                                        "Direction":str,
-                                       "Stop_ID":str })
+                                       "Stop_ID":str,
+                                       "Time_Bin_Start":str,
+                                       "Scheduled_Speed_Per_Stop":float,
+                                       "Stops_To_Travel":int})
         
         
-        y, X = dmatrices('Time_Traveling ~ Day_Of_Week + Direction + Start_Time + Stop_Sequence',
+        y, X = dmatrices('Time_To_Travel ~ Day_Of_Week + Time_Bin_Start + Wind_Speed + Temperature + Holiday + Scheduled_Speed_Per_Stop + Stops_To_Travel + Stop_Sequence',
                          modify_me,
                          return_type="dataframe") 
         y = np.ravel(y)
@@ -131,6 +133,7 @@ def model_file(path, files, month):
         
         pred = clf.predict(X_test)
         
+        f = open(test_address, "w+")
         title = "\n\n===" + data +" Random Forest==="
         f.write( title )
         

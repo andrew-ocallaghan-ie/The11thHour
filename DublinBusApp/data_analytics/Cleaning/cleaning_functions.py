@@ -5,10 +5,10 @@ import time
 import multiprocessing
 from multiprocessing import Pool
 import threading
+import datetime
 
 import pandas as pd
 import numpy as np
-
 
 
 
@@ -145,12 +145,14 @@ def all_things_time(dataframe):
     dataframe['Min_Of_Hour30'] = np.where((dataframe['Min_Of_Hour'] > 30), 1, 0)
     dataframe['Min_Of_Hour15'] = np.where((dataframe['Min_Of_Hour'] > 15), 1, 0)
     dataframe['Min_Of_Hour45'] = np.where((dataframe['Min_Of_Hour'] > 45), 1, 0)
+    dataframe['Time_Bin_Start'] = dataframe.Hour_Of_Day.astype('str') + dataframe.Min_Of_Hour15.astype('str')+ dataframe.Min_Of_Hour30.astype('str') + dataframe.Min_Of_Hour45.astype('str')
+    dataframe['Time_Bin_Start']=dataframe['Time_Bin_Start'].astype('int')
     
     dataframe["End_Time"] = dataframe.groupby(["Vehicle_Journey_ID",
-                                               "Timeframe"])["Timestamp"].transform(max)
+                                               "Timeframe", "Vehicle_ID", "Journey_Pattern_ID"])["Timestamp"].transform(max)
     
     dataframe["Start_Time"] = dataframe.groupby(["Vehicle_Journey_ID",
-                                               "Timeframe"])["Timestamp"].transform(min)
+                                               "Timeframe", "Vehicle_ID", "Journey_Pattern_ID"])["Timestamp"].transform(min)
     
     
     dataframe["Journey_Time_Dirty"] = ( (dataframe["End_Time"]) - (dataframe["Start_Time"]) )
@@ -158,6 +160,11 @@ def all_things_time(dataframe):
     dataframe["Journey_Time"] = pd.to_timedelta(dataframe["Journey_Time_Dirty"], unit="us").astype("timedelta64[m]")
     
     dataframe["Scheduled_Time_OP"] = 0
+    
+    date_before = datetime.date(2012, 12, 31)
+    date_after = datetime.date(2013, 1, 5)
+    
+    dataframe['Holiday'] = np.where((dataframe['Time'].dt.date < date_after) & (dataframe['Time'].dt.date > date_before), 1, 0)
     
     dataframe.LineID = dataframe.LineID.astype("str")
     
@@ -192,24 +199,48 @@ def make_speed(dataframe):
     dataframe.Stop_ID = dataframe.Stop_ID.astype("str")
  
     sequence_dataframe = pd.read_csv("route_seq.csv",
-                                     encoding = "latin1",
-                                     header = 0,
-                                     index_col = None,
-                                     converters = {"LineID":str,
-                                                   "Stop_ID":str,
-                                                   "Stop_Sequence": str})
+                     encoding = "latin1",
+                     header = 0,
+                     index_col = None,
+                     converters = {"LineID":str,
+                                   "Stop_ID":str,
+                                   "Direction":str,
+                                    "Stop_Sequence": int})
+    
+    sequence_dataframe['Max_Stop_Sequence'] = sequence_dataframe.groupby(['LineID', 'Direction', "Destination"]).Stop_Sequence.transform(max)
     
     sequence_dataframe = sequence_dataframe[["LineID",
                                              "Stop_ID",
-                                             "Stop_Sequence"]]
+                                             "Stop_Sequence",
+                                             "Max_Stop_Sequence",
+                                             "Direction"]]
 
     dataframe = pd.merge(dataframe,
                          sequence_dataframe,
                          how='inner',
-                         on=['LineID', 'Stop_ID'])
+                         on=['LineID', 'Stop_ID', 'Direction'])
     
     dataframe["Speed"] = ( (dataframe["Time_Traveling"].astype(int) / (dataframe["Stop_Sequence"].astype(int)) ) ) 
    
+    return dataframe
+
+def weather(dataframe):
+    
+    dataframe_weather = pd.read_csv('weather.csv', encoding='latin-1', header = 0,
+                     index_col = None,
+                     converters = {
+                                   "Rain":float,
+                                   "Wind_Speed":float,
+                                    "Temperature": float})
+    dataframe_weather["Time"] = pd.to_datetime(dataframe_weather["Time"])
+       
+    dataframe_weather.sort_values(['Time'], ascending=[True], inplace=True)
+    
+    dataframe_weather['Hour_Of_Day'] = dataframe_weather['Time'].dt.hour
+    
+    dataframe.sort_values(['Time'], ascending=[True], inplace=True)
+    dataframe_weather.sort_values(['Time'], ascending=[True], inplace=True)
+    dataframe =  pd.merge_asof(dataframe, dataframe_weather, on='Time')
     
     return dataframe
 
@@ -217,17 +248,15 @@ def make_speed(dataframe):
 def make_scheduled_speed_per_stop(dataframe):
     #DB's published speed in stops per min for each route by using overall scheduled offpeak time end to end divided by no stops
     
-    dataframe['Start_Stop'] = dataframe.groupby(['Vehicle_Journey_ID', 'Timeframe'])['Stop_Sequence'].transform(min)
+    dataframe['Start_Stop'] = dataframe.groupby(['LineID', 'Vehicle_Journey_ID', 'Timeframe', "Vehicle_ID", "Journey_Pattern_ID"])['Stop_Sequence'].transform(min)
     
-    dataframe['Max_Stop_Sequence'] = dataframe.groupby(['Direction'])['Stop_Sequence'].transform(max)
+    dataframe['End_Stop'] = dataframe.groupby(['LineID', 'Vehicle_Journey_ID', 'Timeframe', "Vehicle_ID", "Journey_Pattern_ID"])['Stop_Sequence'].transform(max)
     
-    dataframe['End_Stop'] = dataframe.groupby(['Vehicle_Journey_ID', 'Timeframe'])['Stop_Sequence'].transform(max)
-    
-    dataframe['Stops_Travelled'] = ((dataframe['End_Stop'].astype(int) - dataframe['Start_Stop'].astype(int)) )
+    dataframe['Stops_To_Travel'] = ((dataframe['End_Stop'].astype(int) - dataframe['Start_Stop'].astype(int)) )
     
     dataframe['Time_To_Travel_Dirty'] = ((dataframe['End_Time'].astype(int) - dataframe['Timestamp'].astype(int) ) )
     
-    dataframe['Time_To_Travel'] = pd.to_timedelta(dataframe['Time_To_Travel_Dirty']*1000, unit="ns").astype('timedelta64[m]')
+    dataframe['Time_To_Travel'] = pd.to_timedelta(dataframe['Time_To_Travel_Dirty'], unit="us").astype('timedelta64[m]')
     
     dataframe['Scheduled_Speed_Per_Stop'] = dataframe['Scheduled_Time_OP'].astype(int)/dataframe['Max_Stop_Sequence'].astype(int)
    
@@ -257,8 +286,9 @@ def delete_excess_columns(dataframe):
 def drop_zero_JTs(dataframe):
     return dataframe[dataframe["Journey_Time"]>0]
 
-def drop_JT_margin(dataframe, margin):
-    return datafram[dataframe.Journey_Time > (dataframe.Scheduled_Time_OP)*margin]
+def drop_JT_margin(dataframe):
+    return dataframe[dataframe.Journey_Time <= (dataframe.Scheduled_Time_OP * 2) ]
+#wrote this back in, switched margin parameter for hardcoding double the scheduled time 
 
 def drop_zero_OP_Schedules(dataframe):
     return datafram[dataframe.Schedule_Time_OP == 0 ]
@@ -358,8 +388,11 @@ def re_construct(path, files, month, columns):
         modify_me = drop_zero_JTs(modify_me)
         print("\tDrop zero Journey Times")
         
-        #modify_me = drop_JT_margin(modify_me, 0.1)
-        #print("\tDropped Improbable Journey_Times")
+        modify_me = weather(modify_me)
+        print ("\tWeather")
+        
+        modify_me = drop_JT_margin(modify_me)
+        print("\tDropped Improbable Journey_Times")
               
         #modify_me = drop_zero_OP_Schedules(modify_me)
         #print("\tDropped Empty Schedule Info")
