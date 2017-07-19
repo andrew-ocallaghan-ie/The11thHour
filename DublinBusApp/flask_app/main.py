@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import api, dbi
+from busData import api, dbi
 
 #https://docs.python.org/3/library/datetime.html
 import datetime
@@ -370,4 +370,4 @@ def get_db():
 # Setting app to run only if this file is run directly.
 if __name__ == '__main__':
     app.secret_key='secret123'
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
