@@ -223,7 +223,7 @@ class dbi:
         return stops
     
     
-        def route_overlap(self, stop_ids):
+    def route_overlap(self, stop_ids):
         """gets overlap of routes between two stops"""
         engine = get_db()
         

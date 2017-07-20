@@ -79,7 +79,7 @@ def location_from_address(address):
 def determine_set_of_routes(area):
     """gets stop and route info of area
     returns dict with key for each stop, and 'all_routes'"""
-    lat, lon = get_location_from_address(area)
+    lat, lon = location_from_address(area)
     stops = dbi().find_nearby_stops(lat, lon)
     stop_route = dbi().route_overlap(stops)
     all_routes = set()
