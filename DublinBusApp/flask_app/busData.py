@@ -3,7 +3,7 @@ from flask import jsonify
 from operator import itemgetter
 from sqlalchemy import create_engine
 from flask import g
-
+import pandas as pd
 # --------------------------------------------------------------------------#
 
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
@@ -221,5 +221,51 @@ class dbi:
             stops.append(row[0])
     
         return stops
+    
+    
+        def route_overlap(self, stop_ids):
+        """gets overlap of routes between two stops"""
+        engine = get_db()
+        
+        sql = "SELECT Stop_ID, Routes_serviced \
+               FROM All_routes.Stops\
+               WHERE Stop_ID in (%s)" % ",".join(map(str, stop_ids))
+               
+        stop_route = {} 
+        result = engine.execute(sql)
+        all_data = result.fetchall()
+          
+        for row in all_data:
+            stop_route[row[0]] = set( map(str.strip, row[1].split(" - ") ) )
+            
+        return stop_route   
+    
+    #---------------------------------------------------------------------#
+    
+    def route_plan(self, routes, src_stops, dest_stops):
+        """gets table of routes, dir, stop_id"""
+        engine = get_db()
+        all_stops = src_stops
+        if src_stops != dest_stops:
+            all_stops = src_stops.union(dest_stops)
+        
+        #',' is important for getting sql to read correctly '%s'
+        sql = "SELECT *, Stop_ID in (%s) as 'src' \
+               FROM All_routes.Sequence\
+               WHERE \
+                   Route in ('%s') AND\
+                   Stop_ID in (%s)\
+                ORDER BY Route, Direction, Stop_Sequence" % \
+                (",".join(map(str, src_stops)),
+                 "','".join(map(str, routes)),
+                 ','.join(map(str, all_stops)))
+            
+               
+        stops = []
+        result = engine.execute(sql )
+        all_data = result.fetchall()
+        dataframe = pd.DataFrame(all_data, columns=["Route","Direction","Stop_ID","Stop_Sequence","Src"])
+    
+        return dataframe
     
     
