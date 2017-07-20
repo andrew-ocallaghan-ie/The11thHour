@@ -35,6 +35,7 @@ import pandas as pd
 
 #http://scikit-learn.org/stable/
 from sklearn.externals import joblib
+from tkinter.constants import CURRENT
 
 pymysql.install_as_MySQLdb()
 
@@ -82,7 +83,14 @@ def index():
         # dest_num = int(request.form['destination'])
 
         current_time = datetime.datetime.now()
-        current_weekday = datetime.datetime.now().weekday()
+        current_weekday = current_time.day
+        current_hour = current_time.hour
+        current_min = current_time.minute
+        bit1 = "1" if (current_min > 15) else "0"
+        bit2 = "1" if (current_min > 30) else "0"
+        bit3 = "1" if (current_min > 45) else "0"
+        time_bin = str(current_hour) + bit1 + bit2 + bit3
+        
 
         # route_options = dbi().get_common_routes(source_num, dest_num)
 
