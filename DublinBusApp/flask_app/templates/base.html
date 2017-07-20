@@ -37,7 +37,7 @@
         <script type="text/javascript">
 
             // This is the url i.e. localhost:5000 etc.
-            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }}
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
             //map functions
             var markers = [];
@@ -64,7 +64,7 @@
               markers.infowindow = new google.maps.InfoWindow();
 
 
-              marker.addListener("mouseover",function(){
+              marker.addListener("click",function(){
                   var contentString='<h3>'+name+'</h3>'+marker.mycategory
                   markers.infowindow.setContent(contentString);
                   markers.infowindow.open(map, this);
@@ -147,7 +147,7 @@
                         marker.name = json.stops[i].name;
 
                         // Mouse Over Functionality
-                        google.maps.event.addListener(marker, 'mouseover', function () {
+                        google.maps.event.addListener(marker, 'click', function () {
                             // Set contents
                             infowindow.setContent(this.html);
                             // Open infowindow
@@ -163,7 +163,7 @@
                 // Initializing canvas
                 var mapCanvas = document.getElementById("map");
 
-                //all
+                // All
                 jQuery.getJSON($SCRIPT_ROOT + "/api/stations", null, function (data) {
                     var stations = data.stops;
                     _.forEach(stations, function (station) {
@@ -197,62 +197,54 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-default">
-          <div class="container-fluid">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
             <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">Dublin Bus</a>
-              </div>
-
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul class="nav navbar-nav">
-                      <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
-                      <li><a href="stop_search">Search by stop</a></li>
-                      <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
-                  </ul>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
+                    <li><a href="stop_search">Search by stop</a></li>
+                    <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
+                </ul>
                 
-                  <ul class="nav navbar-nav navbar-right">
-                      {% if session.logged_in %}
-                      <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-                      <li class="dropdown" id="My routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a>
-
-                      </li>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if session.logged_in %}
+                        <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        <li class="dropdown" id="My routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a></li>
                       
-                      
-                      
-                      {% else %}
-                      <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
-
-
+                    {% else %}
+                        <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
 
                       <!--<li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
-                      <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in">
+                          <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in">
                           </span> Login</a>
-                          <div class="dropdown-menu">
-                         <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
-                          <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" name="username" class="form-control" value={{request.form.username}}>
-                        </div>
-                        <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" value={{request.form.password}}>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button> 
-                        </form>
-                          </div>
-                      </li>
+                              <div class="dropdown-menu">
+                                  <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
+                                      <div class="form-group">
+                                          <label>Username</label>
+                                          <input type="text" name="username" class="form-control" value={{request.form.username}}>
+                                      </div>
+                                      <div class="form-group">
+                                          <label>Password</label>
+                                          <input type="password" name="password" class="form-control" value={{request.form.password}}>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Submit</button>
+                                  </form>
+                              </div>
+                          </li>
                       {% endif %}
                       <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
                   </ul>
-
               </div>
-            </div>
+          </div>
         </nav>
         {% include 'includes/_messages.html' %}
         {% block content %}{% endblock %}

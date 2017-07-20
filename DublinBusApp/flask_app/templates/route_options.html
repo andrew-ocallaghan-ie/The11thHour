@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <script>
+        $(document).ready(function(){
+            $(".options_route").click(function(){
+                $(".collapse").collapse('toggle');
+            });
+        });
+
+        // Google Map
+            function usersMap() {
+
+                for (var key in {{ route_option_times }}) {
+                    var route_info = {{ route_opyion_times }}[key];
+                    $.getJSON($SCRIPT_ROOT + '/api/routes/' + route_info.route + "/" + route_info.direction, function (json) {
+                        for (i = route_info.src_stop; i < route_info.dest_stop; i++) {
+                            var lat = json[i].lat;
+                            var lng = json[i].lon;
+                            var name = json[i].name;
+                            var category = i;
+                            var color = '#4682b4';
+                            var marker = createMarker(lat, lng, name, category, color);
+                        }
+                        hide(1);
+                        hide(2);
+                        hide(3);
+                    });
+                }
+
+                // Centre of map
+                var myCenter = new google.maps.LatLng(53.3498, -6.2603);
+
+                // Initializing canvas
+                var mapCanvas = document.getElementById("map");
+
+                // Map options
+                var mapOptions = {
+                    center: myCenter,
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                // Creating map
+                map = new google.maps.Map(mapCanvas, mapOptions);
+            }
+    </script>
+
+    <div class="collapse" id="map"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 route_options">
+                <h3>Route Options</h3>
+                {{ html }}
+            </div>
+        </div>
+    </div>
+
+
+    <!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
+    <!--stop info page-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=usersMap&libraries=places"></script>
+
+{% endblock %}

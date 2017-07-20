@@ -1,10 +1,10 @@
 #http://flask.pocoo.org/
-from flask import Flask, render_template, request, g, flash, redirect, url_for, session
+from flask import Flask, render_template, request, g, flash, redirect, url_for, session, Markup
 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import api, dbi
+from busData import api, dbi
 
 #https://docs.python.org/3/library/datetime.html
 import datetime
@@ -73,42 +73,77 @@ def location_from_address(address):
     location = (lat, long)
     return location
 
+
+# --------------------------------------------------------------------------#
+
+def get_option_times(route_options):
+    """Determines the journey time for each viable route option
+    Returns a list of options ordered by their journey time"""
+
+    options = []
+
+    for option, info in route_options.items():
+
+        route = info['route']
+        direction = info['direction']
+        timestamp = info['time_bin']
+        src_stop = info['src_stop']
+        dest_stop = info['dest_stop']
+        stops_travelled = dbi().stops_between_src_dest(src_stop, dest_stop, route)
+        current_weekday = datetime.datetime.now().weekday()
+        predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
+
+        time_pred = predictor.predict([1, current_weekday, direction, timestamp, stops_travelled])
+
+        options.append([time_pred, route, src_stop, dest_stop])
+
+    options = options.sort(key=lambda x: x[0])
+    return options
+
+
 # --------------------------------------------------------------------------#
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     if request.method == 'POST':
-        origin = request.form['origin']
-        destination = request.form['destination']
+        src = request.form['origin']
+        dest = request.form['destination']
+
+        src_location = location_from_address(src)
+        dest_location = location_from_address(dest)
+
 
         # This will be taken out once we take in addresses rather than bus stop IDs
-        source_num = int(request.form['origin'])
-        dest_num = int(request.form['destination'])
+        # source_num = int(request.form['origin'])
+        # dest_num = int(request.form['destination'])
 
         current_time = datetime.datetime.now()
         current_weekday = datetime.datetime.now().weekday()
 
-        route_options = dbi().get_common_routes(source_num, dest_num)
+        # route_options = dbi().get_common_routes(source_num, dest_num)
 
-        for route, direction in route_options.items():
+        # route_option_times = get_option_times(route_options)
+        #
+        html = ""
+        route = '46A'
+        src_stop = 'Merrion Square'
+        dest_stop = 'Ballymun'
+        time = '44mins'
+        # total_options = len(route_option_times)
+        #
+        # for option in route_option_times:
+        #     time = option[0]
+        #     route = option[1]
+        #     src_stop = option[2]
+        #     dest_stop = option[3]
+        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
+        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 2)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
+        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 3)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
+        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 4)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
+        html = Markup(html)
 
-            predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
-            direction = direction
-            timestamp = 1357044910000000
-            stops_travelled = dbi().stops_between_src_dest(source_num, dest_num, route)
-
-            time_pred = predictor.predict([1, current_weekday, direction, timestamp, stops_travelled])
-
-            arrival_time = current_time + datetime.timedelta(minutes = float(time_pred[0]))
-            arrival_time_hours = arrival_time.hour
-            arrival_time_minutes = arrival_time.minute
-
-            # These values are returned from here so that the HTML page doesn't show info until
-            # the user has inputted values
-            html1 = origin + " to " + destination
-            html2 = "Estimated journey time is: " + str(time_pred[0]) + " minutes."
-            html3 = "You will arrive in " + destination + " at: " + str(arrival_time.hour) + ":" + str(arrival_time_minutes)
+        return render_template('route_options.html', **locals())
 
     return render_template('home.html', **locals())
 

@@ -73,6 +73,32 @@ margin-bottom:5px;
     padding-bottom: 10px;
 }
 
+.route_options div{
+    display: inline-block;
+    width: 100%;
+    height: 45px;
+}
+
+.route_options .option_route{
+    position: relative;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    background: cornflowerblue;
+    border: 1px solid brown;
+    text-align: center;
+}
+
+.route_options .option_src_dest{
+    width: 55%;
+    padding-left: 10px;
+}
+
+.route_options .option_journey_time{
+    width: 30%;
+}
+
 .ck-button{
     width: 100%;
     height: 100%;
@@ -205,12 +231,6 @@ input#user_route{
 	float: left;
 }
 
-
-
-
-
-
-
 /* Landscape phones and down */
 @media (max-width: 768px) {
     body {
@@ -219,7 +239,7 @@ input#user_route{
     .navbar-fixed-top .navbar-brand {
         padding: 15px 0;
     }
-    #map{
+    #map, #panomap, #pano{
         height: 300px;
     }
 }

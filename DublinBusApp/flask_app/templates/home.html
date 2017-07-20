@@ -1,38 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div id="map"></div>
+    <script>
+        function initialize() {
+            var input1 = document.getElementById('origin');
+            var input2 = document.getElementById('destination');
+            var dublinLatLong = new google.maps.LatLng(53.350140, -6.266155);
+            var optionsAuto = {
+                location: dublinLatLong,
+                radius: 10000,
+                types: ['geocode'],
+                componentRestrictions: {
+                    country: 'IE'
+                }
+            };
+            var autocomplete1 = new google.maps.places.Autocomplete(input1, optionsAuto);
+            var autocomplete2 = new google.maps.places.Autocomplete(input2, optionsAuto);
+        }
 
-<div class="container">
-    <div class="row" id="inputs">
-        <div class="col-sm-6">
-            <form method="POST">
-                <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
-                <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
+    </script>
 
-                <select class="form-control" name="now_arrive_depart" id="now_arrive_depart">
-                  <option>Now</option>
-                  <option>Arrive By</option>
-                  <option>Leave At</option>
-                </select>
+    <div id="map"></div>
 
-              <button type="submit" class="btn btn-default btn-circle">GO!</button>
-          </form>
-        </div>
+    <div class="container">
+        <div class="row" id="inputs">
+            <div class="col-sm-6">
+                <form method="POST">
+                    <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
+                    <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
 
-        <div class="col-sm-6">
-            <!--These are written in from the Flask app to prevent random words being on screen before any-->
-            <!--input is given by the user.-->
-            <h2>{{html1}}</h2>
-            <h4>{{html2}}</h4>
-            <h4>{{html3}}</h4>
+                    <select class="form-control" name="now_arrive_depart" id="now_arrive_depart">
+                      <option>Now</option>
+                      <option>Arrive By</option>
+                      <option>Leave At</option>
+                    </select>
+
+                  <button type="submit" class="btn btn-default btn-circle">GO!</button>
+              </form>
+            </div>
+
+            <div class="col-sm-6 route_options">
+                {{html}}
+            </div>
         </div>
     </div>
-</div>
 
-<!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
-<!--stop info page-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
 
+    <!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
+    <!--stop info page-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap&libraries=places"></script>
+    <script>window.onload=initialize();</script>
 
 {% endblock %}
