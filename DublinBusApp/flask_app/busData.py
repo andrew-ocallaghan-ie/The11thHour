@@ -196,7 +196,7 @@ class dbi:
         #----------------------------------------------------------------------------------#
 
 
-    def nearby_stops(self, lat,long):
+    def find_nearby_stops(self, lat,long):
         """
         Finds out the nearest stops to a given point
         Returns stop IDs in a list
@@ -265,7 +265,7 @@ class dbi:
         result = engine.execute(sql )
         all_data = result.fetchall()
         dataframe = pd.DataFrame(all_data, columns=["Route","Direction","Stop_ID","Stop_Sequence","Src"])
-    
+        
         return dataframe
     
     
