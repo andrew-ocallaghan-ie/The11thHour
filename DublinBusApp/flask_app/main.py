@@ -80,7 +80,7 @@ def index():
 
         current_time = datetime.datetime.now()
         current_date = current_time.date()
-        current_weekday = current_time.day
+        current_weekday = current_time.weekday()
         current_hour = current_time.hour
         current_min = current_time.minute
         bit1 = "1" if (current_min > 15) else "0"
@@ -112,8 +112,16 @@ def index():
             sched_speed_per_stop = scheduled_time / max_stop_seq
 
             predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
-
-            time_pred = predictor.predict([1, current_weekday, time_bin, sched_speed_per_stop, current_wind, current_temp, is_school_holiday, stops_to_travel, max_stop_seq])
+            print(predictor.feature_importances_)
+            time_pred = predictor.predict([1, 
+                                           current_weekday,
+                                           time_bin,
+                                           current_wind,                                         
+                                           current_temp, 
+                                           is_school_holiday, 
+                                           sched_speed_per_stop,
+                                           stops_to_travel,
+                                           src_stop_seq])
 
             html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "</div></div>"
 
