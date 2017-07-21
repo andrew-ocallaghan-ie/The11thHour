@@ -4,9 +4,9 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import api
+from busData import api, dbi
 
-from flask_app.travel_functions import location_from_address, find_viable_routes,\
+from travel_functions import location_from_address, find_viable_routes,\
     find_viable_stops, route_planner
 
 #https://docs.python.org/3/library/datetime.html
@@ -61,12 +61,14 @@ class RegisterForm(Form):
         ])
     confirm = PasswordField('Confirm Password')
     
-    
+
 
 # --------------------------------------------------------------------------#
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
+
+    dbi().get_max_sequence(4, 0)
 
     if request.method == 'POST':
         src = request.form['origin']
@@ -75,14 +77,9 @@ def index():
         viable_routes = find_viable_routes(src, dest)
         viable_stops = find_viable_stops(viable_routes)
         route_plan = route_planner(viable_stops)
-        print(route_plan)
-        
-
-        # This will be taken out once we take in addresses rather than bus stop IDs
-        # source_num = int(request.form['origin'])
-        # dest_num = int(request.form['destination'])
 
         current_time = datetime.datetime.now()
+        current_date = current_time.date()
         current_weekday = current_time.day
         current_hour = current_time.hour
         current_min = current_time.minute
@@ -90,28 +87,36 @@ def index():
         bit2 = "1" if (current_min > 30) else "0"
         bit3 = "1" if (current_min > 45) else "0"
         time_bin = str(current_hour) + bit1 + bit2 + bit3
-        
 
-        # route_options = dbi().get_common_routes(source_num, dest_num)
+        if current_date in dbi().extract_holidays():
+            is_school_holiday = 1
+        else:
+            is_school_holiday = 0
 
-        # route_option_times = get_option_times(route_options)
-        #
+        weather = dbi().scrape_weather()
+        current_temp = weather[0]
+        current_wind = weather[1]
+
         html = ""
-        route = '46A'
-        src_stop = 'Merrion Square'
-        dest_stop = 'Ballymun'
-        time = '44mins'
-        # total_options = len(route_option_times)
-        #
-        # for option in route_option_times:
-        #     time = option[0]
-        #     route = option[1]
-        #     src_stop = option[2]
-        #     dest_stop = option[3]
-        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
-        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 2)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
-        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 3)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
-        html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 4)'>" + route + "</div><div class='option_src_dest'>" + src_stop + " to " + dest_stop + "</div><div class='option_journey_time'>" + time + "</div></div>"
+
+        for option in route_plan:
+            direction = int(route_plan[option]['Direction'])
+            route = route_plan[option]['Route']
+            src_stop_id = route_plan[option]['Src_Stop_ID']
+            src_stop_seq = route_plan[option]['Src_Stop_Sequence']
+            dest_stop_id = route_plan[option]['Dest_Stop_ID']
+            dest_stop_seq = route_plan[option]['Dest_Stop_Sequence']
+            stops_to_travel = dest_stop_seq - src_stop_seq
+            max_stop_seq = dbi().get_max_sequence(route, direction)
+            scheduled_time = dbi().get_sched_time(route, direction)
+            sched_speed_per_stop = scheduled_time / max_stop_seq
+
+            # predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
+
+            # time_pred = predictor.predict([1, current_weekday, time_bin, sched_speed_per_stop, current_wind, current_temp, is_school_holiday, stops_to_travel, max_stop_seq])
+
+            html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "</div></div>"
+
         html = Markup(html)
 
         return render_template('route_options.html', **locals())

@@ -4,6 +4,10 @@ from operator import itemgetter
 from sqlalchemy import create_engine
 from flask import g
 import pandas as pd
+import datetime
+import requests
+import traceback
+import csv
 # --------------------------------------------------------------------------#
 
 URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
@@ -267,5 +271,80 @@ class dbi:
         dataframe = pd.DataFrame(all_data, columns=["Route","Direction","Stop_ID","Stop_Sequence","Src"])
         
         return dataframe
-    
-    
+
+
+    # --------------------------------------------------------------------------#
+    def scrape_weather(self):
+        '''Returns a summary of the current weather from the Wunderground API'''
+        # API URI
+        api = 'http://api.wunderground.com/api'
+        # API Parameters
+        city = '/IE/Dublin'
+        app_id = '/0d675ef957ce972d'
+        api_type = '/hourly'
+
+        URI = api + app_id + api_type + '/q' + city + '.json'
+
+        # Loading Data
+        try:
+            req = requests.get(URI)
+            data = req.json()
+
+        except:
+            data = []
+            print(traceback.format_exc())
+
+        # Temperature
+        current_temp = data['hourly_forecast'][0]['temp']['metric']
+        # Rainfall
+        # current_rain = data['hourly_forecast'][0]['qpf']['metric']
+        # Windspeed
+        current_wind = data['hourly_forecast'][0]['wspd']['metric']
+
+        # Returning Summary
+        return (current_temp, current_wind)
+
+
+    # --------------------------------------------------------------------------#
+    def extract_holidays(self):
+        '''Returns a list of school holidays'''
+        holidays = []
+        engine = get_db()
+
+        sql = "SELECT * FROM All_routes.School_Holidays"
+
+        result = engine.execute(sql)
+        all_data = result.fetchall()
+
+        for row in all_data:
+            holidays += row
+
+        holidays = [datetime.datetime.strptime(x, '%d/%m/%Y').date() for x in holidays]
+
+        return (holidays)
+
+    # --------------------------------------------------------------------------#
+    def get_max_sequence(self, route, direction):
+        """Return the max stop sequence for a route in a direction"""
+        engine = get_db()
+
+        sql = "SELECT MAX(Stop_sequence) FROM All_routes.Sequence WHERE Route = %s AND Direction = %s;"
+
+        result = engine.execute(sql, (route, direction))
+        all_data = result.fetchone()
+
+        max_seq = all_data[0]
+        return max_seq
+
+    # --------------------------------------------------------------------------#
+    def get_sched_time(self, route, direction):
+        """Return the max stop sequence for a route in a direction"""
+        engine = get_db()
+
+        sql = "SELECT Scheduled_Overall_Time FROM All_routes.routes_to_add_time WHERE Route = %s AND Direction = %s;"
+
+        result = engine.execute(sql, (route, direction))
+        all_data = result.fetchone()
+
+        time = all_data[0]
+        return time

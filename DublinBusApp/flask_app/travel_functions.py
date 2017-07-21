@@ -5,7 +5,7 @@ Created on 20 Jul 2017
 '''
 
 
-from flask_app.busData import dbi
+from busData import dbi
 
 #https://docs.python.org/3/library/datetime.html
 import datetime
@@ -207,3 +207,7 @@ def get_option_times(route_options):
 
     options = options.sort(key=lambda x: x[0])
     return options
+
+
+# --------------------------------------------------------------------------#
+
