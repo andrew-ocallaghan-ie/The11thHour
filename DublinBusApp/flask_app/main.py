@@ -4,9 +4,9 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from busData import api, dbi
+from flask_app.busData import api, dbi
 
-from travel_functions import location_from_address, find_viable_routes,\
+from flask_app.travel_functions import location_from_address, find_viable_routes,\
     find_viable_stops, route_planner
 
 #https://docs.python.org/3/library/datetime.html
@@ -111,9 +111,9 @@ def index():
             scheduled_time = dbi().get_sched_time(route, direction)
             sched_speed_per_stop = scheduled_time / max_stop_seq
 
-            # predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
+            predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
 
-            # time_pred = predictor.predict([1, current_weekday, time_bin, sched_speed_per_stop, current_wind, current_temp, is_school_holiday, stops_to_travel, max_stop_seq])
+            time_pred = predictor.predict([1, current_weekday, time_bin, sched_speed_per_stop, current_wind, current_temp, is_school_holiday, stops_to_travel, max_stop_seq])
 
             html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "</div></div>"
 

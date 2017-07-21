@@ -136,7 +136,7 @@ def make_stops_made(dataframe):
 
 
 
-
+"""todo improve this with a merge of scheduled OP time."""
 def all_things_time(dataframe):
     dataframe["Time"] = pd.to_datetime(dataframe["Timestamp"], unit="us")
     dataframe["Day_Of_Week"] = dataframe["Time"].dt.dayofweek
@@ -291,7 +291,7 @@ def drop_JT_margin(dataframe):
 #wrote this back in, switched margin parameter for hardcoding double the scheduled time 
 
 def drop_zero_OP_Schedules(dataframe):
-    return datafram[dataframe.Schedule_Time_OP == 0 ]
+    return dataframe[dataframe.Schedule_Time_OP == 0 ]
 
 
 """
