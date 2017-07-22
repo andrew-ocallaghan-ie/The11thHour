@@ -79,6 +79,12 @@ def index():
         route_plan = route_planner(viable_stops)
 
         current_time = datetime.datetime.now()
+        
+        #needed a float() timestamp
+        ahh = (current_time-datetime.datetime(1970,1,1)).total_seconds()
+        print(current_time)
+        
+        
         current_date = current_time.date()
         current_weekday = current_time.weekday()
         current_hour = current_time.hour
@@ -98,10 +104,22 @@ def index():
         current_wind = weather[1]
 
         html = ""
-
+        #this guy is a quick patch to allow us to use functioning pkls only
+        omg = {"Option 1": "4",
+               "Option 2": "7",
+               "Option 3": "1",
+               "Option 4": "4",
+               "Option 5": "7D",
+               "Option 6": "7",
+               "Option 7": "1",
+               "Option 8": "4"}
         for option in route_plan:
+            #the second part of the quick patch
+            route = omg[option]
+            print(option, route)
+            
             direction = int(route_plan[option]['Direction'])
-            route = route_plan[option]['Route']
+#             route = route_plan[option]['Route']
             src_stop_id = route_plan[option]['Src_Stop_ID']
             src_stop_seq = route_plan[option]['Src_Stop_Sequence']
             dest_stop_id = route_plan[option]['Dest_Stop_ID']
@@ -110,18 +128,34 @@ def index():
             max_stop_seq = dbi().get_max_sequence(route, direction)
             scheduled_time = dbi().get_sched_time(route, direction)
             sched_speed_per_stop = scheduled_time / max_stop_seq
+            
+#             predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
+            predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
+            
+#           #this is the model tested by andy and reggie at begining of sptint.  
+            #It is only known pkl to function on front end
+            #intercept....Day_Of_Week + Direction + Start_Time + Stop_Sequence
+            #             d = [ 1,1,1,ahh-28800,10]
+            d = [ 1,current_weekday,direction,ahh-28800,dest_stop_seq]
+            
 
-            predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
-            print(predictor.feature_importances_)
-            time_pred = predictor.predict([1, 
-                                           current_weekday,
-                                           time_bin,
-                                           current_wind,                                         
-                                           current_temp, 
-                                           is_school_holiday, 
-                                           sched_speed_per_stop,
-                                           stops_to_travel,
-                                           src_stop_seq])
+            #latest model, xbeta
+#           Day_Of_Week + Time_Bin_Start + Scheduled_Speed_Per_Stop + Stops_To_Travel + Stop_Sequence + Direction      
+#             predict_me =  pd.DataFrame(d)
+#             print(predict_me)
+                #             time_pred = predictor.predict([1, 
+#                                            current_weekday,
+#                                            time_bin,
+#                                            current_wind,                                         
+#                                            current_temp, 
+#                                            is_school_holiday, 
+#                                            sched_speed_per_stop,
+#                                            stops_to_travel,
+#                                            src_stop_seq])
+
+
+            time_pred = predictor.predict(d)
+            print(time_pred)
 
             html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "</div></div>"
 
