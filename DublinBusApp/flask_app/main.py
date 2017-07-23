@@ -30,7 +30,7 @@ import requests
 #http://scikit-learn.org/stable/
 from sklearn.externals import joblib
 
-pymysql.install_as_MySQLdb()
+#pymysql.install_as_MySQLdb()
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
