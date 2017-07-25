@@ -9,7 +9,7 @@
     // JSON call returns the location of the selected stop which is fed into the map
     function pano_initialize() {
 
-        $.getJSON('https://csi6220-4-vm4.ucd.ie/api/stops', function (json) {
+        $.getJSON($SCRIPT_ROOT+'/api/stops', function (json) {
             var users_stop = json.stops[{{stop_num}}];
             var user_lat = parseFloat(users_stop[1]);
             var user_long = parseFloat(users_stop[2]);

@@ -9,7 +9,7 @@
      function dataList() {
         var stopInfo;
 
-        $.getJSON('https://csi6220-4-vm4.ucd.ie/api/stops/', function(data) {
+        $.getJSON($SCRIPT_ROOT+'/api/stops/', function(data) {
             for (var key in data.stops) {
                 var name = data.stops[key][0];
                 stopInfo = "<option value=" + key + ">" + name + "</option>";

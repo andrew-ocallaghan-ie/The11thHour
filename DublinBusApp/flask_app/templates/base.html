@@ -113,7 +113,7 @@
             // Google Map
             function myMap() {
 
-                $.getJSON('https://csi6220-4-vm4.ucd.ie/api/routes/{{users_route}}/{{direction}}', function (json) {
+                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function (json) {
                     // Looping through elements in JSON file.
 
 
@@ -164,7 +164,7 @@
                 var mapCanvas = document.getElementById("map");
 
                 //all
-                jQuery.getJSON("https://csi6220-4-vm4.ucd.ie/api/stations", null, function (data) {
+                jQuery.getJSON($SCRIPT_ROOT+"/api/stations", null, function (data) {
                     var stations = data.stops;
                     _.forEach(stations, function (station) {
                         var lat = station.latitude;
