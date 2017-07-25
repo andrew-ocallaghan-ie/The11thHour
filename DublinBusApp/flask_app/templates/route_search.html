@@ -5,7 +5,7 @@
     // This sends information about the route to the html for display
     function populateStopInfo(){
 
-        $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function(json) {
+        $.getJSON('https://csi6220-4-vm4.ucd.ie/api/routes/{{users_route}}/{{direction}}', function(json) {
             var bus_stop_info = '';
             for (var i = 0; i < json.stops.length; i++) {
                 bus_stop_info += "<p><a href=stop/" + json.stops[i].id + ">" + json.stops[i].id + "</a>" + " - " + json.stops[i].name + "</p>"
@@ -19,7 +19,7 @@
      function dataList() {
         var routeInfo;
 
-        $.getJSON($SCRIPT_ROOT+'/api/all_routes', function(data) {
+        $.getJSON('https://csi6220-4-vm4.ucd.ie/api/all_routes', function(data) {
             $(data.route).each(function() {
                 routeInfo = "<option value=" + this.route + ">" + this.origin + " &#8644 " + this.destination + "</option>";
                 $('#routes').append(routeInfo);

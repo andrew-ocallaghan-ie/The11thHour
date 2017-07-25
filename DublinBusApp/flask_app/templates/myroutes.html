@@ -21,7 +21,7 @@
         }    
     document.getElementById("demo").innerHTML = text;
         
-         jQuery.getJSON($SCRIPT_ROOT+"/api/stops",null,function(data){
+         jQuery.getJSON("https://csi6220-4-vm4.ucd.ie/api/stops",null,function(data){
             var stations = data.stops;
              
             for (i=0;i<{{Length}};i++){
