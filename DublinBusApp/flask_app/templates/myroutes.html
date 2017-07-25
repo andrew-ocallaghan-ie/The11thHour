@@ -46,24 +46,19 @@
                 
                 // Create infowindow on mouseover
                         var infowindow = new google.maps.InfoWindow();
-
                         // Contents of infowindow
                         var html = "No" + b[i] + " " +stations[b[i]][0] +"<form class='delete' action='{{url_for('stop_search')}}' method='post'><button class='button button2' value='" + b[i] + "' name='user_stop'><span>Go</span></button></form>";
                         marker.html = html;
-
-
                         // Mouse Over Functionality
-                        google.maps.event.addListener(marker, 'mouseover', function () {
+                        google.maps.event.addListener(marker, 'click', function () {
                             // Set contents
                             infowindow.setContent(this.html);
                             // Open infowindow
                             infowindow.open(map, this);
                         }); 
-
                             
             }
           });
-
     </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
 {% endblock %}
