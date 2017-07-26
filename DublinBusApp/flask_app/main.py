@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from busData import api, dbi
 
-from flask_app.travel_functions import location_from_address, find_viable_routes,\
+from travel_functions import location_from_address, find_viable_routes,\
     find_viable_stops, route_planner
 
 #https://docs.python.org/3/library/datetime.html
@@ -37,7 +37,7 @@ import pandas as pd
 from sklearn.externals import joblib
 from tkinter.constants import CURRENT
 
-#pymysql.install_as_MySQLdb()
+pymysql.install_as_MySQLdb()
 
 
 
