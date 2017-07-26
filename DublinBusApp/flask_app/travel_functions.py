@@ -22,7 +22,7 @@ import pandas as pd
 #http://scikit-learn.org/stable/
 from sklearn.externals import joblib
 
-pymysql.install_as_MySQLdb()
+#pymysql.install_as_MySQLdb()
 
 # --------------------------------------------------------------------------#
 def location_from_address(address):

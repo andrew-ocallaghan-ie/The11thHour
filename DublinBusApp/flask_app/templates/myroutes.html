@@ -47,9 +47,17 @@
         
                 var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                  var marker = new google.maps.Marker({
-                position: pos,
+                position: geolocate,
                 map: map,
                 title: 'You are here'
+                icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#468274',
+                                strokeWeight: 1.5,
+                                fillColor: '#45ADA8',
+                                fillOpacity: 0.4,
+                                scale: 10
+                            }   
                 });
                 var infowindow = new google.maps.InfoWindow({
                 map: map,
