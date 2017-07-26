@@ -189,6 +189,35 @@
 
                 // Creating map
                 map = new google.maps.Map(mapCanvas, mapOptions);
+                
+                //get user geolocation
+                navigator.geolocation.getCurrentPosition(function(position) {
+        
+                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                 var marker = new google.maps.Marker({
+                position: geolocate,
+                map: map,
+                title: 'You are here',
+                icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#463274',
+                                strokeWeight: 1.5,
+                                fillColor: '#45ADA8',
+                                fillOpacity: 0.4,
+                                scale: 10
+                            }   
+                });
+                var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: geolocate,
+                content:
+                    'Latitude: ' + position.coords.latitude  +
+                    'Longitude: ' + position.coords.longitude
+                });
+            
+                map.setCenter(geolocate);
+            
+                });
 
             }
 
