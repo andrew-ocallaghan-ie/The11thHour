@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import api, dbi
+from busData import api, dbi
 
 from flask_app.travel_functions import location_from_address, find_viable_routes,\
     find_viable_stops, route_planner
@@ -37,7 +37,7 @@ import pandas as pd
 from sklearn.externals import joblib
 from tkinter.constants import CURRENT
 
-pymysql.install_as_MySQLdb()
+#pymysql.install_as_MySQLdb()
 
 
 
@@ -421,6 +421,7 @@ def get_db():
 # =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.
+app.secret_key='secret123'
+app.config['SESSION_TYPE'] = 'filesystem'
 if __name__ == '__main__':
-    app.secret_key='secret123'
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
