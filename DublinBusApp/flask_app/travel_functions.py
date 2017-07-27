@@ -25,22 +25,22 @@ from sklearn.externals import joblib
 pymysql.install_as_MySQLdb()
 
 # --------------------------------------------------------------------------#
-def location_from_address(address):
-    """Gets latitude & longitude from an address Returns a tuple of lat/long
-    Currently only takes the first search result"""
-    address = address.replace(" ", "+")
-    key = "AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc"
-    url = "https://maps.googleapis.com/maps/api/geocode/json?"
-    params = {'address': address, 'region': 'IE', 'components': 'locality:dublin|country:IE', 'key': key}
-
-    r = requests.get(url, params=params)
-    data = r.json()
-
-    lat = data['results'][0]['geometry']['location']['lat']
-    long = data['results'][0]['geometry']['location']['lng']
-
-    location = (lat, long)
-    return location
+# def location_from_address(self, address):
+#     """Gets latitude & longitude from an address Returns a tuple of lat/long
+#     Currently only takes the first search result"""
+#     address = address.replace(" ", "+")
+#     key = "AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc"
+#     url = "https://maps.googleapis.com/maps/api/geocode/json?"
+#     params = {'address': address, 'region': 'IE', 'components': 'locality:dublin|country:IE', 'key': key}
+#
+#     r = requests.get(url, params=params)
+#     data = r.json()
+#
+#     lat = data['results'][0]['geometry']['location']['lat']
+#     long = data['results'][0]['geometry']['location']['lng']
+#
+#     location = (lat, long)
+#     return location
 
 #----------------------------------------------------------------------#
 

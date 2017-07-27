@@ -4,9 +4,12 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import api, dbi
+from busData import api, dbi
 
-from flask_app.travel_functions import location_from_address, find_viable_routes,\
+# from travel_functions import location_from_address, find_viable_routes,\
+#     find_viable_stops, route_planner
+
+from travel_functions import find_viable_routes,\
     find_viable_stops, route_planner
 
 #https://docs.python.org/3/library/datetime.html
@@ -74,10 +77,10 @@ def index():
         src = request.form['origin']
         dest = request.form['destination']
         
-        viable_routes = find_viable_routes(src, dest)
-        viable_stops = find_viable_stops(viable_routes)
-        route_plan = route_planner(viable_stops)
-
+        # viable_routes = find_viable_routes(src, dest)
+        # viable_stops = find_viable_stops(viable_routes)
+        # route_plan = route_planner(viable_stops)
+        route_options = dbi().find_nearby_stops(src, dest)
         current_time = datetime.datetime.now()
         
         #needed a float() timestamp

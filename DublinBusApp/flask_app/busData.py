@@ -193,17 +193,36 @@ class dbi:
 
         # ----------------------------------------------------------------------------------#
 
-    def find_nearby_stops(self, src.lat, src.lon, des.lat, des.lon):
-        """ 
+    def location_from_address(self, address):
+        """Gets latitude & longitude from an address Returns a tuple of lat/long
+        Currently only takes the first search result"""
+        address = address.replace(" ", "+")
+        key = "AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc"
+        url = "https://maps.googleapis.com/maps/api/geocode/json?"
+        params = {'address': address, 'region': 'IE', 'components': 'locality:dublin|country:IE', 'key': key}
+
+        r = requests.get(url, params=params)
+        data = r.json()
+
+        lat = data['results'][0]['geometry']['location']['lat']
+        long = data['results'][0]['geometry']['location']['lng']
+
+        location = (lat, long)
+        return location
+
+
+    def find_nearby_stops(self, src, dest):
+        """
         Finds out the nearest stops to a given point
         Returns route, stop IDs, direction, seq in a list
         """
-        route_data = []
+        src_lat, src_lon = self.location_from_address(src)
+        dest_lat, dest_lon = self.location_from_address(dest)
         engine = get_db()
         radius = 0.3
 
         """use 6371 as constant and drop degree conv."""
-        sql = "SELECT  start_route, start_stop_seq, end_stop_seq, start_direction, start_stop, end_stop\
+        sql = "SELECT  start_route, start_direction, start_stop, end_stop, start_stop_seq, end_stop_seq\
         FROM(SELECT DISTINCT s.Route as start_route, s.Direction as start_direction, s.Stop_ID as start_stop, s.Stop_sequence as start_stop_seq, 111.111 *\
                 DEGREES(ACOS(COS(RADIANS(%s))\
         * COS(RADIANS(s.Lat))\
@@ -221,15 +240,14 @@ class dbi:
         * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end' \
                     FROM All_routes.new_all_routes e\
                     HAVING distance_in_km_end< %s) as end\
-WHERE start_route = end_route AND start_stop_seq<end_stop_seq AND start_direction = end_direction"
+        WHERE start_route=end_route AND start_stop_seq<end_stop_seq AND start_direction=end_direction"
 
-        result = engine.execute(sql, (src.lat, src.lon, src.lat, radius, des.lat, des.lon, des.lat, radius))
+        result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
         all_data = result.fetchall()
 
-        for row in all_data:
-            route_data.append(row)
-
-        return route_data
+        dataframe = pd.DataFrame(all_data, columns=["Route", "Direction", "Start_Stop_ID", "End_Stop_ID", "Start_Stop_Sequence", "End_Stop_Sequence"])
+        print (dataframe)
+        return dataframe
 
     # def route_overlap(self, stop_ids):
     #     """gets overlap of routes between two stops"""
