@@ -1,4 +1,3 @@
-
 from flask import jsonify
 from operator import itemgetter
 from sqlalchemy import create_engine
@@ -8,9 +7,10 @@ import datetime
 import requests
 import traceback
 import csv
+
 # --------------------------------------------------------------------------#
 
-URI="bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
+URI = "bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
 PORT = "3306"
 DB = "All_routes"
 USER = "teamgosky"
@@ -21,6 +21,7 @@ def connect_to_database():
     db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
     engine = create_engine(db_str.format(USER, PASSWORD, URI, PORT, DB), echo=True)
     return engine
+
 
 def get_db():
     engine = getattr(g, 'engine', None)
@@ -33,12 +34,11 @@ def get_db():
 
 class api:
     '''Class that deals with querying DB for API construction.'''
-    
 
     def __init__(self):
         pass
 
-        #----------------------------------------------------------------------------------#
+        # ----------------------------------------------------------------------------------#
 
     def bus_route_info(self):
         """Returns a JSON list of all the bus routes"""
@@ -52,7 +52,6 @@ class api:
         all_data = result.fetchall()
 
         for row in all_data:
-
             route = {
                 'route': row[0],
                 'origin': row[1],
@@ -64,7 +63,6 @@ class api:
         return jsonify({'route': routes})
 
         # --------------------------------------------------------------------------#
-
 
     def bus_stop_info_for_route(self, routenum, direction):
         """Returns a JSON list with info about a given stop in a given direction"""
@@ -79,7 +77,6 @@ class api:
         stops = []
 
         for row in all_data:
-
             stop = {
                 'id': int(row[0]),
                 'name': row[1],
@@ -109,7 +106,6 @@ class api:
         stops = {}
 
         for row in all_data:
-
             stop = {
                 int(row[0]): (row[1], row[2], row[3], row[4])
             }
@@ -143,7 +139,6 @@ class api:
         # --------------------------------------------------------------------------#
 
 
-
 class dbi:
     '''Class that deals with querying DB, for nonAPI purposes'''
 
@@ -151,127 +146,134 @@ class dbi:
         pass
 
         # --------------------------------------------------------------------------#
-        
-    def get_common_routes(self, src_stop_num, dest_stop_num):
-        """Finds common routes between two bus stops
-        Returns a dictionary of routes, easier to loop through"""
-        route_options = {}
-    
-        engine = get_db()
-        sql =   "SELECT * \
-                 FROM All_routes.Sequence \
-                 WHERE Stop_ID = %s AND Route IN (\
-                     SELECT Route \
-                     FROM All_routes.Sequence \
-                     WHERE Stop_ID = %s);"
-        
-        result = engine.execute(sql, (src_stop_num, dest_stop_num))
-        all_data = result.fetchall()
-    
-        for row in all_data:
-            route_options[row[0].strip('\n')] = (row[1])
-    
-        return route_options
+
+    # def get_common_routes(self, src_stop_num, dest_stop_num):
+    #     """Finds common routes between two bus stops
+    #     Returns a dictionary of routes, easier to loop through"""
+    #     route_options = {}
+    #
+    #     engine = get_db()
+    #     sql = "SELECT * \
+    #              FROM All_routes.Sequence \
+    #              WHERE Stop_ID = %s AND Route IN (\
+    #                  SELECT Route \
+    #                  FROM All_routes.Sequence \
+    #                  WHERE Stop_ID = %s);"
+    #
+    #     result = engine.execute(sql, (src_stop_num, dest_stop_num))
+    #     all_data = result.fetchall()
+    #
+    #     for row in all_data:
+    #         route_options[row[0].strip('\n')] = (row[1])
+    #
+    #     return route_options
 
         # ---------------------------------------------------------------------------#
-        
-        
+
     def stops_between_src_dest(self, src_stop_num, dest_stop_num, route):
         """Finds out how many stops are between two stops on a given route"""
         engine = get_db()
-        sql =   "SELECT Stop_sequence \
+        sql = "SELECT Stop_sequence \
                 FROM All_routes.Sequence \
                 WHERE (Stop_ID = %s AND Route = %s) OR \
                       (Stop_ID = %s AND Route = %s);"
-        
+
         result = engine.execute(sql, (src_stop_num,
-                                      int(route), 
-                                      dest_stop_num, 
+                                      int(route),
+                                      dest_stop_num,
                                       int(route)))
         all_data = result.fetchall()
-    
+
         src_stop_sequence = int(all_data[0][0])
         dest_stop_sequence = int(all_data[1][0])
-    
+
         stops_travelled = dest_stop_sequence - src_stop_sequence
-    
+
         return stops_travelled
 
-        #----------------------------------------------------------------------------------#
+        # ----------------------------------------------------------------------------------#
 
-
-    def find_nearby_stops(self, lat,long):
-        """
+    def find_nearby_stops(self, src.lat, src.lon, des.lat, des.lon):
+        """ 
         Finds out the nearest stops to a given point
-        Returns stop IDs in a list
+        Returns route, stop IDs, direction, seq in a list
         """
-        stops = []
+        route_data = []
         engine = get_db()
         radius = 0.3
-        
-        """use 6371 as constant and drop degree conv."""
-        sql =   "SELECT Stop_ID, 111.111 * \
-                DEGREES( acos (\
-                    cos ( radians(%s) ) * cos( radians(Lat) ) * cos( radians(Lon) - radians(%s) ) +\
-                    sin ( radians(%s) ) * sin( radians( Lat ) ) ) ) \
-                AS `distance_in_km` \
-                FROM All_routes.Stops \
-                HAVING (distance_in_km < %s) \
-                ORDER BY distance_in_km;"
-        result = engine.execute(sql, (lat, long, lat, radius))
-        all_data = result.fetchall()
-    
-        for row in all_data:
-            stops.append(row[0])
-    
-        return stops
-    
-    
-    def route_overlap(self, stop_ids):
-        """gets overlap of routes between two stops"""
-        engine = get_db()
-        
-        sql = "SELECT Stop_ID, Routes_serviced \
-               FROM All_routes.Stops\
-               WHERE Stop_ID in (%s)" % ",".join(map(str, stop_ids))
-               
-        stop_route = {} 
-        result = engine.execute(sql)
-        all_data = result.fetchall()
-          
-        for row in all_data:
-            stop_route[row[0]] = set( map(str.strip, row[1].split(" - ") ) )
-            
-        return stop_route   
-    
-    #---------------------------------------------------------------------#
-    
-    def route_plan(self, routes, src_stops, dest_stops):
-        """gets table of routes, dir, stop_id"""
-        engine = get_db()
-        all_stops = src_stops
-        if src_stops != dest_stops:
-            all_stops = src_stops.union(dest_stops)
-        
-        #',' is important for getting sql to read correctly '%s'
-        sql = "SELECT *, Stop_ID in (%s) as 'src' \
-               FROM All_routes.Sequence\
-               WHERE \
-                   Route in ('%s') AND\
-                   Stop_ID in (%s)\
-                ORDER BY Route, Direction, Stop_Sequence" % \
-                (",".join(map(str, src_stops)),
-                 "','".join(map(str, routes)),
-                 ','.join(map(str, all_stops)))
-            
-               
-        stops = []
-        result = engine.execute(sql )
-        all_data = result.fetchall()
-        dataframe = pd.DataFrame(all_data, columns=["Route","Direction","Stop_ID","Stop_Sequence","Src"])
-        
-        return dataframe
 
+        """use 6371 as constant and drop degree conv."""
+        sql = "SELECT  start_route, start_stop_seq, end_stop_seq, start_direction, start_stop, end_stop\
+        FROM(SELECT DISTINCT s.Route as start_route, s.Direction as start_direction, s.Stop_ID as start_stop, s.Stop_sequence as start_stop_seq, 111.111 *\
+                DEGREES(ACOS(COS(RADIANS(%s))\
+        * COS(RADIANS(s.Lat))\
+        * COS(RADIANS(%s - s.Lon))\
+        + SIN(RADIANS(%s))\
+        * SIN(RADIANS(s.Lat))))  AS 'distance_in_km_start' \
+                    FROM All_routes.new_all_routes s\
+                    HAVING distance_in_km_start< %s) As Start\
+                    JOIN \
+        (SELECT DISTINCT e.Route as end_route, e.Direction as end_direction , e.Stop_ID as end_stop, e.Stop_sequence as end_stop_seq, 111.111 * \
+        DEGREES(ACOS(COS(RADIANS(%s))\
+        * COS(RADIANS(e.Lat))\
+        * COS(RADIANS(%s - e.Lon))\
+        + SIN(RADIANS(%s))\
+        * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end' \
+                    FROM All_routes.new_all_routes e\
+                    HAVING distance_in_km_end< %s) as end\
+WHERE start_route = end_route AND start_stop_seq<end_stop_seq AND start_direction = end_direction"
+
+        result = engine.execute(sql, (src.lat, src.lon, src.lat, radius, des.lat, des.lon, des.lat, radius))
+        all_data = result.fetchall()
+
+        for row in all_data:
+            route_data.append(row)
+
+        return route_data
+
+    # def route_overlap(self, stop_ids):
+    #     """gets overlap of routes between two stops"""
+    #     engine = get_db()
+    #
+    #     sql = "SELECT Stop_ID, Routes_serviced \
+    #            FROM All_routes.Stops\
+    #            WHERE Stop_ID in (%s)" % ",".join(map(str, stop_ids))
+    #
+    #     stop_route = {}
+    #     result = engine.execute(sql)
+    #     all_data = result.fetchall()
+    #
+    #     for row in all_data:
+    #         stop_route[row[0]] = set(map(str.strip, row[1].split(" - ")))
+    #
+    #     return stop_route
+
+        # ---------------------------------------------------------------------#
+
+    # def route_plan(self, routes, src_stops, dest_stops):
+    #     """gets table of routes, dir, stop_id"""
+    #     engine = get_db()
+    #     all_stops = src_stops
+    #     if src_stops != dest_stops:
+    #         all_stops = src_stops.union(dest_stops)
+    #
+    #     # ',' is important for getting sql to read correctly '%s'
+    #     sql = "SELECT *, Stop_ID in (%s) as 'src' \
+    #            FROM All_routes.Sequence\
+    #            WHERE \
+    #                Route in ('%s') AND\
+    #                Stop_ID in (%s)\
+    #             ORDER BY Route, Direction, Stop_Sequence" % \
+    #           (",".join(map(str, src_stops)),
+    #            "','".join(map(str, routes)),
+    #            ','.join(map(str, all_stops)))
+    #
+    #     stops = []
+    #     result = engine.execute(sql)
+    #     all_data = result.fetchall()
+    #     dataframe = pd.DataFrame(all_data, columns=["Route", "Direction", "Stop_ID", "Stop_Sequence", "Src"])
+    #
+    #     return dataframe
 
     # --------------------------------------------------------------------------#
     def scrape_weather(self):
@@ -303,7 +305,6 @@ class dbi:
 
         # Returning Summary
         return (current_temp, current_wind)
-
 
     # --------------------------------------------------------------------------#
     def extract_holidays(self):
