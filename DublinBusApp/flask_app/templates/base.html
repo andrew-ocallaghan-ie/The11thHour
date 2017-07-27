@@ -189,8 +189,9 @@
 
                 // Creating map
                 map = new google.maps.Map(mapCanvas, mapOptions);
-                
-                //get user geolocation
+
+            }
+            //get user geolocation
                 navigator.geolocation.getCurrentPosition(function(position) {
         
                 var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -218,8 +219,6 @@
                 map.setCenter(geolocate);
             
                 });
-
-            }
 
         </script>
 
