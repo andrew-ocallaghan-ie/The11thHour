@@ -147,26 +147,26 @@ class dbi:
 
         # --------------------------------------------------------------------------#
 
-    # def get_common_routes(self, src_stop_num, dest_stop_num):
-    #     """Finds common routes between two bus stops
-    #     Returns a dictionary of routes, easier to loop through"""
-    #     route_options = {}
-    #
-    #     engine = get_db()
-    #     sql = "SELECT * \
-    #              FROM All_routes.Sequence \
-    #              WHERE Stop_ID = %s AND Route IN (\
-    #                  SELECT Route \
-    #                  FROM All_routes.Sequence \
-    #                  WHERE Stop_ID = %s);"
-    #
-    #     result = engine.execute(sql, (src_stop_num, dest_stop_num))
-    #     all_data = result.fetchall()
-    #
-    #     for row in all_data:
-    #         route_options[row[0].strip('\n')] = (row[1])
-    #
-    #     return route_options
+        # def get_common_routes(self, src_stop_num, dest_stop_num):
+        #     """Finds common routes between two bus stops
+        #     Returns a dictionary of routes, easier to loop through"""
+        #     route_options = {}
+        #
+        #     engine = get_db()
+        #     sql = "SELECT * \
+        #              FROM All_routes.Sequence \
+        #              WHERE Stop_ID = %s AND Route IN (\
+        #                  SELECT Route \
+        #                  FROM All_routes.Sequence \
+        #                  WHERE Stop_ID = %s);"
+        #
+        #     result = engine.execute(sql, (src_stop_num, dest_stop_num))
+        #     all_data = result.fetchall()
+        #
+        #     for row in all_data:
+        #         route_options[row[0].strip('\n')] = (row[1])
+        #
+        #     return route_options
 
         # ---------------------------------------------------------------------------#
 
@@ -210,7 +210,6 @@ class dbi:
         location = (lat, long)
         return location
 
-
     def find_nearby_stops(self, src, dest):
         """
         Finds out the nearest stops to a given point
@@ -245,28 +244,76 @@ class dbi:
         result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
         all_data = result.fetchall()
 
-        dataframe = pd.DataFrame(all_data, columns=["Route", "Direction", "Start_Stop_ID", "End_Stop_ID", "Start_Stop_Sequence", "End_Stop_Sequence"])
-        print (dataframe)
-        return dataframe
+        dataframe = pd.DataFrame(all_data,
+                                 columns=["Route", "Direction", "Start_Stop_ID", "End_Stop_ID", "Start_Stop_Sequence",
+                                          "End_Stop_Sequence"])
+        print(dataframe)
+        return self.dataframe_to_dict(dataframe)
 
-    # def route_overlap(self, stop_ids):
-    #     """gets overlap of routes between two stops"""
-    #     engine = get_db()
-    #
-    #     sql = "SELECT Stop_ID, Routes_serviced \
-    #            FROM All_routes.Stops\
-    #            WHERE Stop_ID in (%s)" % ",".join(map(str, stop_ids))
-    #
-    #     stop_route = {}
-    #     result = engine.execute(sql)
-    #     all_data = result.fetchall()
-    #
-    #     for row in all_data:
-    #         stop_route[row[0]] = set(map(str.strip, row[1].split(" - ")))
-    #
-    #     return stop_route
+    def dataframe_to_dict(self, dataframe):
+        route_options = dataframe.transpose().to_dict()
+        i = 1
+        break_at = len(route_options)
+        for option in route_options:
+            if i > break_at:
+                break
+            route_options["Option " + str(i)] = route_options.pop(option)
+            i += 1
+        print (route_options)
+        return route_options
 
-        # ---------------------------------------------------------------------#
+
+    # --------------------------------------------------------------------------#
+
+    def get_option_times(self, route_options):
+        """Determines the journey time for each viable route option
+        Returns a list of options ordered by their journey time"""
+
+        options = []
+        timestamp = datetime.datetime.now()
+        current_weekday = timestamp.weekday()
+        #     current_hour = timestamp.
+        for option, info in route_options.items():
+            route = info['Route']
+            direction = info['Direction']
+            #         info["time_bin"] = timestamp
+            timestamp = info['Time_Bin']
+            src_stop = info['Src_Stop_ID']
+            dest_stop = info['Dest_Stop_ID']
+            stops_travelled = info["Src_Stop_Sequence"] - info["Dest_Stop_Sequence"]
+            #         stops_travelled = dbi().stops_between_src_dest(src_stop, dest_stop, route)
+            #         stops_traveled = difference between sourece and end stop in info
+
+
+            predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
+
+            time_pred = predictor.predict([1, current_weekday, direction, timestamp, stops_travelled])
+
+            options.append([time_pred, route, src_stop, dest_stop])
+
+        options = options.sort(key=lambda x: x[0])
+        return options
+
+
+
+        # def route_overlap(self, stop_ids):
+            #     """gets overlap of routes between two stops"""
+            #     engine = get_db()
+            #
+            #     sql = "SELECT Stop_ID, Routes_serviced \
+            #            FROM All_routes.Stops\
+            #            WHERE Stop_ID in (%s)" % ",".join(map(str, stop_ids))
+            #
+            #     stop_route = {}
+            #     result = engine.execute(sql)
+            #     all_data = result.fetchall()
+            #
+            #     for row in all_data:
+            #         stop_route[row[0]] = set(map(str.strip, row[1].split(" - ")))
+            #
+            #     return stop_route
+
+            # ---------------------------------------------------------------------#
 
     # def route_plan(self, routes, src_stops, dest_stops):
     #     """gets table of routes, dir, stop_id"""

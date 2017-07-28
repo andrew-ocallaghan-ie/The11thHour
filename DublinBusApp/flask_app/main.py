@@ -9,8 +9,6 @@ from busData import api, dbi
 # from travel_functions import location_from_address, find_viable_routes,\
 #     find_viable_stops, route_planner
 
-from travel_functions import find_viable_routes,\
-    find_viable_stops, route_planner
 
 #https://docs.python.org/3/library/datetime.html
 import datetime
@@ -107,26 +105,16 @@ def index():
         current_wind = weather[1]
 
         html = ""
-        #this guy is a quick patch to allow us to use functioning pkls only
-        omg = {"Option 1": "4",
-               "Option 2": "7",
-               "Option 3": "1",
-               "Option 4": "4",
-               "Option 5": "7D",
-               "Option 6": "7",
-               "Option 7": "1",
-               "Option 8": "4"}
-        for option in route_plan:
-            #the second part of the quick patch
-            route = omg[option]
-            print(option, route)
+
+        for option in route_options:
+            print(option)
             
-            direction = int(route_plan[option]['Direction'])
-#             route = route_plan[option]['Route']
-            src_stop_id = route_plan[option]['Src_Stop_ID']
-            src_stop_seq = route_plan[option]['Src_Stop_Sequence']
-            dest_stop_id = route_plan[option]['Dest_Stop_ID']
-            dest_stop_seq = route_plan[option]['Dest_Stop_Sequence']
+            direction = int(route_options[option]['Direction'])
+            route = route_options[option]['Route']
+            src_stop_id = route_options[option]['Start_Stop_ID']
+            src_stop_seq = route_options[option]['Start_Stop_Sequence']
+            dest_stop_id = route_options[option]['End_Stop_ID']
+            dest_stop_seq = route_options[option]['End_Stop_Sequence']
             stops_to_travel = dest_stop_seq - src_stop_seq
             max_stop_seq = dbi().get_max_sequence(route, direction)
             scheduled_time = dbi().get_sched_time(route, direction)
