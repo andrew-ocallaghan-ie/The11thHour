@@ -27,7 +27,7 @@
         <link href="{{ url_for('static', filename='../static/style.css') }}" rel="stylesheet" type="text/css">
 
         <!--ChartJS-->
-        <!--<script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>-->
+        <script src="../static/chart.js/dist/Chart.js"></script>
 
         <!--Button Toggling Library-->
         <link href="../static/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
             //map functions
             var markers = [];
 
-            function createMarker(lat,lng,name,category,color) {
+            function createMarker(lat,lng,name,category,color, id) {
               var marker = new google.maps.Marker({
                 position: {lat:lat, lng:lng},
                 map: map,
@@ -60,12 +60,13 @@
               // === Store the category and name info as a marker properties ===
               marker.mycategory = category;
               marker.myname = name;
+              marker.myid = id;
               markers.push(marker);
               markers.infowindow = new google.maps.InfoWindow();
 
 
               marker.addListener("click",function(){
-                  var contentString='<h3>'+name+'</h3>'+marker.mycategory
+                  var contentString='<h3>'+name+'</h3>'+marker.mycategory+'<h3>'+ marker.myid + '</h3>';
                   markers.infowindow.setContent(contentString);
                   markers.infowindow.open(map, this);
               });
@@ -113,7 +114,7 @@
             // Google Map
             function myMap() {
 
-                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function (json) {
+                $.getJSON($SCRIPT_ROOT + '/api/routes/{{users_route}}/{{direction}}', function (json) {
                     // Looping through elements in JSON file.
 
 
@@ -163,8 +164,8 @@
                 // Initializing canvas
                 var mapCanvas = document.getElementById("map");
 
-                //all
-                jQuery.getJSON($SCRIPT_ROOT+"/api/stations", null, function (data) {
+                // All
+                jQuery.getJSON($SCRIPT_ROOT + "/api/stations", null, function (data) {
                     var stations = data.stops;
                     _.forEach(stations, function (station) {
                         var lat = station.latitude;
@@ -191,34 +192,6 @@
                 map = new google.maps.Map(mapCanvas, mapOptions);
 
             }
-            //get user geolocation
-                navigator.geolocation.getCurrentPosition(function(position) {
-        
-                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                 var marker = new google.maps.Marker({
-                position: geolocate,
-                map: map,
-                title: 'You are here',
-                icon: {
-                                path: google.maps.SymbolPath.CIRCLE,
-                                strokeColor: '#463274',
-                                strokeWeight: 1.5,
-                                fillColor: '#45ADA8',
-                                fillOpacity: 0.4,
-                                scale: 10
-                            }   
-                });
-                var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: geolocate,
-                content:
-                    'Latitude: ' + position.coords.latitude  +
-                    ' Longitude: ' + position.coords.longitude
-                });
-            
-                map.setCenter(geolocate);
-            
-                });
 
         </script>
 
@@ -280,9 +253,6 @@
         
         <!--import Lodash-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-
-        <!--Google Maps marker clustering script-->
-        <script src="../static/marker_clustering/markerclusterer.js"></script>
 
     </body>
 
