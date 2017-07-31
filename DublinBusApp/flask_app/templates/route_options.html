@@ -2,64 +2,241 @@
 {% block content %}
 
     <script>
+        // Google Map
+        function usersMap() {
+
+            directionsService = new google.maps.DirectionsService();
+            directionsDisplay = new google.maps.DirectionsRenderer();
+
+            var polylineArray = [];
+
+            {% for key, value in route_plan.items() %}
+                $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
+
+                    for (i = {{ value["Src_Stop_Sequence"] }}-1; i < {{ value["Dest_Stop_Sequence"] }}; i++) {
+                        var lat = json.stops[i].lat;
+                        var lng = json.stops[i].lon;
+                        var name = json.stops[i].name;
+                        var id = json.stops[i].id;
+                        var category = "{{ key }}";
+                        var color = '#4682b4';
+                        var marker = createMarker(lat, lng, name, category, color, id);
+                        polylineArray.push({"lat": lat, "lng": lng});
+
+                    }
+{#                    hide("{{ key }}");#}
+                });
+            {% endfor %}
+
+
+            var flightPlanCoordinates = [
+                {lat: 53.3827, lng: -6.14843},
+                {lat: 53.382, lng: -6.15114},
+                {lat: 53.3812, lng: -6.1555},
+                {lat: 53.3806, lng: -6.15922}
+                ];
+
+            console.log(typeof(flightPlanCoordinates));
+            console.log(flightPlanCoordinates[0]);
+            console.log(typeof(polylineArray));
+            console.log(polylineArray);
+            console.log(polylineArray.length);
+
+
+            // Centre of map
+            var myCenter = new google.maps.LatLng(53.350140, -6.266155);
+
+            // Initializing canvas
+            var mapCanvas = document.getElementById("map");
+
+            // Map options
+            var mapOptions = {
+                center: myCenter,
+                zoom: 12
+            };
+
+            // Creating map
+            map = new google.maps.Map(mapCanvas, mapOptions);
+{#            directionsDisplay.setMap(map);#}
+
+            createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);
+            createMarker({{ dest_lat }},{{ dest_long }},"Source","User Location",'red', 1);
+
+            calcRoute();
+
+            var polylinePath = new google.maps.Polyline({
+              path: flightPlanCoordinates,
+              geodesic: true,
+              strokeColor: '#FF0000',
+              strokeOpacity: 1.0,
+              strokeWeight: 2
+            });
+            polylinePath.setMap(map);
+
+        }
+
+        function calcRoute() {
+            var start = new google.maps.LatLng({{ src_lat }},{{ src_long }});
+            var end = new google.maps.LatLng({{ dest_lat }},{{ dest_long }});
+            var request = {
+              origin: start,
+              destination: end,
+              travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function(response, status) {
+              if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                directionsDisplay.setMap(map);
+              } else {
+                alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+              }
+            });
+          }
+
+        function moveCenter(lat, long){
+            var center = new google.maps.LatLng(lat, long);
+            map.panTo(center);
+        }
+
+        function hideAll() {
+                for (var i=0; i<markers.length; i++) {
+                        markers[i].setVisible(false);
+                    }
+            }
+
         $(document).ready(function(){
-            $(".options_route").click(function(){
-                $(".collapse").collapse('toggle');
+            $(".route_option_box").click(function(){
+                 var isExpanded = $("#collapse_map").attr("aria-expanded");
+                 if (isExpanded == 'true'){
+                     hideAll();
+                 } else if (isExpanded == 'false' || isExpanded == undefined){
+                     show($(this).attr('id'));
+                     var lat = parseFloat($(this).attr('value').split(',')[0].substring(1));
+                     var long = parseFloat($(this).attr('value').split(',')[1]);
+                     moveCenter(lat, long);
+                 }
             });
         });
 
-        // Google Map
-            function usersMap() {
+        // Snap a user-created polyline to roads and draw the snapped path
+        function runSnapToRoad(path) {
+          var pathValues = [];
+          for (var i = 0; i < path.getLength(); i++) {
+            pathValues.push(path.getAt(i).toUrlValue());
+          }
 
-                for (var key in {{ route_option_times }}) {
-                    var route_info = {{ route_opyion_times }}[key];
-                    $.getJSON($SCRIPT_ROOT + '/api/routes/' + route_info.route + "/" + route_info.direction, function (json) {
-                        for (i = route_info.src_stop; i < route_info.dest_stop; i++) {
-                            var lat = json[i].lat;
-                            var lng = json[i].lon;
-                            var name = json[i].name;
-                            var category = i;
-                            var color = '#4682b4';
-                            var marker = createMarker(lat, lng, name, category, color);
-                        }
-                        hide(1);
-                        hide(2);
-                        hide(3);
-                    });
-                }
+          $.get('https://roads.googleapis.com/v1/snapToRoads', {
+            interpolate: true,
+            key: apiKey,
+            path: pathValues.join('|')
+          }, function(data) {
+            processSnapToRoadResponse(data);
+            drawSnappedPolyline();
+            getAndDrawSpeedLimits();
+          });
+        }
 
-                // Centre of map
-                var myCenter = new google.maps.LatLng(53.3498, -6.2603);
+        // Store snapped polyline returned by the snap-to-road service.
+        function processSnapToRoadResponse(data) {
+          snappedCoordinates = [];
+          placeIdArray = [];
+          for (var i = 0; i < data.snappedPoints.length; i++) {
+            var latlng = new google.maps.LatLng(
+                data.snappedPoints[i].location.latitude,
+                data.snappedPoints[i].location.longitude);
+            snappedCoordinates.push(latlng);
+            placeIdArray.push(data.snappedPoints[i].placeId);
+          }
+        }
 
-                // Initializing canvas
-                var mapCanvas = document.getElementById("map");
+        // Draws the snapped polyline (after processing snap-to-road response).
+        function drawSnappedPolyline() {
+          var snappedPolyline = new google.maps.Polyline({
+            path: snappedCoordinates,
+            strokeColor: 'black',
+            strokeWeight: 3
+          });
 
-                // Map options
-                var mapOptions = {
-                    center: myCenter,
-                    zoom: 12,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
+          snappedPolyline.setMap(map);
+          polylines.push(snappedPolyline);
+        }
 
-                // Creating map
-                map = new google.maps.Map(mapCanvas, mapOptions);
-            }
     </script>
 
-    <div class="collapse" id="map"></div>
+    <div class="collapse in" id="collapse_map" data-toggle="false">
+        <div id="map"></div>
+    </div>
+
 
     <div class="container">
         <div class="row">
             <div class="col-sm-6 route_options">
                 <h3>Route Options</h3>
-                {{ html }}
+                {%  for route in route_plan.items() %}
+                <div id={{ route[0] }} value="{{ mid_location }}" class='route_option_box' data-toggle='collapse' data-target='#collapse_map'>
+                    <div class='option_route'>{{ route[1]["Route"] }}</div>
+                    <div class='option_src_dest'>{{ route[1]['Src_Stop_ID'] }} to {{ route[1]['Dest_Stop_ID'] }}</div>
+                    <div class='option_journey_time'>{{ route[1]["Route"] }}mins</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-sm-6">
+                <canvas id="chart"></canvas>
             </div>
         </div>
     </div>
 
-
     <!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
     <!--stop info page-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=usersMap&libraries=places"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=usersMap&libraries=places"></script>
+
+
+    <!-- Script to refresh the map when it is unhidden. It appears as grey if this isn't used.-->
+    <script>
+{#        $('#collapse_map').on('hidden.bs.collapse', function () {#}
+{#            google.maps.event.trigger(map, 'resize');#}
+{#        });#}
+        $('#collapse_map').on('shown.bs.collapse', function () {
+            google.maps.event.trigger(map, 'resize');
+        });
+{#        google.maps.event.addDomListener(window, 'resize', function() {#}
+{#        });#}
+    </script>
+
+    <script>
+         var ctx = document.getElementById("chart");
+         var chartDemo = new Chart(ctx, {
+          type: 'line',
+          data: {
+
+          labels: [{% for time in times_for_chart %}'{{ time }}', {% endfor %}],
+          datasets: [{
+              fill: true,
+              label: '42a',
+              data: [48,23,32,55,13,33,22,15],
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor:'rgba(255,99,132,1)',
+              borderWidth: 1
+                     },
+                    {
+             fill: true,
+             label: '37',
+             data: [12,13,22,8,43,33,23,17],
+             backgroundColor: 'rgba(0, 102, 255, 0.2)',
+             borderColor:'rgba(0, 102, 255,1)',
+             borderWidth: 1}]
+                 },
+          options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {
+                 fontSize: 15,
+                 fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
+                 display: true,
+                 text: "Your Route Travel Times"
+              }
+          }
+         });
+    </script>
 
 {% endblock %}

@@ -6,9 +6,8 @@ from flask_cors import CORS
 
 from busData import api, dbi
 
-# from travel_functions import location_from_address, find_viable_routes,\
-#     find_viable_stops, route_planner
-
+from travel_functions import location_from_address, find_viable_routes,\
+    find_viable_stops, route_planner
 
 #https://docs.python.org/3/library/datetime.html
 import datetime
@@ -41,7 +40,6 @@ from tkinter.constants import CURRENT
 pymysql.install_as_MySQLdb()
 
 
-
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
 # Creating Flask App
@@ -69,22 +67,24 @@ class RegisterForm(Form):
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
-    dbi().get_max_sequence(4, 0)
-
     if request.method == 'POST':
         src = request.form['origin']
         dest = request.form['destination']
-        
-        # viable_routes = find_viable_routes(src, dest)
-        # viable_stops = find_viable_stops(viable_routes)
-        # route_plan = route_planner(viable_stops)
-        route_options = dbi().find_nearby_stops(src, dest)
+
+        src_lat = location_from_address(src)[0]
+        src_long = location_from_address(src)[1]
+        dest_lat = location_from_address(dest)[0]
+        dest_long = location_from_address(dest)[1]
+
+        viable_routes = find_viable_routes(src, dest)
+        viable_stops = find_viable_stops(viable_routes)
+        route_plan = route_planner(viable_stops)
+
         current_time = datetime.datetime.now()
         
         #needed a float() timestamp
         ahh = (current_time-datetime.datetime(1970,1,1)).total_seconds()
-        print(current_time)
-        
+
         
         current_date = current_time.date()
         current_weekday = current_time.weekday()
@@ -104,26 +104,55 @@ def index():
         current_temp = weather[0]
         current_wind = weather[1]
 
-        html = ""
+        mid_location = (53.350140,-6.266155)
 
-        for option in route_options:
-            print(option)
-            
-            direction = int(route_options[option]['Direction'])
-            route = route_options[option]['Route']
-            src_stop_id = route_options[option]['Start_Stop_ID']
-            src_stop_seq = route_options[option]['Start_Stop_Sequence']
-            dest_stop_id = route_options[option]['End_Stop_ID']
-            dest_stop_seq = route_options[option]['End_Stop_Sequence']
+        html = ""
+        route_plan = {'1': {'Route': '31', 'Direction': 0, 'Src_Stop_ID': 572, 'Src_Stop_Sequence': 6, 'Dest_Stop_ID': 599,
+                      'Dest_Stop_Sequence': 32},
+         '2': {'Route': '14', 'Direction': 0, 'Src_Stop_ID': 2826, 'Src_Stop_Sequence': 20, 'Dest_Stop_ID': 1053,
+                      'Dest_Stop_Sequence': 63},
+         '3': {'Route': '4', 'Direction': 0, 'Src_Stop_ID': 28, 'Src_Stop_Sequence': 49, 'Dest_Stop_ID': 126,
+                      'Dest_Stop_Sequence': 57}}
+
+
+        times = []
+        time_bins = []
+        times_for_chart = []
+        for i in range(8):
+            times.append(current_time + datetime.timedelta(minutes=15 * i))
+
+        for time in times:
+            times_for_chart.append(str(time.hour) + ":" + str(time.minute))
+            bit1 = "1" if (time.minute > 15) else "0"
+            bit2 = "1" if (time.minute > 30) else "0"
+            bit3 = "1" if (time.minute > 45) else "0"
+            time_bins.append(str(time.hour) + bit1 + bit2 + bit3)
+
+        print(times_for_chart)
+
+        for option in route_plan:
+
+            direction = int(route_plan[option]['Direction'])
+            route = route_plan[option]['Route']
+            src_stop_id = route_plan[option]['Src_Stop_ID']
+            src_stop_seq = route_plan[option]['Src_Stop_Sequence']
+            dest_stop_id = route_plan[option]['Dest_Stop_ID']
+            dest_stop_seq = route_plan[option]['Dest_Stop_Sequence']
             stops_to_travel = dest_stop_seq - src_stop_seq
             max_stop_seq = dbi().get_max_sequence(route, direction)
             scheduled_time = dbi().get_sched_time(route, direction)
             sched_speed_per_stop = scheduled_time / max_stop_seq
+
+            mid_point = dbi().mid_point_lat_long(src_stop_id, dest_stop_id, route, direction)
+            mid_lat = mid_point[0]
+            mid_long = mid_point[1]
+
+
             
 #             predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
-            predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
+#             predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
             
-#           #this is the model tested by andy and reggie at begining of sptint.  
+#           #this is the model tested by andy and reggie at beginning of sprint.
             #It is only known pkl to function on front end
             #intercept....Day_Of_Week + Direction + Start_Time + Stop_Sequence
             #             d = [ 1,1,1,ahh-28800,10]
@@ -145,10 +174,10 @@ def index():
 #                                            src_stop_seq])
 
 
-            time_pred = predictor.predict(d)
-            print(time_pred)
+            # time_pred = predictor.predict(d)
+            # print(time_pred[0])
 
-            html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "</div></div>"
+            # html += "<div id=" + option + " class='route_option_box' value=" + str(mid_lat) + "," + str(mid_long) + " data-toggle='collapse' data-target='#collapse_map'><div class='option_route'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "mins</div></div>\n"
 
         html = Markup(html)
 

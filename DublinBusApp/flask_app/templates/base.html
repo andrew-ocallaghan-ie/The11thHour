@@ -27,7 +27,7 @@
         <link href="{{ url_for('static', filename='../static/style.css') }}" rel="stylesheet" type="text/css">
 
         <!--ChartJS-->
-        <!--<script src="../static/chartjs/node_modules/chart.js/dist/Chart.js"></script>-->
+        <script src="../static/chart.js/dist/Chart.js"></script>
 
         <!--Button Toggling Library-->
         <link href="../static/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
             //map functions
             var markers = [];
 
-            function createMarker(lat,lng,name,category,color) {
+            function createMarker(lat,lng,name,category,color, id) {
               var marker = new google.maps.Marker({
                 position: {lat:lat, lng:lng},
                 map: map,
@@ -60,12 +60,13 @@
               // === Store the category and name info as a marker properties ===
               marker.mycategory = category;
               marker.myname = name;
+              marker.myid = id;
               markers.push(marker);
               markers.infowindow = new google.maps.InfoWindow();
 
 
               marker.addListener("click",function(){
-                  var contentString='<h3>'+name+'</h3>'+marker.mycategory
+                  var contentString='<h3>'+name+'</h3>'+marker.mycategory+'<h3>'+ marker.myid + '</h3>';
                   markers.infowindow.setContent(contentString);
                   markers.infowindow.open(map, this);
               });
@@ -252,9 +253,6 @@
         
         <!--import Lodash-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-
-        <!--Google Maps marker clustering script-->
-        <script src="../static/marker_clustering/markerclusterer.js"></script>
 
     </body>
 

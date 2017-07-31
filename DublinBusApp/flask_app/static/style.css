@@ -1,6 +1,7 @@
 body {
     margin: 0 auto;
     font-family: 'Open Sans', sans-serif;
+    background-color: #d2e8ef;
 }
 
 #map a{
@@ -24,9 +25,10 @@ body {
 }
 
 #map{
-    height: 400px;
+    height: 300px;
     width: 100%;
-    margin-top: 0;
+    padding: 0;
+    top: -20px;
 }
 
 #panomap, #pano{
@@ -73,21 +75,36 @@ margin-bottom:5px;
     padding-bottom: 10px;
 }
 
+.route_options{
+    padding: 0;
+    /*background-color: #2aabd2;*/
+    top: -20px;
+}
+
 .route_options div{
     display: inline-block;
     width: 100%;
-    height: 45px;
+}
+
+.route_option_box{
+    cursor: pointer;
+    height: 60px;
+    border-top: solid white 0.5px;
 }
 
 .route_options .option_route{
     position: relative;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    padding: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
     background: cornflowerblue;
     border: 1px solid brown;
     text-align: center;
+}
+
+.route_options h3{
+    height: 50px;
 }
 
 .route_options .option_src_dest{
@@ -138,6 +155,10 @@ margin-bottom:5px;
 
 #hide_show_box input[type=checkbox]{
     display: none;
+}
+
+#north_south{
+    width: 60px;
 }
 
 input#user_route{
@@ -231,6 +252,12 @@ input#user_route{
 	float: left;
 }
 
+.collapsing {
+  -webkit-transition: height .27s ease;
+       -o-transition: height .27s ease;
+          transition: height .27s ease;
+}
+
 /* Landscape phones and down */
 @media (max-width: 768px) {
     body {
@@ -242,5 +269,6 @@ input#user_route{
     #map, #panomap, #pano{
         height: 300px;
     }
+    
 }
 
