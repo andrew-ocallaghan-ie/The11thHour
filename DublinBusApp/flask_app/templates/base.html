@@ -113,7 +113,7 @@
             // Google Map
             function myMap() {
 
-                $.getJSON($SCRIPT_ROOT + '/api/routes/{{users_route}}/{{direction}}', function (json) {
+                $.getJSON($SCRIPT_ROOT+'/api/routes/{{users_route}}/{{direction}}', function (json) {
                     // Looping through elements in JSON file.
 
 
@@ -163,8 +163,8 @@
                 // Initializing canvas
                 var mapCanvas = document.getElementById("map");
 
-                // All
-                jQuery.getJSON($SCRIPT_ROOT + "/api/stations", null, function (data) {
+                //all
+                jQuery.getJSON($SCRIPT_ROOT+"/api/stations", null, function (data) {
                     var stations = data.stops;
                     _.forEach(stations, function (station) {
                         var lat = station.latitude;
@@ -191,6 +191,34 @@
                 map = new google.maps.Map(mapCanvas, mapOptions);
 
             }
+            //get user geolocation
+                navigator.geolocation.getCurrentPosition(function(position) {
+        
+                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                 var marker = new google.maps.Marker({
+                position: geolocate,
+                map: map,
+                title: 'You are here',
+                icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#463274',
+                                strokeWeight: 1.5,
+                                fillColor: '#45ADA8',
+                                fillOpacity: 0.4,
+                                scale: 10
+                            }   
+                });
+                var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: geolocate,
+                content:
+                    'Latitude: ' + position.coords.latitude  +
+                    ' Longitude: ' + position.coords.longitude
+                });
+            
+                map.setCenter(geolocate);
+            
+                });
 
         </script>
 

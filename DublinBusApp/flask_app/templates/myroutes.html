@@ -14,7 +14,7 @@
         var text = "Here are your preferred stops."+"<br>";
         var a = {{ stopnamelist|tojson }};
         var b = {{ stopidlist|tojson}};
-        var c = 2084;
+        
         for(i=0;i<{{Length}};i++) {
             var stop_num = b[i];
             text += "<big> No"+b[i]+" "+a[i]+"</big>"+"<br><form class='info' action='{{url_for('stop_search')}}' method='post'><button class='button' value='" + stop_num + "' name='user_stop'><span>info</span></button></form><form class='go' action='{{url_for('stop_search')}}' method='post'><button class='button button3' value='" + stop_num + "' name='user_stop'><span>Go</span></button></form><form class='delete' action='{{url_for('delete')}}' method='post'><button class='button button2' value='" + stop_num + "' name='user_delete'><span>Delete</span></button></form></br>"
@@ -42,28 +42,50 @@
                                 scale: 10
                             }
                 });
-                  
                 
                 // Create infowindow on mouseover
                         var infowindow = new google.maps.InfoWindow();
-
                         // Contents of infowindow
                         var html = "No" + b[i] + " " +stations[b[i]][0] +"<form class='delete' action='{{url_for('stop_search')}}' method='post'><button class='button button2' value='" + b[i] + "' name='user_stop'><span>Go</span></button></form>";
                         marker.html = html;
-
-
                         // Mouse Over Functionality
-                        google.maps.event.addListener(marker, 'mouseover', function () {
+                        google.maps.event.addListener(marker, 'click', function () {
                             // Set contents
                             infowindow.setContent(this.html);
                             // Open infowindow
                             infowindow.open(map, this);
                         }); 
-
                             
             }
           });
-
+        //get user geolocation
+                navigator.geolocation.getCurrentPosition(function(position) {
+        
+                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                 var marker = new google.maps.Marker({
+                position: geolocate,
+                map: map,
+                title: 'You are here',
+                icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#463274',
+                                strokeWeight: 1.5,
+                                fillColor: '#45ADA8',
+                                fillOpacity: 0.4,
+                                scale: 10
+                            }   
+                });
+                var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: geolocate,
+                content:
+                    'Latitude: ' + position.coords.latitude  +
+                    ' Longitude: ' + position.coords.longitude
+                });
+            
+                map.setCenter(geolocate);
+            
+                });
     </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
 {% endblock %}

@@ -6,8 +6,8 @@ from flask_cors import CORS
 
 from busData import api, dbi
 
-# from travel_functions import location_from_address, find_viable_routes,\
-#     find_viable_stops, route_planner
+from travel_functions import location_from_address, find_viable_routes,\
+    find_viable_stops, route_planner
 
 
 #https://docs.python.org/3/library/datetime.html
@@ -412,6 +412,7 @@ def get_db():
 # =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.
+app.secret_key='secret123'
+app.config['SESSION_TYPE'] = 'filesystem'
 if __name__ == '__main__':
-    app.secret_key='secret123'
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
