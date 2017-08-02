@@ -6,7 +6,12 @@ import pandas as pd
 import datetime
 import requests
 import traceback
+import numpy as np
 import csv
+import json
+import datetime
+from sklearn.externals import joblib
+from tkinter.constants import CURRENT
 
 # --------------------------------------------------------------------------#
 
@@ -145,52 +150,6 @@ class dbi:
     def __init__(self):
         pass
 
-        # --------------------------------------------------------------------------#
-
-        # def get_common_routes(self, src_stop_num, dest_stop_num):
-        #     """Finds common routes between two bus stops
-        #     Returns a dictionary of routes, easier to loop through"""
-        #     route_options = {}
-        #
-        #     engine = get_db()
-        #     sql = "SELECT * \
-        #              FROM All_routes.Sequence \
-        #              WHERE Stop_ID = %s AND Route IN (\
-        #                  SELECT Route \
-        #                  FROM All_routes.Sequence \
-        #                  WHERE Stop_ID = %s);"
-        #
-        #     result = engine.execute(sql, (src_stop_num, dest_stop_num))
-        #     all_data = result.fetchall()
-        #
-        #     for row in all_data:
-        #         route_options[row[0].strip('\n')] = (row[1])
-        #
-        #     return route_options
-
-        # ---------------------------------------------------------------------------#
-
-    def stops_between_src_dest(self, src_stop_num, dest_stop_num, route):
-        """Finds out how many stops are between two stops on a given route"""
-        engine = get_db()
-        sql = "SELECT Stop_sequence \
-                FROM All_routes.Sequence \
-                WHERE (Stop_ID = %s AND Route = %s) OR \
-                      (Stop_ID = %s AND Route = %s);"
-
-        result = engine.execute(sql, (src_stop_num,
-                                      int(route),
-                                      dest_stop_num,
-                                      int(route)))
-        all_data = result.fetchall()
-
-        src_stop_sequence = int(all_data[0][0])
-        dest_stop_sequence = int(all_data[1][0])
-
-        stops_travelled = dest_stop_sequence - src_stop_sequence
-
-        return stops_travelled
-
         # ----------------------------------------------------------------------------------#
 
     def location_from_address(self, address):
@@ -200,13 +159,10 @@ class dbi:
         key = "AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc"
         url = "https://maps.googleapis.com/maps/api/geocode/json?"
         params = {'address': address, 'region': 'IE', 'components': 'locality:dublin|country:IE', 'key': key}
-
         r = requests.get(url, params=params)
         data = r.json()
-
         lat = data['results'][0]['geometry']['location']['lat']
         long = data['results'][0]['geometry']['location']['lng']
-
         location = (lat, long)
         return location
 
@@ -214,6 +170,7 @@ class dbi:
         """
         Finds out the nearest stops to a given point
         Returns route, stop IDs, direction, seq in a list
+        Todo include the stop names and max stop seq and scheduled number of stops to return the scheduled speed
         """
         src_lat, src_lon = self.location_from_address(src)
         dest_lat, dest_lon = self.location_from_address(dest)
@@ -221,22 +178,22 @@ class dbi:
         radius = 0.3
 
         """use 6371 as constant and drop degree conv."""
-        sql = "SELECT  start_route, start_direction, start_stop, end_stop, start_stop_seq, end_stop_seq\
+        sql = "SELECT  start_route, start_direction, start_stop, end_stop, start_stop_seq, end_stop_seq, distance_in_km_start, distance_in_km_end\
         FROM(SELECT DISTINCT s.Route as start_route, s.Direction as start_direction, s.Stop_ID as start_stop, s.Stop_sequence as start_stop_seq, 111.111 *\
                 DEGREES(ACOS(COS(RADIANS(%s))\
         * COS(RADIANS(s.Lat))\
         * COS(RADIANS(%s - s.Lon))\
         + SIN(RADIANS(%s))\
-        * SIN(RADIANS(s.Lat))))  AS 'distance_in_km_start' \
+        * SIN(RADIANS(s.Lat))))  AS 'distance_in_km_start'\
                     FROM All_routes.new_all_routes s\
                     HAVING distance_in_km_start< %s) As Start\
-                    JOIN \
+                    JOIN\
         (SELECT DISTINCT e.Route as end_route, e.Direction as end_direction , e.Stop_ID as end_stop, e.Stop_sequence as end_stop_seq, 111.111 * \
         DEGREES(ACOS(COS(RADIANS(%s))\
         * COS(RADIANS(e.Lat))\
         * COS(RADIANS(%s - e.Lon))\
         + SIN(RADIANS(%s))\
-        * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end' \
+        * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end'\
                     FROM All_routes.new_all_routes e\
                     HAVING distance_in_km_end< %s) as end\
         WHERE start_route=end_route AND start_stop_seq<end_stop_seq AND start_direction=end_direction"
@@ -246,11 +203,19 @@ class dbi:
 
         dataframe = pd.DataFrame(all_data,
                                  columns=["Route", "Direction", "Start_Stop_ID", "End_Stop_ID", "Start_Stop_Sequence",
-                                          "End_Stop_Sequence"])
+                                          "End_Stop_Sequence", "Distance_in_km_from_start", "Distance_in_km_from_end"])
         print(dataframe)
+        return self.priority_options(dataframe)
+
+    def priority_options(self, dataframe):
+        #this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
+        dataframe['low_score'] = dataframe["Distance_in_km_from_start"]+dataframe["Distance_in_km_from_end"]
+        dataframe = dataframe.loc[dataframe.groupby('Route').low_score.idxmin()]
+        print('priority dataframe', dataframe)
         return self.dataframe_to_dict(dataframe)
 
     def dataframe_to_dict(self, dataframe):
+        #this converts the interesting routes to a dictionary
         route_options = dataframe.transpose().to_dict()
         i = 1
         break_at = len(route_options)
@@ -262,85 +227,8 @@ class dbi:
         print (route_options)
         return route_options
 
-
     # --------------------------------------------------------------------------#
 
-    def get_option_times(self, route_options):
-        """Determines the journey time for each viable route option
-        Returns a list of options ordered by their journey time"""
-
-        options = []
-        timestamp = datetime.datetime.now()
-        current_weekday = timestamp.weekday()
-        #     current_hour = timestamp.
-        for option, info in route_options.items():
-            route = info['Route']
-            direction = info['Direction']
-            #         info["time_bin"] = timestamp
-            timestamp = info['Time_Bin']
-            src_stop = info['Src_Stop_ID']
-            dest_stop = info['Dest_Stop_ID']
-            stops_travelled = info["Src_Stop_Sequence"] - info["Dest_Stop_Sequence"]
-            #         stops_travelled = dbi().stops_between_src_dest(src_stop, dest_stop, route)
-            #         stops_traveled = difference between sourece and end stop in info
-
-
-            predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
-
-            time_pred = predictor.predict([1, current_weekday, direction, timestamp, stops_travelled])
-
-            options.append([time_pred, route, src_stop, dest_stop])
-
-        options = options.sort(key=lambda x: x[0])
-        return options
-
-
-
-        # def route_overlap(self, stop_ids):
-            #     """gets overlap of routes between two stops"""
-            #     engine = get_db()
-            #
-            #     sql = "SELECT Stop_ID, Routes_serviced \
-            #            FROM All_routes.Stops\
-            #            WHERE Stop_ID in (%s)" % ",".join(map(str, stop_ids))
-            #
-            #     stop_route = {}
-            #     result = engine.execute(sql)
-            #     all_data = result.fetchall()
-            #
-            #     for row in all_data:
-            #         stop_route[row[0]] = set(map(str.strip, row[1].split(" - ")))
-            #
-            #     return stop_route
-
-            # ---------------------------------------------------------------------#
-
-    # def route_plan(self, routes, src_stops, dest_stops):
-    #     """gets table of routes, dir, stop_id"""
-    #     engine = get_db()
-    #     all_stops = src_stops
-    #     if src_stops != dest_stops:
-    #         all_stops = src_stops.union(dest_stops)
-    #
-    #     # ',' is important for getting sql to read correctly '%s'
-    #     sql = "SELECT *, Stop_ID in (%s) as 'src' \
-    #            FROM All_routes.Sequence\
-    #            WHERE \
-    #                Route in ('%s') AND\
-    #                Stop_ID in (%s)\
-    #             ORDER BY Route, Direction, Stop_Sequence" % \
-    #           (",".join(map(str, src_stops)),
-    #            "','".join(map(str, routes)),
-    #            ','.join(map(str, all_stops)))
-    #
-    #     stops = []
-    #     result = engine.execute(sql)
-    #     all_data = result.fetchall()
-    #     dataframe = pd.DataFrame(all_data, columns=["Route", "Direction", "Stop_ID", "Stop_Sequence", "Src"])
-    #
-    #     return dataframe
-
-    # --------------------------------------------------------------------------#
     def scrape_weather(self):
         '''Returns a summary of the current weather from the Wunderground API'''
         # API URI
@@ -370,6 +258,17 @@ class dbi:
 
         # Returning Summary
         return (current_temp, current_wind)
+
+    # --------------------------------------------------------------------------#
+    def bikes(self):
+        APIKEY = 'a360b2a061d254a3a5891e4415511251899f6df1'
+        NAME = "Dublin"
+        STATIONS_URI = "https://api.jcdecaux.com/vls/v1/stations"
+        r = requests.get(STATIONS_URI, params={"apiKey": APIKEY,
+                                               "contract": NAME})
+        data = (json.loads(r.text))
+
+        return(data)
 
     # --------------------------------------------------------------------------#
     def extract_holidays(self):
@@ -414,3 +313,53 @@ class dbi:
 
         time = all_data[0]
         return time
+
+
+def everything(src, dest):
+    """Determines the journey time for each viable route option
+    Returns a list of options ordered by their journey time"""
+
+    route_options = dbi().find_nearby_stops(src, dest)
+    current_time = datetime.datetime.now()
+    current_weekday = current_time.weekday()
+    current_hour = current_time.hour
+    current_min = current_time.minute
+    bit1 = "1" if (current_min > 15) else "0"
+    bit2 = "1" if (current_min > 30) else "0"
+    bit3 = "1" if (current_min > 45) else "0"
+    time_bin = str(current_hour) + bit1 + bit2 + bit3
+
+    current_date = current_time.date()
+    if current_date in dbi().extract_holidays():
+        is_school_holiday = 1
+    else:
+        is_school_holiday = 0
+
+    weather = dbi().scrape_weather()
+    current_temp, current_wind = weather
+
+    for option in route_options.keys():
+        print(option)
+        '''todo add stop name to dict'''
+        direction = int(route_options[option]['Direction'])
+        route = route_options[option]['Route']
+        src_stop_seq = route_options[option]['Start_Stop_Sequence']
+        dest_stop_seq = route_options[option]['End_Stop_Sequence']
+        stops_to_travel = dest_stop_seq - src_stop_seq
+        '''consider mergine this with bigger call, overhead issue?'''
+        max_stop_seq = dbi().get_max_sequence(route, direction)
+        scheduled_time = dbi().get_sched_time(route, direction)
+        sched_speed_per_stop = scheduled_time / max_stop_seq
+        predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
+        '''use lambda or zip to int all inputs, its cleaner'''
+        params = [
+            [int(current_weekday), int(time_bin), int(current_wind), int(current_temp), int(is_school_holiday),
+             int(sched_speed_per_stop), int(stops_to_travel), int(src_stop_seq)]]
+
+        time_pred = predictor.predict(params)[0]
+        print(time_pred, 'time_pred on main page')
+        route_options[option]['html'] = "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(
+            'i should be a name') + " to " + 'i too should be a name' + "</div><div class='option_journey_time'>" + str(
+            int(time_pred)) + "</div></div>"
+
+    return route_options

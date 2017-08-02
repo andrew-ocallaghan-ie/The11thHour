@@ -4,10 +4,10 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 #https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from busData import api, dbi
+from busData import api, dbi, everything
 
-from travel_functions import location_from_address, find_viable_routes,\
-    find_viable_stops, route_planner
+# from travel_functions import location_from_address, find_viable_routes,\
+#     find_viable_stops, route_planner
 
 
 #https://docs.python.org/3/library/datetime.html
@@ -40,7 +40,8 @@ from tkinter.constants import CURRENT
 
 pymysql.install_as_MySQLdb()
 
-
+import jsonify
+import json
 
 # View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
@@ -68,90 +69,18 @@ class RegisterForm(Form):
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     dbi().get_max_sequence(4, 0)
-
     if request.method == 'POST':
+        html = ""
         src = request.form['origin']
         dest = request.form['destination']
-        
-        # viable_routes = find_viable_routes(src, dest)
-        # viable_stops = find_viable_stops(viable_routes)
-        # route_plan = route_planner(viable_stops)
-        route_options = dbi().find_nearby_stops(src, dest)
-        current_time = datetime.datetime.now()
-        
-        #needed a float() timestamp
-        ahh = (current_time-datetime.datetime(1970,1,1)).total_seconds()
-        print(current_time)
-        
-        
-        current_date = current_time.date()
-        current_weekday = current_time.weekday()
-        current_hour = current_time.hour
-        current_min = current_time.minute
-        bit1 = "1" if (current_min > 15) else "0"
-        bit2 = "1" if (current_min > 30) else "0"
-        bit3 = "1" if (current_min > 45) else "0"
-        time_bin = str(current_hour) + bit1 + bit2 + bit3
+        route_options = everything(src, dest)
 
-        if current_date in dbi().extract_holidays():
-            is_school_holiday = 1
-        else:
-            is_school_holiday = 0
-
-        weather = dbi().scrape_weather()
-        current_temp = weather[0]
-        current_wind = weather[1]
-
-        html = ""
-
-        for option in route_options:
-            print(option)
-            
-            direction = int(route_options[option]['Direction'])
-            route = route_options[option]['Route']
-            src_stop_id = route_options[option]['Start_Stop_ID']
-            src_stop_seq = route_options[option]['Start_Stop_Sequence']
-            dest_stop_id = route_options[option]['End_Stop_ID']
-            dest_stop_seq = route_options[option]['End_Stop_Sequence']
-            stops_to_travel = dest_stop_seq - src_stop_seq
-            max_stop_seq = dbi().get_max_sequence(route, direction)
-            scheduled_time = dbi().get_sched_time(route, direction)
-            sched_speed_per_stop = scheduled_time / max_stop_seq
-            
-#             predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
-            predictor = joblib.load('static/pkls/beta' + route + '.csvrf_regressor.pkl')
-            
-#           #this is the model tested by andy and reggie at begining of sptint.  
-            #It is only known pkl to function on front end
-            #intercept....Day_Of_Week + Direction + Start_Time + Stop_Sequence
-            #             d = [ 1,1,1,ahh-28800,10]
-            d = [ 1,current_weekday,direction,ahh-28800,dest_stop_seq]
-            
-
-            #latest model, xbeta
-#           Day_Of_Week + Time_Bin_Start + Scheduled_Speed_Per_Stop + Stops_To_Travel + Stop_Sequence + Direction      
-#             predict_me =  pd.DataFrame(d)
-#             print(predict_me)
-                #             time_pred = predictor.predict([1, 
-#                                            current_weekday,
-#                                            time_bin,
-#                                            current_wind,                                         
-#                                            current_temp, 
-#                                            is_school_holiday, 
-#                                            sched_speed_per_stop,
-#                                            stops_to_travel,
-#                                            src_stop_seq])
-
-
-            time_pred = predictor.predict(d)
-            print(time_pred)
-
-            html += "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" + str(src_stop_id) + " to " + str(dest_stop_id) + "</div><div class='option_journey_time'>" + route + "</div></div>"
-
+        '''list.join method to concat'''
+        for option in route_options.keys():
+            '''list . join method would be better'''
+            html += route_options[option]['html']
         html = Markup(html)
-
         return render_template('route_options.html', **locals())
 
     return render_template('home.html', **locals())
@@ -164,10 +93,6 @@ def route_search():
 
     if request.method == 'POST':
         users_route = request.form['user_route']
-        # if request.form.get('direction') == 'on':
-        #     direction = "southbound"
-        # else:
-        #     direction = "northbound"
 
         if request.form.get('direction') == 'on':
             direction = 1
@@ -388,6 +313,12 @@ def get_all_info():
 def get_all_stop_info():
     return api().all_bus_stop_info()
 
+#--------------------------------------------------------------------------#
+@app.route("/api/bike_data")
+def get_bikes():
+    bikes = dbi().bikes()
+    return json.dumps(bikes)
+
 
 # =================================== DB ==================================#
 
@@ -412,7 +343,6 @@ def get_db():
 # =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.
-app.secret_key='secret123'
-app.config['SESSION_TYPE'] = 'filesystem'
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.secret_key='secret123'
+    app.run(debug=True)
