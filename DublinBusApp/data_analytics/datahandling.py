@@ -1,31 +1,48 @@
+from datetime import date
+
 import pandas as pd
 import numpy as np
-import datetime
-from tqdm import tqdm
-import os
 
+from tqdm import tqdm
+
+from os import getcwd
+from os import listdir
+from os import makedirs
+from os import path
+
+#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
 from sklearn import preprocessing
+
+#sklearn.ensemble.RandomForestRegressor
 from sklearn.ensemble import RandomForestRegressor
+
+#http://scikit-learn.org/stable/modules/model_persistence.html
 from sklearn.externals import joblib
+
+#http://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics
 from sklearn.metrics import explained_variance_score
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
+from sklearn.metrics.classification import accuracy_score
+
+#http://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
 from sklearn.model_selection import GridSearchCV 
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+
+#http://scikit-learn.org/stable/modules/classes.html#module-sklearn.pipeline
 from sklearn.pipeline import make_pipeline
-from asyncore import write
-from sklearn.metrics.classification import accuracy_score
-from blaze.expr.collections import join
+
  
 class cleaning:
     '''Class that carries out cleaning action on a dataframe
      - initialised with a pandas dataframe of raw Dublin Bus AVL data
      - assumes column names from DublinBus AVL data
      - single attribute 'df'
-     - methods should be applied in order'''
-    #------------------------------------------------------------------------------#
+     - calls the 'clean' method to execute all other methods in order '''
+    
+    #--------------------------------------------------------------------------#
 
     def __init__(self, df):
         '''initialses dataframe as df, and sets columns'''
@@ -36,20 +53,20 @@ class cleaning:
                     'Vehicle_ID', 'Stop_ID', 'At_Stop']
         self.df.columns = columns
 
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def drop_it_like_its_stop(self):
         '''drops any data classified as NOT at stop'''
         self.df = self.df[self.df.At_Stop == 1]
 
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def drop_useless_columns(self):
         '''drops poorly defined, un-used, non-critical columns'''
         useless = ['Congestion', 'Delay', 'Block_ID', 'Operator', 'Lat', 'Lon', 'At_Stop']
         self.df = self.df.drop(useless, axis=1)
         
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
     def fix_journey_pattern_id(self):
         '''takes nulls and re-derives them'''
@@ -69,20 +86,20 @@ class cleaning:
             
         self.df =  grouped_df.apply(re_derive_nulls)
         
-    #------------------------------------------------------------------------------# 
+    #--------------------------------------------------------------------------# 
     
     def drop_literal_nulls(self):
         '''drops rows where Journey Pattern ID is not 'null' literal'''
         self.df = self.df[self.df.Journey_Pattern_ID != 'null' ]
         
-    #------------------------------------------------------------------------------#  
+    #--------------------------------------------------------------------------#  
     
     def fix_direction_column(self):
         '''Re-derives Direction from Journey Patter ID'''
         self.df.Journey_Pattern_ID = self.df.Journey_Pattern_ID.astype('str')    
         self.df.Direction = self.df.Journey_Pattern_ID.str[4]
     
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def fix_line_id(self):
         '''Re-derives LineID from Journey Pattern ID'''
@@ -90,7 +107,7 @@ class cleaning:
         self.df.LineID = self.df.Journey_Pattern_ID.str[:4]
         self.df.LineID = self.df.LineID.str.lstrip('0') #strips leading zeros
    
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def remove_idling(self):
         '''creates stops_made column'''
@@ -103,7 +120,7 @@ class cleaning:
         
         self.df = grouped_df.apply(remove_idle_at_stop)
         
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def clean(self):
         '''executes above instructions'''
@@ -116,7 +133,7 @@ class cleaning:
         self.remove_idling() # 
         return self.df
         
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
 class preparing:
     '''class prepares dataframe with new columns
@@ -127,7 +144,7 @@ class preparing:
         '''initialises dataframe as df'''
         self.df = dataframe
         
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
     def create_time_categories(self):
         '''creates Time, Day, Hour and Time Bin Start
@@ -152,33 +169,33 @@ class preparing:
         self.df = make_time_bin_start(self.df)
         self.df = self.df.drop(["Hour"], axis=1)
      
-    #------------------------------------------------------------------------------#   
+    #--------------------------------------------------------------------------#   
     
-    def create_journey_times(self):
-        '''creates journey time which is end to end time'''
-        as_delta = pd.to_timedelta
-        single_journeys = ['Vehicle_Journey_ID', 'Timeframe', 'Vehicle_ID', 'Journey_Pattern_ID']
-        self.df['End_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(max)
-        self.df['Start_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(min)
-        self.df['Journey_Time'] = ( self.df.End_Time - self.df.Start_Time )
-        self.df.Journey_Time = as_delta(self.df.Journey_Time, unit='us').astype('timedelta64[m]')
-        
-    #------------------------------------------------------------------------------#
-       
     def drop_impossible_journey_times(self):
         '''returns rows where journey times are greater than zero'''
+        
+        def create_journey_times(self):
+            '''creates journey time which is end to end time'''
+            as_delta = pd.to_timedelta
+            single_journeys = ['Vehicle_Journey_ID', 'Timeframe', 'Vehicle_ID', 'Journey_Pattern_ID']
+            self.df['End_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(max)
+            self.df['Start_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(min)
+            self.df['Journey_Time'] = ( self.df.End_Time - self.df.Start_Time )
+            self.df.Journey_Time = as_delta(self.df.Journey_Time, unit='us').astype('timedelta64[m]')
+        
         self.df = self.df[self.df.Journey_Time > 0]
         self.df = self.df.drop(["Journey_Time"], axis=1)
-    
-    #------------------------------------------------------------------------------#
+            
+    #--------------------------------------------------------------------------#       
 
     def create_holiday(self):
         '''creates bool column if date corresponds to a school holiday'''
-        date_before = datetime.date(2012, 12, 31)
-        date_after = datetime.date(2013, 1, 5)
-        self.df['Holiday'] = np.where((self.df.Time.dt.date < date_after)  & (self.df.Time.dt.date > date_before), 1, 0)
+        date_before = date(2012, 12, 31)
+        date_after = date(2013, 1, 5)
+        self.df['Holiday'] = np.where((self.df.Time.dt.date < date_after)  \
+                                    & (self.df.Time.dt.date > date_before), 1, 0)
     
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
     def create_scheduled_time_op(self):
         '''merges route_times with df to create scheduled time op column'''
@@ -192,7 +209,7 @@ class preparing:
             
         self.df = pd.merge(self.df, get_times_dataframe(), how='inner', on=['LineID'])
                 
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
     def create_stop_sequence(self): #create_stop_sequence
         '''creates stop sequence column by merging with sequence dataframe'''
@@ -203,8 +220,9 @@ class preparing:
             sequence_dataframe.LineID = sequence_dataframe.LineID.astype('str')
             sequence_dataframe.Direction = sequence_dataframe.Direction.astype('str')
             sequence_dataframe.Stop_ID = sequence_dataframe.Stop_ID.astype('str')
-            unique_signiture = ['LineID', 'Direction', 'Destination', 'Stop_ID']
-            sequence_dataframe['Max_Stop_Sequence'] = sequence_dataframe.groupby(unique_signiture).Stop_Sequence.transform(max)
+            unique_signiture = ['LineID', 'Direction', 'Destination']
+            grouped_df = sequence_dataframe.groupby
+            sequence_dataframe['Max_Stop_Sequence'] = grouped_df(unique_signiture).Stop_Sequence.transform(max)
             excess_columns = ['Stop_name', 'Lat', 'Lon', 'Destination']
             sequence_dataframe = sequence_dataframe.drop(excess_columns, axis=1)
             return sequence_dataframe
@@ -212,7 +230,7 @@ class preparing:
         shared_columns = ['LineID', 'Stop_ID', 'Direction']
         self.df = pd.merge(self.df, get_sequence_dataframe(), how='inner', on=shared_columns)
     
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def create_scheduled_speed_per_stop(self):
         '''creates scheduled speed which is the scheduled mean rate of stop traversal'''
@@ -225,7 +243,7 @@ class preparing:
         self.df.Time_To_Travel = as_delta(self.df.Time_To_Travel, unit='us').astype('timedelta64[m]')
         self.df = self.df.drop(['End_Stop'], axis=1)    
     
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def create_weather_columns(self):
         '''creates weather columns such as temerature and windspeed
@@ -243,16 +261,15 @@ class preparing:
         self.df.sort_values(['Time'], ascending=[True], inplace=True)
         self.df =  pd.merge_asof(self.df, get_weather_dataframe(), on='Time')
         
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def drop_non_modeling_columns(self):
         '''drops columns that can't be modeled'''
-        useless = ['Timestamp', 'Timeframe', 'Time','Max_Stop_Sequence', 
-                   'Vehicle_Journey_ID', 'Vehicle_ID', 'Stop_ID', 'Rain'
-                   ]
+        #timeframe, vjid, vid, stopid, timestamp
+        useless = ['Time''Max_Stop_Sequence', 'Rain']
         self.df = self.df = self.df.drop(useless, axis=1)
     
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
    
     def prepare(self):
         '''applies predefined preparation methods'''
@@ -267,27 +284,28 @@ class preparing:
         self.drop_non_modeling_columns()
         return self.df
 
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
     
 class extracting:
-    '''class for seperating data by route'''
+    '''class for separating data by route
+    is initialised with list of file paths'''
     
     def __init__(self, files):
         self.routes = set()
         self.files = files
     
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def get_all_routes(self):
-        '''gets all routes from csvs'''
+        '''gets all routes from files'''
         for data in self.files:
             df = pd.read_hdf(data)
             self.routes = self.routes.union(set(df.LineID.unique()))
             
-    #------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
     
     def extract(self, route):
-        '''extracts single route'''
+        '''extracts single route from files and returns df of that rooute'''
         accumulator = pd.read_hdf(self.files[0])
         accumulator = accumulator[accumulator.LineID == route]
         for data in self.files:
@@ -296,17 +314,20 @@ class extracting:
             accumulator = pd.concat([accumulator, df[df.LineID==route]])
         return accumulator
 
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
-class modelling:    
+class modelling:
+    '''class that contains processes for modeling''' 
     
     def __init__(self):
+        '''creats columns for record dataframe'''
         metric_columns = ['route', 'r2', 'rmse', 'mae', 'ten_percent-delta', 'five_min-delta','five_min_late','exp_variance']
         self.record = pd.DataFrame(columns=metric_columns)
     
-    #-------------------------------------------------------------------------#    
+    #--------------------------------------------------------------------------#    
         
     def create_model(self, data):
+        '''creates rf regressor for data,'''
         data_columns = ["Day_Of_Week", "Time_Bin_Start", "Wind_Speed", "Temperature",
                    "Holiday", "Scheduled_Speed_Per_Stop", "Stops_To_Travel","Stop_Sequence"]
         self.X_train, self.X_test, self.y_train, self.y_test = \
@@ -318,12 +339,12 @@ class modelling:
                            'randomforestregressor__max_depth': [None, 5, 3, 1]}
         reg = GridSearchCV(pipeline, hyperparameters, cv=8)
         reg.fit(self.X_train, self.y_train)
-        pred = reg.predict(self.X_test)
         self.model = reg
         
-        #---------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
     def create_test_metrics(self):
+        '''takes most recently created rf regressor and creates test metrics for it'''
         pred = self.model.predict(self.X_test)
         actual = self.y_test
         
@@ -346,9 +367,10 @@ class modelling:
         self.late_acc = accuracy_score(data.true, data.five_min_late)
         self.exp_var = explained_variance_score(actual, pred)
  
-        #---------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
         
     def record_test_metrics(self, route):
+        '''takes most recently evaluated test metrics and stores them in record'''
         values = [route, self.rsquared, self.rmse, self.mae, self.rel_acc, self.abs_acc, self.late_acc, self.exp_var]
         keys = self.record.columns
         row = dict(zip(keys, values))
@@ -356,78 +378,88 @@ class modelling:
         self.record = self.record.append(record)
         print(self.record)
         
-#----------------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
         
     def model_route(self, data, route):
+        '''runs modeling process for a set of data'''
         self.create_model(data)
         self.create_test_metrics()
         self.record_test_metrics(route)
         return self.model
         
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
-def setup():
-        '''creates folders'''
-        path_to_routes_folder = os.path.join(os.getcwd(), 'routes')
-        os.makedirs(path_to_routes_folder, exist_ok=True)
-        path_to_re_con = os.path.join(os.getcwd(), 're_con')
-        os.makedirs(path_to_re_con, exist_ok=True)
-        path_to_pkls = os.path.join(os.getcwd(), 'pkls')
-        os.makedirs(path_to_pkls)
-
-#----------------------------------------------------------------------------------#
+def setup_folders():
+    '''creates folders'''
+    try:
+        path_to_routes_folder = path.join(getcwd(), 'routes')
+        makedirs(path_to_routes_folder, exist_ok=True)
+    except:
+        pass
+    try:
+        path_to_re_con = path.join(getcwd(), 're_con')
+        makedirs(path_to_re_con, exist_ok=True)
+    except:
+        pass
+    try:
+        path_to_pkls = path.join(getcwd(), 'pkls')
+        makedirs(path_to_pkls)
+    except:
+        pass
+    
+#------------------------------------------------------------------------------#
 
 def re_construction():
     '''execustes cleaning and prepatation on raw data files'''
-    path_to_folder = os.path.join(os.getcwd(), 'DayRawCopy')
-    files = os.listdir(path_to_folder)
+    path_to_folder = path.join(getcwd(), 'DayRawCopy')
+    files = listdir(path_to_folder)
     for data_file in tqdm(files):
-        file_address = os.path.join(path_to_folder, data_file)
+        file_address = path.join(path_to_folder, data_file)
         df = pd.read_csv(file_address)
         df = cleaning(df).clean()
         df = preparing(df).prepare()
-        write_address = os.path.join(os.getcwd(), 're_con' , data_file[:-4] + '.h5')
+        write_address = path.join(getcwd(), 're_con' , data_file[:-4] + '.h5')
         df.to_hdf(write_address, key='moo', mode='w')
 
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
 def extraction():
     '''splits data by route'''
-    path_to_folder = os.path.join(os.getcwd(), 're_con')
-    files = os.listdir(path_to_folder)
-    path_to_files = list(map(lambda data: os.path.join(path_to_folder, data), files))
+    path_to_folder = path.join(getcwd(), 're_con')
+    files = listdir(path_to_folder)
+    path_to_files = list(map(lambda data: path.join(path_to_folder, data), files))
     data = extracting(path_to_files)
     data.get_all_routes()
     for route in tqdm(data.routes):
-        write_address = os.path.join(os.getcwd(), 'routes', 'xbeta'+str(route)+'.h5')
+        write_address = path.join(getcwd(), 'routes', 'xbeta'+str(route)+'.h5')
         df = data.extract(route)
         df.to_hdf(write_address, key='moo', mode = 'w')
  
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
         
 def quantification():
-    path_to_folder = os.path.join(os.getcwd(), 'routes' )
-    files = os.listdir(path_to_folder)
+    path_to_folder = path.join(getcwd(), 'routes' )
+    files = listdir(path_to_folder)
     models = modelling()
     for data_file in tqdm(files):
-        file_address = os.path.join(path_to_folder, data_file)
+        file_address = path.join(path_to_folder, data_file)
         route = data_file[5:-3]
         print(route)
         rf_reg = models.model_route(pd.read_hdf(file_address), route)
-        write_address = os.path.join(os.getcwd(), 'pkls', route+'rf.pkl')
+        write_address = path.join(getcwd(), 'pkls', route+'rf.pkl')
         joblib.dump(rf_reg, write_address)
     models.record.to_csv("model_summary")
                 
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
 def processing():
-    #setup()
-    #re_construction()
-    #extraction()
+    setup_folders()
+    re_construction()
+    extraction()
     quantification()
     return 'Finished'
 
-#----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
 if __name__ == '__main__':
     
