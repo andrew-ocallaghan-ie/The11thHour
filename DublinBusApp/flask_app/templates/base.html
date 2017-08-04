@@ -6,9 +6,6 @@
 
         <title>Dublin Bus Predictions</title>
 
-        <!-- Add icon library -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
         <!--Google Fonts-->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -23,15 +20,19 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="../static/bootstrap/js/bootstrap.min.js"></script>
 
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="../static/materialize/css/materialize.min.css"  media="screen,projection"/>
+
         <!--Our Stylesheet, goes at bottom of CSS sheets to ensure precedence-->
         <link href="{{ url_for('static', filename='../static/style.css') }}" rel="stylesheet" type="text/css">
 
         <!--ChartJS-->
         <script src="../static/chart.js/dist/Chart.js"></script>
 
-        <!--Button Toggling Library-->
-        <link href="../static/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
-        <script src="../static/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+        <!--Material Design Library-->
+        <script type="text/javascript" src="../static/materialize/js/materialize.min.js"></script>
 
        <!--Our functions-->
         <script type="text/javascript">
@@ -43,9 +44,16 @@
             var markers = [];
 
             function createMarker(lat,lng,name,category,color, id) {
-              var marker = new google.maps.Marker({
-                position: {lat:lat, lng:lng},
-                map: map,
+                var marker_vis;
+                if (category == "1" || category == "User Location"){
+                    marker_vis = true
+                } else {
+                    marker_vis = false
+                }
+                var marker = new google.maps.Marker({
+                  position: {lat:lat, lng:lng},
+                  map: map,
+                  visible: marker_vis,
                 icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 strokeColor:color,
@@ -66,9 +74,18 @@
 
 
               marker.addListener("click",function(){
-                  var contentString='<h3>'+name+'</h3>'+marker.mycategory+'<h3>'+ marker.myid + '</h3>';
+                  if(marker.mycategory=="luas"){
+                 var contentString='<h3>'+name+'</h3>'+'Luas';
                   markers.infowindow.setContent(contentString);
-                  markers.infowindow.open(map, this);
+                  markers.infowindow.open(map, this);}
+                  if(marker.mycategory=="dart"){
+                  var contentString='<h3>'+name+'</h3>'+'Dart';
+                  markers.infowindow.setContent(contentString);
+                  markers.infowindow.open(map, this);}
+                  if(marker.mycategory=="dublinbike"){
+                  var contentString='<h3>'+name+'</h3>'+'Dublin Bike';
+                  markers.infowindow.setContent(contentString);
+                  markers.infowindow.open(map, this);}
               });
               for(var i=0; i<markers.length; i++){
                   markers[i].infowindow = new google.maps.InfoWindow();
@@ -193,60 +210,100 @@
 
             }
 
+            //get user geolocation
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                var marker = new google.maps.Marker({
+                    position: geolocate,
+                    map: map,
+                    title: 'You are here',
+                icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                                strokeColor: '#463274',
+                                strokeWeight: 1.5,
+                                fillColor: '#45ADA8',
+                                fillOpacity: 0.4,
+                                scale: 10
+                            }
+                });
+{#                    'Latitude:' + position.coords.latitude  +#}
+{#                    'Longitude:' + position.coords.longitude#}
+            });
+
+            $(document).ready(function() {
+                $('select').material_select();
+                $(".button-collapse").sideNav();
+            });
+
         </script>
 
     </head>
 
     <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Dublin Bus</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
-                    <li><a href="stop_search">Search by stop</a></li>
-                    <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
-                </ul>
-                
-                <ul class="nav navbar-nav navbar-right">
-                    {% if session.logged_in %}
-                        <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-                        <li class="dropdown" id="My routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a></li>
-                      
-                    {% else %}
-                        <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
 
-                      <!--<li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
-                          <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in">
-                          </span> Login</a>
-                              <div class="dropdown-menu">
-                                  <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
-                                      <div class="form-group">
-                                          <label>Username</label>
-                                          <input type="text" name="username" class="form-control" value={{request.form.username}}>
-                                      </div>
-                                      <div class="form-group">
-                                          <label>Password</label>
-                                          <input type="password" name="password" class="form-control" value={{request.form.password}}>
-                                      </div>
-                                      <button type="submit" class="btn btn-primary">Submit</button>
-                                  </form>
-                              </div>
-                          </li>
-                      {% endif %}
-                      <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
-                  </ul>
-              </div>
-          </div>
-        </nav>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo"><i class="material-icons">directions_bus</i>Hustle Bustle</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+            <li><a href="route_search">Search by Route<span class="sr-only">(current)</span></a></li>
+            <li><a href="stop_search">Search by Stop</a></li>
+            <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
+            {% if session.logged_in %}
+                <li class="dropdown" id="My Routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My Routes</a></li>
+                <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            {% else %}
+                <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+              <!--<li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+                <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" name="username" class="form-control" value={{request.form.username}}>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control" value={{request.form.password}}>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+              </li>
+          {% endif %}
+          <li><img class="img-responsive" id="weather" src="../static/images/flurries.png"/></li>
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+          <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
+          <li><a href="stop_search">Search by stop</a></li>
+          <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
+          {% if session.logged_in %}
+              <li class="dropdown" id="My Routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a></li>
+              <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+          {% else %}
+              <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+              <!--<li class="dropdown" id="Login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+              <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                  <div class="dropdown-menu">
+                      <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
+                          <div class="form-group">
+                              <label>Username</label>
+                              <input type="text" name="username" class="form-control" value={{request.form.username}}>
+                          </div>
+                          <div class="form-group">
+                              <label>Password</label>
+                              <input type="password" name="password" class="form-control" value={{request.form.password}}>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                      </form>
+                  </div>
+              </li>
+          {% endif %}
+      </ul>
+    </div>
+    </nav>
+
         {% include 'includes/_messages.html' %}
         {% block content %}{% endblock %}
         {% from "includes/_formhelpers.html" import render_field %}

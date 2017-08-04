@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
     <script>
+
         function initialize() {
             var input1 = document.getElementById('origin');
             var input2 = document.getElementById('destination');
@@ -18,6 +20,18 @@
             var autocomplete2 = new google.maps.places.Autocomplete(input2, optionsAuto);
         }
 
+        $(document).ready(function(){
+            $("#now_arrive_depart").change(function(){
+                 if (($(this).val() == 1) || ($(this).val() == 2)){
+                     $('.date_time').collapse("show");
+                     var today = moment().format('YYYY-MM-DD');
+                     document.getElementById("date_input").value = today;
+                 } else if ($(this).val() == 0){
+                     $('.date_time').collapse("hide");
+                 }
+            });
+        });
+
     </script>
 
     <div id="map"></div>
@@ -29,13 +43,20 @@
                     <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
                     <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
 
-                    <select class="form-control" name="now_arrive_depart" id="now_arrive_depart">
-                      <option>Now</option>
-                      <option>Arrive By</option>
-                      <option>Leave At</option>
+                    <select class="input-field" name="now_arrive_depart" id="now_arrive_depart">
+                      <option value="0">Now</option>
+                      <option value="1">Arrive By</option>
+                      <option value="2">Leave At</option>
                     </select>
+{#                    <input type="time" id="time_input" name="time" class="collapse date_time">#}
+{#                    <input type="date" id="date_input" name="date" class="collapse date_time">#}
 
-                  <button type="submit" class="btn btn-default btn-circle">GO!</button>
+                    <input type="time" id="time_input" name="time" class="collapse date_time timepicker">
+                    <input type="date" id="date_input" name="date" class="collapse date_time datepicker">
+
+                    <button class="btn waves-effect waves-light" type="submit">GO!
+                        <i class="material-icons right">send</i>
+                    </button>
               </form>
             </div>
 
@@ -50,5 +71,28 @@
     <!--stop info page-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap&libraries=places"></script>
     <script>window.onload=initialize();</script>
+    <script>
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 15, // Creates a dropdown of 15 years to control year,
+            today: 'Today',
+            clear: 'Clear',
+            close: 'Ok',
+            closeOnSelect: false // Close upon selecting a date,
+        });
+
+        $('.timepicker').pickatime({
+            default: 'now', // Set default time: 'now', '1:30AM', '16:30'
+            fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+            twelvehour: false, // Use AM/PM or 24-hour format
+            donetext: 'OK', // text for done-button
+            cleartext: 'Clear', // text for clear-button
+            canceltext: 'Cancel', // Text for cancel-button
+            autoclose: false, // automatic close timepicker
+            ampmclickable: true // make AM PM clickable
+        });
+
+
+    </script>
 
 {% endblock %}

@@ -17,15 +17,16 @@
     // This function adds all of the routes to the routes textbox so we can autocomplete them
     // Currently takes the route from a CSV which can probably be done in a cleaner way
      function dataList() {
-        var routeInfo;
+         var routeInfo;
 
-        $.getJSON($SCRIPT_ROOT+'/api/all_routes', function(data) {
-            $(data.route).each(function() {
-                routeInfo = "<option value=" + this.route + ">" + this.origin + " &#8644 " + this.destination + "</option>";
-                $('#routes').append(routeInfo);
-            });
-        });
-    }
+         $.getJSON($SCRIPT_ROOT + '/api/all_routes', function (data) {
+             $(data.route).each(function () {
+                 routeInfo = "<option value=" + this.route + ">" + this.origin + " &#8644 " + this.destination + "</option>";
+                 $('#routes').append(routeInfo);
+             });
+         });
+     }
+
 
 </script>
 
@@ -54,12 +55,21 @@
 
                 <input type="text" class="form-control" id="user_route" name="user_route" list="routes" placeholder="Route">
                   <datalist id="routes"></datalist>
-                  <!--This calls the script to add all of the routes to the textbox for autocomplete-->
-                  <script>window.onload=dataList();</script>
+{#                  <!--This calls the script to add all of the routes to the textbox for autocomplete-->#}
+                <script>window.onload=dataList();</script>
 
-                <input type="checkbox" data-toggle="toggle" data-on="Southbound" data-off="Northbound" data-size="mini" id="north_south" name="direction">
+                <div class="switch">
+                    <label>
+                        Northbound
+                        <input type="checkbox" name="direction">
+                        <span class="lever"></span>
+                        Southbound
+                    </label>
+                </div>
 
-                <button type="submit" class="btn btn-default btn-circle">GO!</button>
+                <button class="btn waves-effect waves-light" type="submit">GO!
+                    <i class="material-icons right">send</i>
+                </button>
           </form>
         </div>
 
