@@ -9,8 +9,7 @@
             directionsDisplay = new google.maps.DirectionsRenderer();
 
             var polylineArray = [];
-
-            {% for key, value in route_plan.items() %}
+            {% for key, value in route_options.items() %}
                 $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
 
                     for (i = {{ value["Src_Stop_Sequence"] }}-1; i < {{ value["Dest_Stop_Sequence"] }}; i++) {
@@ -156,7 +155,7 @@
         <div class="row">
             <div class="col-sm-9 route_options">
                 <h3>Route Options</h3>
-                {%  for route in route_plan.items() %}
+                {%  for route in route_options.items() %}
                 <div id={{ route[0] }} value="{{ route[1]['mid_location'] }}" class='route_option_box' data-toggle='collapse' data-target='#collapse_map'>
                     <div class='option_route'>{{ route[1]["Route"] }}</div>
                     <div class='option_src_dest'>{{ route[1]['Src_Stop_ID'] }} <b>&#8594</b> {{ route[1]['Dest_Stop_ID'] }}</div>

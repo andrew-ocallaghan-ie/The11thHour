@@ -426,15 +426,18 @@ def everything(src, dest, time):
 
 
     def make_predictions(df):
-        route = list(df.Route.unique())[0]
-        predictor = joblib.load('static/pkls/xbeta' + route + '.csvrf_regressor.pkl')
-        columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel', 'Start_Stop_Sequence']
-        df['Predictions'] = predictor.predict(df[columns])
-        '''add stop name to df,'''
-        pred = str(df.Predictions.values[0])
-
-        #df['html'] = "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" +str(df.Start_Stop_Name) + " to " + str(df.End_Stop_Name) + "</div><div class='option_journey_time'>" + pred + "</div></div>"
-        return df
+        try:
+            route = list(df.Route.unique())[0]
+            predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
+            columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel', 'Start_Stop_Sequence']
+            df['Predictions'] = predictor.predict(df[columns])
+            '''add stop name to df,'''
+            pred = str(df.Predictions.values[0])
+    
+            #df['html'] = "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" +str(df.Start_Stop_Name) + " to " + str(df.End_Stop_Name) + "</div><div class='option_journey_time'>" + pred + "</div></div>"
+            return df
+        except:
+            pass
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
 
