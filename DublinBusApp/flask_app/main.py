@@ -4,10 +4,7 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 # https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from busData import api, dbi, everything
-
-# from travel_functions import location_from_address, find_viable_routes,\
-#     find_viable_stops, route_planner
+from flask_app.busData import api, dbi, everything
 
 
 # https://docs.python.org/3/library/datetime.html
@@ -34,13 +31,9 @@ import requests
 # http://pandas.pydata.org/
 import pandas as pd
 
-# http://scikit-learn.org/stable/
-from sklearn.externals import joblib
-from tkinter.constants import CURRENT
-
 pymysql.install_as_MySQLdb()
 
-import jsonify
+from flask import  jsonify
 import json
 
 # View site @ http://localhost:5000/
@@ -93,15 +86,14 @@ def index():
             hour = int(time[0])
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
-
+        
+        #i'm THE DICTIONARY!
+        #take googleplaces api call from everything and keep it here.
         route_options = everything(src, dest, time)
         print('something unique', route_options)
 
-        '''list.join method to concat'''
-        # for option in route_options.keys():
-        #     '''list . join method would be better'''
-        #     html += route_options[option]['html']
-        # html = Markup(html)
+        
+        
         return render_template('route_options.html', **locals())
 
     return render_template('home.html', **locals())
