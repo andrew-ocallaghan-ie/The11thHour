@@ -1,7 +1,20 @@
+#------------------------------------------------------------------------------#
+#------------------------------IMPORTS-----------------------------------------#
+#------------------------------------------------------------------------------#
+
+#https://docs.python.org/3/library/concurrent.futures.html
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import wait
+
 from datetime import date
 
+#https://pandas.pydata.org/pandas-docs/stable/
 import pandas as pd
+
+#http://www.numpy.org/
 import numpy as np
+
 
 from tqdm import tqdm
 
@@ -34,8 +47,14 @@ from sklearn.model_selection import cross_val_score
 #http://scikit-learn.org/stable/modules/classes.html#module-sklearn.pipeline
 from sklearn.pipeline import make_pipeline
 
+from time import time
+
+#------------------------------------------------------------------------------#
+#------------------------------CLASSES-----------------------------------------#
+#------------------------------------------------------------------------------#
  
 class cleaning:
+    #https://data.dublinked.ie/dataset/dublin-bus-gps-sample-data-from-dublin-city-council-insight-project
     '''Class that carries out cleaning action on a dataframe
      - initialised with a pandas dataframe of raw Dublin Bus AVL data
      - assumes column names from DublinBus AVL data
@@ -153,8 +172,7 @@ class preparing:
         self.df['Time'] = pd.to_datetime(self.df.Timestamp, unit='us')
         self.df['Day_Of_Week'] = self.df.Time.dt.dayofweek
         self.df['Hour'] = self.df.Time.dt.hour.astype('str')
-        
-        
+                
         def make_time_bin_start(df):
             '''creates Time Bin Start and drops intermediate columns'''
             df['Minute'] = df.Time.dt.minute
@@ -171,20 +189,18 @@ class preparing:
      
     #--------------------------------------------------------------------------#   
     
+    def create_start_end_times(self):
+        '''creates start and end times columns for df'''
+        single_journeys = ['Vehicle_Journey_ID', 'Timeframe', 'Vehicle_ID', 'Journey_Pattern_ID']
+        self.df['End_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(max)
+        self.df['Start_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(min)
+    
+    #--------------------------------------------------------------------------#
+    
     def drop_impossible_journey_times(self):
         '''returns rows where journey times are greater than zero'''
-        
-        def create_journey_times(self):
-            '''creates journey time which is end to end time'''
-            as_delta = pd.to_timedelta
-            single_journeys = ['Vehicle_Journey_ID', 'Timeframe', 'Vehicle_ID', 'Journey_Pattern_ID']
-            self.df['End_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(max)
-            self.df['Start_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(min)
-            self.df['Journey_Time'] = ( self.df.End_Time - self.df.Start_Time )
-            self.df.Journey_Time = as_delta(self.df.Journey_Time, unit='us').astype('timedelta64[m]')
-        
-        self.df = self.df[self.df.Journey_Time > 0]
-        self.df = self.df.drop(["Journey_Time"], axis=1)
+        as_delta = pd.to_timedelta
+        self.df = self.df[(self.df.End_Time - self.df.Start_Time) > 0]
             
     #--------------------------------------------------------------------------#       
 
@@ -264,9 +280,10 @@ class preparing:
     #--------------------------------------------------------------------------#
     
     def drop_non_modeling_columns(self):
-        '''drops columns that can't be modeled'''
+        '''drops columns that can't be modeled, improves write speed'''
         #timeframe, vjid, vid, stopid, timestamp
-        useless = ['Time''Max_Stop_Sequence', 'Rain']
+        useless = ['Time','Max_Stop_Sequence','Rain','Timeframe','Vehicle_Journey_ID',
+                   'Vehicle_ID','Stop_ID','Timestamp']
         self.df = self.df = self.df.drop(useless, axis=1)
     
     #--------------------------------------------------------------------------#
@@ -274,14 +291,13 @@ class preparing:
     def prepare(self):
         '''applies predefined preparation methods'''
         self.create_time_categories()  # time, day, hour columns
-        self.create_journey_times() # end to end journey time
-        self.drop_impossible_journey_times() # drops journey times == 0
+        self.create_start_end_times() # creates start and end times
+        self.drop_impossible_journey_times() # drops end_to_end journey times == 0
         self.create_holiday() # creates category for school holidays
         self.create_scheduled_time_op() # creates scheduled travel time
         self.create_stop_sequence() # creates stop sequences for routes
         self.create_scheduled_speed_per_stop() # scheduled speed
-        self.create_weather_columns() # creates weather columns
-        self.drop_non_modeling_columns()
+        self.create_weather_columns() # creates weather columns        self.drop_non_modeling_columns() # drops excess columns
         return self.df
 
 #------------------------------------------------------------------------------#
@@ -290,28 +306,22 @@ class extracting:
     '''class for separating data by route
     is initialised with list of file paths'''
     
-    def __init__(self, files):
-        self.routes = set()
-        self.files = files
-    
-    #--------------------------------------------------------------------------#
-    
-    def get_all_routes(self):
-        '''gets all routes from files'''
-        for data in self.files:
-            df = pd.read_hdf(data)
-            self.routes = self.routes.union(set(df.LineID.unique()))
-            
+    def __init__(self):
+        path_to_folder = path.join(getcwd(), 're_con')
+        all_files = listdir(path_to_folder)
+        path_to_files = list(map(lambda data: path.join(path_to_folder, data), all_files))
+        self.files = path_to_files
     #--------------------------------------------------------------------------#
     
     def extract(self, route):
         '''extracts single route from files and returns df of that rooute'''
         accumulator = pd.read_hdf(self.files[0])
-        accumulator = accumulator[accumulator.LineID == route]
+        accumulator = accumulator[accumulator.LineID == route].drop(['LineID'], axis=1)
         for data in self.files:
             df = pd.read_hdf(data)
+            df =df[df.LineID == route].drop(['LineID'], axis=1)
             accumulator, df = accumulator.align(df, axis=1)
-            accumulator = pd.concat([accumulator, df[df.LineID==route]])
+            accumulator = pd.concat([accumulator, df])
         return accumulator
 
 #------------------------------------------------------------------------------#
@@ -334,7 +344,7 @@ class modelling:
         train_test_split(data[data_columns],np.ravel(data["Time_To_Travel"]), test_size=0.2, random_state=33)
         scaler = preprocessing.StandardScaler().fit(self.X_train)
         pipeline = make_pipeline(preprocessing.StandardScaler(), 
-                                 RandomForestRegressor(n_estimators=10, n_jobs=-1))
+                                 RandomForestRegressor(n_estimators=10, n_jobs=1))
         hyperparameters = {'randomforestregressor__max_features' : ['auto', 'sqrt', 'log2'],
                            'randomforestregressor__max_depth': [None, 5, 3, 1]}
         reg = GridSearchCV(pipeline, hyperparameters, cv=8)
@@ -376,7 +386,6 @@ class modelling:
         row = dict(zip(keys, values))
         record = pd.DataFrame(data = row, columns = self.record.columns, index =[route])
         self.record = self.record.append(record)
-        print(self.record)
         
     #--------------------------------------------------------------------------#
         
@@ -386,82 +395,145 @@ class modelling:
         self.create_test_metrics()
         self.record_test_metrics(route)
         return self.model
+ 
+#------------------------------------------------------------------------------#
+#------------------------------Functions---------------------------------------#
+#------------------------------------------------------------------------------#
+ 
+def timing(func):
+    '''timing decorator for functions'''
+    def wrapper(*arg, **kw):
+        '''source: http://www.daniweb.com/code/snippet368.html'''
+        t1 = time()
+        res = func(*arg, **kw)
+        t2 = time()
+        return (t2 - t1), res, func.__name__
+    return wrapper
         
 #------------------------------------------------------------------------------#
 
 def setup_folders():
-    '''creates folders'''
-    try:
-        path_to_routes_folder = path.join(getcwd(), 'routes')
-        makedirs(path_to_routes_folder, exist_ok=True)
-    except:
-        pass
-    try:
-        path_to_re_con = path.join(getcwd(), 're_con')
-        makedirs(path_to_re_con, exist_ok=True)
-    except:
-        pass
-    try:
-        path_to_pkls = path.join(getcwd(), 'pkls')
-        makedirs(path_to_pkls)
-    except:
-        pass
-    
+    '''creates folder for re_con, routes and pkls'''
+    for folder in ['routes', 're_con', 'pkls']:
+        try:
+            path_to_routes_folder = path.join(getcwd(), folder)
+            makedirs(path_to_routes_folder, exist_ok=True)
+        except:
+            print(folder, 'made already')
+
 #------------------------------------------------------------------------------#
 
-def re_construction():
-    '''execustes cleaning and prepatation on raw data files'''
+def re_construction(data_file):
+    print(data_file)
     path_to_folder = path.join(getcwd(), 'DayRawCopy')
     files = listdir(path_to_folder)
-    for data_file in tqdm(files):
-        file_address = path.join(path_to_folder, data_file)
-        df = pd.read_csv(file_address)
-        df = cleaning(df).clean()
+    path_to_file = path.join(path_to_folder, data_file)
+    '''executes cleaning and prepatation on raw data files'''
+    try:
+        df = cleaning(pd.read_csv(path_to_file)).clean()
         df = preparing(df).prepare()
         write_address = path.join(getcwd(), 're_con' , data_file[:-4] + '.h5')
         df.to_hdf(write_address, key='moo', mode='w')
-
-#------------------------------------------------------------------------------#
-
-def extraction():
-    '''splits data by route'''
-    path_to_folder = path.join(getcwd(), 're_con')
-    files = listdir(path_to_folder)
-    path_to_files = list(map(lambda data: path.join(path_to_folder, data), files))
-    data = extracting(path_to_files)
-    data.get_all_routes()
-    for route in tqdm(data.routes):
-        write_address = path.join(getcwd(), 'routes', 'xbeta'+str(route)+'.h5')
-        df = data.extract(route)
-        df.to_hdf(write_address, key='moo', mode = 'w')
+        return "wooot"
+    except: 
+        return "re_con fails..."    
  
+ #-----------------------------------------------------------------------------#
+    
+def get_all_routes():
+        '''gets all routes from files'''
+        routes = set()
+        path_to_folder = path.join(getcwd(), 're_con')
+        all_files = listdir(path_to_folder)
+        path_to_files = list(map(lambda data: path.join(path_to_folder, data), all_files))
+        for data in path_to_files:
+            df = pd.read_hdf(data)
+            routes = routes.union(set(df.LineID.unique()))
+        return routes
+    
+#------------------------------------------------------------------------------#    
+    
+def extraction(route):
+    '''splits data by route'''
+    results = []
+    try:
+        df = extracting().extract(route)
+        write_address = path.join(getcwd(), 'routes', 'xbeta'+str(route)+'.h5')
+        df.to_hdf(write_address, key='moo', mode = 'w')        
+        results.append(route +'it worked!')
+    except:
+        results.append(route, 'for **** sake')
+    return results
+
 #------------------------------------------------------------------------------#
-        
-def quantification():
+
+def quantification(data_file):
+    path_to_folder = path.join(getcwd(), 'routes')
+    path_to_file =  path.join(path_to_folder, data_file)
+    route = data_file[5:-3]
+    model = modelling()
+    rf_reg = model.model_route(pd.read_hdf(path_to_file), route)
+    write_address = path.join(getcwd(), 'pkls', str(route)+'rf.pkl')
+    joblib.dump(rf_reg, write_address)
+    return model.record
+
+#------------------------------------------------------------------------------#
+#-----------------------------Main Methods-------------------------------------#
+#------------------------------------------------------------------------------#
+
+def main1():
+    '''multiprocesses cleaning and prep of raw data, cpu heavy'''
+    path_to_raw = path.join(getcwd(), 'DayRawCopy')
+    files = listdir(path_to_raw)
+    with ProcessPoolExecutor(max_workers=4) as Executor:
+        for file, result in tqdm(zip(files, Executor.map(re_construction, files, chunksize=4))):
+            print(file[:-4], result)
+
+#------------------------------------------------------------------------------#
+   
+def main2():
+    '''seperates routes into seperate files, ready for training'''
+    routes = get_all_routes()
+    with ProcessPoolExecutor(max_workers=4) as Executor:
+        for route, result in tqdm(zip(routes, Executor.map(extraction, routes, chunksize = 4))):
+            print(route, result)
+    
+#------------------------------------------------------------------------------#
+    
+def main3():
+    '''prepares a model for each route'''
     path_to_folder = path.join(getcwd(), 'routes' )
     files = listdir(path_to_folder)
-    models = modelling()
-    for data_file in tqdm(files):
-        file_address = path.join(path_to_folder, data_file)
-        route = data_file[5:-3]
-        print(route)
-        rf_reg = models.model_route(pd.read_hdf(file_address), route)
-        write_address = path.join(getcwd(), 'pkls', route+'rf.pkl')
-        joblib.dump(rf_reg, write_address)
-    models.record.to_csv("model_summary")
-                
-#------------------------------------------------------------------------------#
+    
+    pool = ProcessPoolExecutor(max_workers=3)
+    dataframes = []
+    wag = zip(files, pool.map(quantification, files))
+    for key, val in wag:
+        dataframes.append(val)
+    dataframe = pd.concat(dataframes, axis=0)
+    dataframe.to_csv('Model_Summary')
+    
 
-def processing():
-    setup_folders()
-    re_construction()
-    extraction()
-    quantification()
-    return 'Finished'
 
 #------------------------------------------------------------------------------#
-
+#---------------------------If Run Directly------------------------------------#
+#------------------------------------------------------------------------------#
+        
 if __name__ == '__main__':
     
+    @timing
+    def processing():
+        setup_folders()
+        t1=time()
+        #main1()
+        t2=time()
+        print((t2-t1)//60)
+        #main2()
+        t3=time()
+        print((t3-t2)//60)
+        t4=time()
+        main3()
+        print((t4-t3)//60)
+
     processing()
-          
+
