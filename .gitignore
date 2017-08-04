@@ -386,3 +386,8 @@ $RECYCLE.BIN/
 __pycache__/
 
 # End of https://www.gitignore.io/api/osx,java,macos,pydev,linux,python,eclipse,pycharm,windows,android,java-web
+*.h5
+
+*.pkl
+
+*.csv
