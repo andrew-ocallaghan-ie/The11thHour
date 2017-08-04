@@ -10,8 +10,9 @@ import numpy as np
 import csv
 import json
 import datetime
+
+# http://scikit-learn.org/stable/
 from sklearn.externals import joblib
-from tkinter.constants import CURRENT
 
 # --------------------------------------------------------------------------#
 
