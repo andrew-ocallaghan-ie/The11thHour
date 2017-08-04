@@ -4,8 +4,7 @@ from flask import Flask, render_template, request, g, flash, redirect, url_for, 
 # https://flask-cors.readthedocs.io/en/latest/
 from flask_cors import CORS
 
-from flask_app.busData import api, dbi, everything
-
+from busData import api, dbi, everything
 
 # https://docs.python.org/3/library/datetime.html
 from _datetime import datetime
@@ -62,9 +61,7 @@ class RegisterForm(Form):
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # dbi().get_max_sequence(4, 0)
     if request.method == 'POST':
-        html = ""
         src = request.form['origin']
         dest = request.form['destination']
         now_arrive_depart_selection = request.form['now_arrive_depart']
@@ -87,13 +84,11 @@ def index():
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
         
-        #i'm THE DICTIONARY!
+        #THE DICTIONARY!
         #take googleplaces api call from everything and keep it here.
         route_options = everything(src, dest, time)
-        print('something unique', route_options)
+        print('Route Options:', route_options)
 
-        
-        
         return render_template('route_options.html', **locals())
 
     return render_template('home.html', **locals())
