@@ -43,7 +43,7 @@
             //map functions
             var markers = [];
 
-            function createMarker(lat,lng,name,category,color, id) {
+            function createMarker(lat,lng,name,category,color,stop_id) {
                 var marker_vis;
                 if (category == "1" || category == "User Location"){
                     marker_vis = true
@@ -68,25 +68,50 @@
               // === Store the category and name info as a marker properties ===
               marker.mycategory = category;
               marker.myname = name;
-              marker.myid = id;
+              marker.myid = stop_id;
               markers.push(marker);
               markers.infowindow = new google.maps.InfoWindow();
-
-
+                
+                
+                //create different content of markers
               marker.addListener("click",function(){
                   if(marker.mycategory=="luas"){
-                 var contentString='<h3>'+name+'</h3>'+'Luas';
+                  var contentString='<h3>'+name+'</h3>'+'luas'
                   markers.infowindow.setContent(contentString);
                   markers.infowindow.open(map, this);}
                   if(marker.mycategory=="dart"){
-                  var contentString='<h3>'+name+'</h3>'+'Dart';
-                  markers.infowindow.setContent(contentString);
-                  markers.infowindow.open(map, this);}
+                    var station_name = marker.myname.replace(/ /g, "%20")
+                    var site = 'https://api.irishrail.ie/realtime/realtime.asmx/getStationDataByNameXML_withNumMins?StationDesc='+station_name+'&NumMins=20';
+                    var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select objStationData.Destination, objStationData.Exparrival from xml where url="' + site + '"') + '&format=xml&callback=?';
+                    $.getJSON(yql, function (data) {
+                    //window.alert(data.results.length)
+                    var re = /[^0-9](?=[0-9])/g;
+                    var contents="In next 20 mins";
+                    for(i=0;i<data.results.length;i++){
+                    var contents= contents+"<br>"+"To " +data.results[i].replace(re, '$& ')
+                    }
+                    var contentString='<h3>'+name+'</h3>'+contents;
+                    markers.infowindow.setContent(contentString);
+                    });
+                    markers.infowindow.open(map, this);
+                      }
                   if(marker.mycategory=="dublinbike"){
-                  var contentString='<h3>'+name+'</h3>'+'Dublin Bike';
-                  markers.infowindow.setContent(contentString);
+                      
+                     var id = marker.myid
+                     
+                     var site = 'https://api.jcdecaux.com/vls/v1/stations/'+id+'?contract=Dublin&apiKey=a360b2a061d254a3a5891e4415511251899f6df1'
+                     jQuery.getJSON(site,null,function(data){
+                         
+                     var contentString='<h3>'+name+'</h3>'+'<br>'+'available bikes '+data.available_bikes + '<br>' +'availbale stands ' + data.available_bike_stands;
+                     markers.infowindow.setContent(contentString);
+                     });
                   markers.infowindow.open(map, this);}
               });
+
+                
+                
+                
+                
               for(var i=0; i<markers.length; i++){
                   markers[i].infowindow = new google.maps.InfoWindow();
               }
@@ -190,7 +215,8 @@
                         var name = station.name;
                         var category = station.category;
                         var color = station.color;
-                        var marker = createMarker(lat, lng, name, category, color);
+                        var stop_id=station.stop_id;
+                        var marker = createMarker(lat, lng, name, category, color,stop_id);
                     });
 
                     hide("dublinbike");

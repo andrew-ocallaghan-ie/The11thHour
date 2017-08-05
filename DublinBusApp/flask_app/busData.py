@@ -124,7 +124,7 @@ class api:
 
     def all_stop_info(self):
         engine = get_db()
-        sql = 'SELECT Address, Lat, Lon, Category, Colour,Stop_Id FROM All_routes.dublinbike_dart_luas1;'
+        sql = 'SELECT Address, Lat, Lon, Category, Colour,Stop_Id FROM All_routes.dublinbike_dart_luas;'
         result = engine.execute(sql)
         all_data = result.fetchall()
         stops = []
