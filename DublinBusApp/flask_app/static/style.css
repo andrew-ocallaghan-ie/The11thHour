@@ -111,6 +111,7 @@ margin-bottom:5px;
 .route_options .option_journey_time{
     width: 20%;
     vertical-align: middle;
+    padding-left: 10px;
 }
 
 .route_options .running_man img{

@@ -87,7 +87,6 @@ def index():
         #THE DICTIONARY!
         #take googleplaces api call from everything and keep it here.
         route_options = everything(src, dest, time)
-        print('Route Options:', route_options)
 
         return render_template('route_options.html', **locals())
 

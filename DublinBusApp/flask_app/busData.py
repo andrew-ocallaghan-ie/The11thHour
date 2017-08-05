@@ -385,10 +385,7 @@ def everything(src, dest, time):
         dataframe.drop(['max_stop_sequence','scheduled_time' ], axis=1)
         return dataframe
 
-
     route_options = route_options.groupby(['Route', 'Direction']).apply(sched_speed)
-
-
 
     def everything_else(df):
 
@@ -401,40 +398,47 @@ def everything(src, dest, time):
 
             for time in times:
                 # makes time pretty
-                times_for_chart.append(str(time.hour) + ":" + str(time.minute))
+                times_for_chart.append(str(time.hour) + ':' + str(time.minute))
                 # makes time bin for time
-                bit1 = "1" if (time.minute > 15) else "0"
-                bit2 = "1" if (time.minute > 30) else "0"
-                bit3 = "1" if (time.minute > 45) else "0"
+                bit1 = '1' if (time.minute > 15) else '0'
+                bit2 = '1' if (time.minute > 30) else '0'
+                bit3 = '1' if (time.minute > 45) else '0'
                 '''str .join this later'''
                 time_bins.append(str(time.hour) + bit1 + bit2 + bit3)
             return (time_bins, times_for_chart)
 
         time_bins, pretty_times = extra_time_bins(time)
-        df = pd.concat([df] * 8, axis=0, ignore_index=True)
+        # print("Time bins:", [time_bins])
+        # print("Type of time bins:", type([time_bins]))
+        # print("Pretty times:", [pretty_times])
+        # print("Type of pretty times:", type([pretty_times]))
 
-        df['time_bin'] = time_bins
-        df['pretty_times'] = pretty_times
+        # df = pd.concat([df] * 8, axis=0, ignore_index=True)
+        # print(df.head())
+
+        df['time_bin'] = [time_bins]
+        df['pretty_times'] = [pretty_times]
 
         return df
 
-
     route_options = route_options.groupby(['Route','Direction']).apply(everything_else)
 
-
     def make_predictions(df):
-        try:
-            route = list(df.Route.unique())[0]
-            predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
-            columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel', 'Start_Stop_Sequence']
-            df['Predictions'] = predictor.predict(df[columns])
-            '''add stop name to df,'''
-            pred = str(df.Predictions.values[0])
-    
-            #df['html'] = "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" +str(df.Start_Stop_Name) + " to " + str(df.End_Stop_Name) + "</div><div class='option_journey_time'>" + pred + "</div></div>"
-            return df
-        except:
-            pass
+        route = list(df.Route.unique())[0]
+        predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
+        time_options = list(df['time_bin'])
+        columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+                   'Start_Stop_Sequence']
+        other_columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+                   'Start_Stop_Sequence']
+        prediction_list = []
+        for time in time_options[0]:
+            prediction = (predictor.predict([df['day'].values[0]] + [time] + df[other_columns].values[0].tolist())[0])
+            prediction_list.append(round(float(prediction), 2))
+        '''add stop name to df,'''
+        df["Predictions"] = [prediction_list]
+
+        return df
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
 
