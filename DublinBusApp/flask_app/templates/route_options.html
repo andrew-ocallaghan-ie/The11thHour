@@ -85,7 +85,7 @@
                      hideAll();
                  } else if (isExpanded == 'false'){
                      show($(this).attr('id'));
-                     var lat = parseFloat($(this).attr('value').split(',')[0].substring(1));
+                     var lat = parseFloat($(this).attr('value').split(',')[0]);
                      var long = parseFloat($(this).attr('value').split(',')[1]);
                      moveCenter(lat, long);
                  }
