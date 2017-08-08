@@ -77,7 +77,7 @@ class api:
 
         engine = get_db()
         sql = "SELECT st.Stop_ID, Stop_name, Lat, Lon, Stop_sequence, Routes_serviced, Direction \
-               FROM All_routes.new_all_routes st, All_routes.Sequence sq \
+               FROM All_routes.Stops st, All_routes.Sequence sq \
                WHERE st.Stop_ID = sq.Stop_ID AND Route = %s AND Direction = %s;"
         result = engine.execute(sql, (routenum, direction))
         all_data = result.fetchall()
@@ -384,7 +384,6 @@ class dbi:
         time = all_data[0]
         return time
 
-
 def dataframe_to_dict(dataframe):
     # this converts the interesting routes to a dictionary
     route_options = dataframe.transpose().to_dict()
@@ -473,19 +472,22 @@ def everything(src, dest, time):
     route_options = route_options.groupby(['Route', 'Direction']).apply(everything_else)
 
     def make_predictions(df):
-        try:
-            route = list(df.Route.unique())[0]
-            predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
-            columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
-                       'Start_Stop_Sequence']
-            df['Predictions'] = predictor.predict(df[columns])
-            '''add stop name to df,'''
-            pred = str(df.Predictions.values[0])
+        route = list(df.Route.unique())[0]
+        predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
+        time_options = list(df['time_bin'])
+        columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+                   'Start_Stop_Sequence']
+        other_columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+                         'Start_Stop_Sequence']
+        prediction_list = []
+        for time in time_options[0]:
+            prediction = (predictor.predict([df['day'].values[0]] + [time] + df[other_columns].values[0].tolist())[0])
+            prediction_list.append(round(float(prediction), 2))
+        '''add stop name to df,'''
+        df["Predictions"] = [prediction_list]
 
-            # df['html'] = "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" +str(df.Start_Stop_Name) + " to " + str(df.End_Stop_Name) + "</div><div class='option_journey_time'>" + pred + "</div></div>"
-            return df
-        except:
-            pass
+        return df
+
     route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
 
     return (dataframe_to_dict(route_options), lat_long_list)

@@ -13,7 +13,7 @@
             {% for key, value in route_options.items() %}
                 $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
 
-                    for (i = {{ value["Start_Stop_Sequence"] }}-1; i < {{ value["End_Stop_Sequence"] }}; i++) {
+                    for (i = {{ value["Start_Stop_Sequence"] }}; i <= {{ value["End_Stop_Sequence"] }}; i++) {
                         var lat = json.stops[i].lat;
                         var lng = json.stops[i].lon;
                         var name = json.stops[i].name;
@@ -21,7 +21,6 @@
                         var category = "{{ key }}";
                         var color = '#4682b4';
                         var marker = createMarker(lat, lng, name, category, color, id);
-                        polylineArray.push({"lat": lat, "lng": lng});
                     }
                 });
             {% endfor %}
@@ -55,9 +54,7 @@
               strokeOpacity: 1.0,
               strokeWeight: 3
             });
-
             polylinePath.setMap(map);
-
         }
 
         function moveCenter(lat, long){
@@ -81,7 +78,7 @@
                      hideAll();
                  } else if (isExpanded == 'false'){
                      show($(this).attr('id'));
-                     var lat = parseFloat($(this).attr('value').split(',')[0].substring(1));
+                     var lat = parseFloat($(this).attr('value').split(',')[0]);
                      var long = parseFloat($(this).attr('value').split(',')[1]);
                      moveCenter(lat, long);
                  }
@@ -152,11 +149,11 @@
             <div class="col-sm-9 route_options">
                 <h3>Route Options</h3>
                 {%  for route in route_options.items() %}
-                <div id={{ route[0] }} value="{{ route[1]['mid_location'] }}" class='route_option_box' data-toggle='collapse' data-target='#collapse_map'>
+                <div id={{ route[0] }} value='{{ route[1]['mid_point_lat'] }}, {{ route[1]['mid_point_lon'] }}' class='route_option_box' data-toggle='collapse' data-target='#collapse_map'>
                     <div class='option_route'>{{ route[1]["Route"] }}</div>
                     <div class='option_src_dest'>{{ route[1]['Start_Stop_Name'] }} <b>&#8594</b> {{ route[1]['End_Stop_Name'] }}</div>
-                    <div class='option_journey_time'>{{ route[1]["Predictions"] }}mins</div>
-                    <span class="tooltipped running_man" data-position="top" data-delay="50" data-tooltip="{{route[1]['walking_mins']}} mins walk"><img src="../static/images/walk_man.png"></span>
+                    <div class='option_journey_time'>{{ route[1]["Predictions"][0] }}mins</div>
+                    <span class="tooltipped running_man" data-position="top" data-delay="50" data-tooltip="3min walk"><img src="../static/images/walk_man.png"></span>
                 </div>
                 {% endfor %}
             </div>
@@ -184,28 +181,26 @@
           data: {
               labels: {{ route_options['1']['pretty_times'] | safe }},
               datasets: [
-
-          labels: [{%  for route in route_options.items() %}'{{ route[1]['pretty_times'] }}', {% endfor %}],
-          datasets: [{ {%  for route in route_options.items() %}
-              fill: true,
-              label: '{{ route[1]["Route"] }}',
-              data: [48,23,32,55,13,33,22,15],
-              backgroundColor: 'rgba(255, 193, 7, 0.2)',
-              borderColor:'rgba(255, 193, 7, 1)',
-              borderWidth: 1
-                     {% endfor %} }]
-
-                 },
-          options: {
-              maintainAspectRatio: false,
-              responsive: true,
-              title: {
-                 fontSize: 15,
-                 fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
-                 display: true,
-                 text: "Your Route Travel Times"
-              }
-          }
+                  {%  for route in route_options.items() %}
+                      {
+                  fill: true,
+                  label: '{{ route[1]["Route"] }}',
+                  data: {{ route[1]["Predictions"] }},
+                  backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                  borderColor:'rgba(255, 193, 7, 1)',
+                  borderWidth: 1
+                      },
+                  {% endfor %} ]},
+             options: {
+                 maintainAspectRatio: false,
+                 responsive: true,
+                 title: {
+                     fontSize: 15,
+                     fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
+                     display: true,
+                     text: "Your Route Travel Times"
+                 }
+             }
          });
     </script>
 

@@ -88,6 +88,7 @@ def index():
         # Take google places api call from everything and keep it here.
         route_options = everything(src, dest, time)[0]
         lat_long_list = everything(src, dest, time)[1]
+        print("Route options:", route_options)
         print("Printing:",lat_long_list)
 
         return render_template('route_options.html', **locals())
