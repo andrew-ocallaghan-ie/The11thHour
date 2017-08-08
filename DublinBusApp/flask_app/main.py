@@ -84,9 +84,11 @@ def index():
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
         
-        #THE DICTIONARY!
-        #take googleplaces api call from everything and keep it here.
-        route_options = everything(src, dest, time)
+        # THE DICTIONARY!
+        # Take google places api call from everything and keep it here.
+        route_options = everything(src, dest, time)[0]
+        lat_long_list = everything(src, dest, time)[1]
+        print("Printing:",lat_long_list)
 
         return render_template('route_options.html', **locals())
 

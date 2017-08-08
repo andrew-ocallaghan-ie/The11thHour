@@ -212,7 +212,7 @@ class dbi:
                                           "End_Stop_Sequence", "Distance_in_km_from_start", "Distance_in_km_from_end", "Start_Stop_Name", "End_Stop_Name"])
         dataframe['mid_point_lat']=self.mid_point_lat
         dataframe['mid_point_lon']=self.mid_point_lon
-        return self.priority_options(dataframe)[0]
+        return self.priority_options(dataframe)
 
     def priority_options(self, dataframe):
         #this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
@@ -236,7 +236,6 @@ class dbi:
         sql ='SELECT lat, lon FROM All_routes.new_all_routes\
         WHERE Stop_sequence >= %s AND Stop_sequence<= %s AND Route = %s AND Direction = %s;'
 
-        #result = engine.execute(sql, (self.start_stop_seq, self.end_stop_seq, self.start_route, self.direction))
         result = engine.execute(sql, (int(self.start_stop_seq.values[0]), int(self.end_stop_seq.values[0]), int(self.start_route.values[0]), int(self.direction.values[0])))
         all_co_ord_data = result.fetchall()
 
@@ -341,7 +340,7 @@ def dataframe_to_dict(dataframe):
     for option in route_options:
         if i > break_at:
             break
-        route_options["Option " + str(i)] = route_options.pop(option)
+        route_options[str(i)] = route_options.pop(option)
         i += 1
     return route_options
 
@@ -366,7 +365,8 @@ def everything(src, dest, time):
     weather = dbi().scrape_weather()
     current_temp, current_wind = weather
 
-    route_options = dbi().find_nearby_stops(src, dest)
+    route_options = dbi().find_nearby_stops(src, dest)[0]
+    lat_long_list = dbi().find_nearby_stops(src, dest)[1]
     route_options.Direction = route_options.Direction.astype(int)
     route_options['Stops_To_Travel'] = route_options.End_Stop_Sequence - route_options.Start_Stop_Sequence
     route_options['temp'] = current_temp
@@ -408,13 +408,6 @@ def everything(src, dest, time):
             return (time_bins, times_for_chart)
 
         time_bins, pretty_times = extra_time_bins(time)
-        # print("Time bins:", [time_bins])
-        # print("Type of time bins:", type([time_bins]))
-        # print("Pretty times:", [pretty_times])
-        # print("Type of pretty times:", type([pretty_times]))
-
-        # df = pd.concat([df] * 8, axis=0, ignore_index=True)
-        # print(df.head())
 
         df['time_bin'] = [time_bins]
         df['pretty_times'] = [pretty_times]
@@ -442,5 +435,4 @@ def everything(src, dest, time):
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
 
-    return dataframe_to_dict(route_options)
-
+    return (dataframe_to_dict(route_options), lat_long_list)

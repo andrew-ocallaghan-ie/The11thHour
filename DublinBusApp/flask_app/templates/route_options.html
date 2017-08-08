@@ -26,15 +26,12 @@
                 });
             {% endfor %}
 
-            var flightPlanCoordinates = [
-                {lat: 53.3827, lng: -6.14843},
-                {lat: 53.382, lng: -6.15114},
-                {lat: 53.3812, lng: -6.1555},
-                {lat: 53.3806, lng: -6.15922}
-                ];
+            var flightPlanCoordinates = {{ lat_long_list | safe }};
 
             // Centre of map
-            var myCenter = new google.maps.LatLng(53.3827, -6.14843);
+            var mid_lat = {{ route_options['1']['mid_point_lat'] | safe }};
+            var mid_long = {{ route_options['1']['mid_point_lon'] | safe }};
+            var myCenter = new google.maps.LatLng(mid_lat, mid_long);
 
             // Initializing canvas
             var mapCanvas = document.getElementById("map");
@@ -50,7 +47,6 @@
 
 {#            createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);#}
 {#            createMarker({{ dest_lat }},{{ dest_long }},"Destination","User Location",'red', 1);#}
-
 
             var polylinePath = new google.maps.Polyline({
               path: flightPlanCoordinates,
@@ -145,7 +141,6 @@
             }
         });
 
-
     </script>
 
     <div class="collapse in" id="collapse_map" data-toggle="false">
@@ -187,7 +182,7 @@
          var chartDemo = new Chart(ctx, {
           type: 'line',
           data: {
-              labels: {{ route_options['Option 1']['pretty_times'] | safe }},
+              labels: {{ route_options['1']['pretty_times'] | safe }},
               datasets: [
 
                   {%  for route in route_options.items() %}
