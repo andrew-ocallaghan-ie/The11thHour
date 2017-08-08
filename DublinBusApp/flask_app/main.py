@@ -32,7 +32,7 @@ import pandas as pd
 
 pymysql.install_as_MySQLdb()
 
-from flask import  jsonify
+from flask import jsonify
 import json
 
 # View site @ http://localhost:5000/
@@ -338,6 +338,12 @@ def get_bikes():
     bikes = dbi().bikes()
     return json.dumps(bikes)
 
+#-------------------------------------------------------------------------#
+
+@app.route("/api/fare_data")
+def get_fares():
+    fares = dbi().fares()
+    return fares
 
 
 # =================================== DB ==================================#
@@ -367,7 +373,6 @@ def get_db():
 # =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.
-app.secret_key='secret123'
-app.config['SESSION_TYPE'] = 'filesystem'
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.secret_key = 'secret123'
+    app.run(debug=True)

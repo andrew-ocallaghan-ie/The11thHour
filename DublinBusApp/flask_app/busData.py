@@ -10,6 +10,8 @@ import numpy as np
 import csv
 import json
 import datetime
+from bs4 import BeautifulSoup
+import urllib.request
 
 # http://scikit-learn.org/stable/
 from sklearn.externals import joblib
@@ -75,7 +77,7 @@ class api:
 
         engine = get_db()
         sql = "SELECT st.Stop_ID, Stop_name, Lat, Lon, Stop_sequence, Routes_serviced, Direction \
-               FROM All_routes.Stops st, All_routes.Sequence sq \
+               FROM All_routes.new_all_routes st, All_routes.Sequence sq \
                WHERE st.Stop_ID = sq.Stop_ID AND Route = %s AND Direction = %s;"
         result = engine.execute(sql, (routenum, direction))
         all_data = result.fetchall()
@@ -106,7 +108,7 @@ class api:
         """Returns the stop information as a JSON dictionary. This is to make it faster to lookup individual stops."""
 
         engine = get_db()
-        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Routes_serviced FROM All_routes.Stops ORDER BY abs(Stop_ID);"
+        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Routes_serviced FROM All_routes.new_all_routes ORDER BY abs(Stop_ID);"
         result = engine.execute(sql)
         all_data = result.fetchall()
         stops = {}
@@ -136,7 +138,7 @@ class api:
                 'longitude': float(row[2]),
                 'category': row[3],
                 'color': row[4],
-                'stop_id':row[5]
+                'stop_id': row[5]
             }
             stops.append(stop)
 
@@ -168,6 +170,46 @@ class dbi:
         location = (lat, long)
         return location
 
+    def find_darts(self, src, dest):
+        """
+        Finds darts
+        """
+        src_lat, src_lon = self.location_from_address(src)
+        dest_lat, dest_lon = self.location_from_address(dest)
+        engine = get_db()
+        radius = 0.8
+        """use 6371 as constant and drop degree conv."""
+        sql = "SELECT  distance_in_km_start_dart, distance_in_km_end_dart, start_dart_name, end_dart_name, start_cat, end_cat\
+         FROM(SELECT  s.Address as start_dart_name, s.category as start_cat, 111.111 *\
+                 DEGREES(ACOS(COS(RADIANS(%s))\
+         * COS(RADIANS(s.Lat))\
+         * COS(RADIANS(%s - s.Lon))\
+         + SIN(RADIANS(%s))\
+         * SIN(RADIANS(s.Lat))))  AS 'distance_in_km_start_dart'\
+                     FROM All_routes.dublinbike_dart_luas s\
+                     HAVING distance_in_km_start_dart< %s) As start_dart\
+                     JOIN\
+         (SELECT DISTINCT e.Address as end_dart_name, e.category as end_cat,111.111 * \
+         DEGREES(ACOS(COS(RADIANS(%s))\
+         * COS(RADIANS(e.Lat))\
+         * COS(RADIANS(%s - e.Lon))\
+         + SIN(RADIANS(%s))\
+         * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end_dart'\
+                     FROM All_routes.dublinbike_dart_luas e\
+                     HAVING distance_in_km_end_dart< %s) As end_dart\
+         WHERE start_cat='luas'  OR start_cat='dart' and start_cat = end_cat"
+        dart_result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
+        dart_all_data = dart_result.fetchall()
+        dart_dataframe = pd.DataFrame(dart_all_data,
+                                 columns=["dist_dart_start", "dist_dart_end", "start_dart_name", "end_dart_name", "start_cat", "end_cat"])
+        dart_dataframe['low_score_dart'] = dart_dataframe["dist_dart_start"] + dart_dataframe["dist_dart_end"]
+        dart_dataframe['walking_dist_dart'] = int(dart_dataframe.low_score_dart.values[0] / 0.05)
+        dart_dataframe = dart_dataframe.loc[dart_dataframe.low_score_dart.idxmin()]
+        dart_dataframe.drop(['low_score_dart','dist_dart_start','dist_dart_end', 'end_cat'])
+        print ("dart_dataframe",dart_dataframe)
+        return dart_dataframe
+
+
     def find_nearby_stops(self, src, dest):
         """
         Finds out the nearest stops to a given point
@@ -177,8 +219,8 @@ class dbi:
 
         src_lat, src_lon = self.location_from_address(src)
         dest_lat, dest_lon = self.location_from_address(dest)
-        self.mid_point_lat = (src_lat+dest_lat)/2
-        self.mid_point_lon = (src_lon +dest_lon)/2
+        self.mid_point_lat = (src_lat + dest_lat) / 2
+        self.mid_point_lon = (src_lon + dest_lon) / 2
         engine = get_db()
         radius = 0.3
 
@@ -206,7 +248,6 @@ class dbi:
         result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
         all_data = result.fetchall()
 
-
         dataframe = pd.DataFrame(all_data,
                                  columns=["Route", "Direction", "Start_Stop_ID", "End_Stop_ID", "Start_Stop_Sequence",
                                           "End_Stop_Sequence", "Distance_in_km_from_start", "Distance_in_km_from_end", "Start_Stop_Name", "End_Stop_Name"])
@@ -215,25 +256,25 @@ class dbi:
         return self.priority_options(dataframe)
 
     def priority_options(self, dataframe):
-        #this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
-        dataframe['low_score'] = dataframe["Distance_in_km_from_start"]+dataframe["Distance_in_km_from_end"]
+        # this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
+        dataframe['low_score'] = dataframe["Distance_in_km_from_start"] + dataframe["Distance_in_km_from_end"]
         dataframe = dataframe.loc[dataframe.groupby('Route').low_score.idxmin()]
-        #return self.dataframe_to_dict(dataframe)
-        self.start_stop_seq =dataframe.Start_Stop_Sequence
+        # return self.dataframe_to_dict(dataframe)
+        self.start_stop_seq = dataframe.Start_Stop_Sequence
         self.end_stop_seq = dataframe.End_Stop_Sequence
-        self.start_route =dataframe.Route
+        self.start_route = dataframe.Route
         self.direction = dataframe.Direction
 
         return (dataframe, self.extract_lat_lon_stops())
 
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def extract_lat_lon_stops(self):
         '''Returns lat lon of all stops on route'''
         co_ords = []
         engine = get_db()
 
-        sql ='SELECT lat, lon FROM All_routes.new_all_routes\
+        sql = 'SELECT lat, lon FROM All_routes.new_all_routes\
         WHERE Stop_sequence >= %s AND Stop_sequence<= %s AND Route = %s AND Direction = %s;'
 
         result = engine.execute(sql, (int(self.start_stop_seq.values[0]), int(self.end_stop_seq.values[0]), int(self.start_route.values[0]), int(self.direction.values[0])))
@@ -241,6 +282,7 @@ class dbi:
 
         for row in all_co_ord_data:
             co_ords.append({"lat": row[0], "lng": row[1]})
+        print ('co_ords', co_ords)
 
         return (co_ords)
 
@@ -285,8 +327,18 @@ class dbi:
                                                "contract": NAME})
         data = (json.loads(r.text))
 
-        return(data)
+        return (data)
 
+
+    #--------------------------------------------------------------------------#
+    def fares(self):
+
+
+        with urllib.request.urlopen("http://www.dublinbus.ie/en/Fare-Calculator/Fare-Calculator-Results/?routeNumber=46a&direction=O&board=31&alight=38") as response:
+            data = response.read()
+            soup = BeautifulSoup(data, 'html.parser')
+            r = soup.find('span', {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
+        return (r.text)
 
     # --------------------------------------------------------------------------#
     def extract_holidays(self):
@@ -311,7 +363,7 @@ class dbi:
         """Return the max stop sequence for a route in a direction"""
         engine = get_db()
 
-        sql = "SELECT MAX(Stop_sequence) FROM All_routes.Sequence WHERE Route = %s AND Direction = %s;"
+        sql = "SELECT MAX(Stop_sequence) FROM All_routes.new_all_routes WHERE Route = %s AND Direction = %s;"
 
         result = engine.execute(sql, (route, direction))
         all_data = result.fetchone()
@@ -332,8 +384,9 @@ class dbi:
         time = all_data[0]
         return time
 
+
 def dataframe_to_dict(dataframe):
-    #this converts the interesting routes to a dictionary
+    # this converts the interesting routes to a dictionary
     route_options = dataframe.transpose().to_dict()
     i = 1
     break_at = len(route_options)
@@ -343,6 +396,7 @@ def dataframe_to_dict(dataframe):
         route_options[str(i)] = route_options.pop(option)
         i += 1
     return route_options
+
 
 def everything(src, dest, time):
     """Determines the journey time for each viable route option
@@ -367,22 +421,24 @@ def everything(src, dest, time):
 
     route_options = dbi().find_nearby_stops(src, dest)[0]
     lat_long_list = dbi().find_nearby_stops(src, dest)[1]
+    darts = dbi().find_darts(src, dest)
     route_options.Direction = route_options.Direction.astype(int)
     route_options['Stops_To_Travel'] = route_options.End_Stop_Sequence - route_options.Start_Stop_Sequence
     route_options['temp'] = current_temp
     route_options['wind'] = current_wind
     route_options['day'] = weekday
     route_options['holiday'] = is_school_holiday
-    route_options['time_bin']=time_bin
-    route_options['time']=time
+    route_options['time_bin'] = time_bin
+    route_options['time'] = time
 
     def sched_speed(dataframe):
         direction = int(list(dataframe.Direction.unique())[0])
         route = list(dataframe.Route.unique())[0]
         dataframe['max_stop_sequence'] = dbi().get_max_sequence(route, direction)
         dataframe['scheduled_time'] = dbi().get_sched_time(route, direction)
-        dataframe['sched_speed'] =  dataframe.scheduled_time / dataframe.max_stop_sequence
-        dataframe.drop(['max_stop_sequence','scheduled_time' ], axis=1)
+        dataframe['sched_speed'] = dataframe.scheduled_time / dataframe.max_stop_sequence
+        dataframe['walking_mins'] =int(dataframe.low_score / 0.05)
+        dataframe.drop(['max_stop_sequence', 'scheduled_time'], axis=1)
         return dataframe
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(sched_speed)
@@ -398,11 +454,11 @@ def everything(src, dest, time):
 
             for time in times:
                 # makes time pretty
-                times_for_chart.append(str(time.hour) + ':' + str(time.minute))
+                times_for_chart.append(str(time.hour) + ":" + str(time.minute))
                 # makes time bin for time
-                bit1 = '1' if (time.minute > 15) else '0'
-                bit2 = '1' if (time.minute > 30) else '0'
-                bit3 = '1' if (time.minute > 45) else '0'
+                bit1 = "1" if (time.minute > 15) else "0"
+                bit2 = "1" if (time.minute > 30) else "0"
+                bit3 = "1" if (time.minute > 45) else "0"
                 '''str .join this later'''
                 time_bins.append(str(time.hour) + bit1 + bit2 + bit3)
             return (time_bins, times_for_chart)
@@ -414,25 +470,22 @@ def everything(src, dest, time):
 
         return df
 
-    route_options = route_options.groupby(['Route','Direction']).apply(everything_else)
+    route_options = route_options.groupby(['Route', 'Direction']).apply(everything_else)
 
     def make_predictions(df):
-        route = list(df.Route.unique())[0]
-        predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
-        time_options = list(df['time_bin'])
-        columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
-                   'Start_Stop_Sequence']
-        other_columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
-                   'Start_Stop_Sequence']
-        prediction_list = []
-        for time in time_options[0]:
-            prediction = (predictor.predict([df['day'].values[0]] + [time] + df[other_columns].values[0].tolist())[0])
-            prediction_list.append(round(float(prediction), 2))
-        '''add stop name to df,'''
-        df["Predictions"] = [prediction_list]
+        try:
+            route = list(df.Route.unique())[0]
+            predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
+            columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+                       'Start_Stop_Sequence']
+            df['Predictions'] = predictor.predict(df[columns])
+            '''add stop name to df,'''
+            pred = str(df.Predictions.values[0])
 
-        return df
-
+            # df['html'] = "<div data-toggle='collapse' data-target='#map'><div class='option_route' onclick='boxclick(this, 1)'>" + route + "</div><div class='option_src_dest'>" +str(df.Start_Stop_Name) + " to " + str(df.End_Stop_Name) + "</div><div class='option_journey_time'>" + pred + "</div></div>"
+            return df
+        except:
+            pass
     route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
 
     return (dataframe_to_dict(route_options), lat_long_list)
