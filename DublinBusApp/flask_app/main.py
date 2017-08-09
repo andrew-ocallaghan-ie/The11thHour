@@ -62,6 +62,15 @@ class RegisterForm(Form):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        if request.form['submit'] == 'normal':
+            dest = request.form['destination']
+        elif request.form['submit'] == 'work':
+            pass
+            # MAKE DEST = USERS WORK ADDRESS
+        elif request.form['submit'] == 'home':
+            pass
+            # MAKE DEST = USERS HOME ADDRESS
+
         src = request.form['origin']
         dest = request.form['destination']
         now_arrive_depart_selection = request.form['now_arrive_depart']
@@ -71,25 +80,23 @@ def index():
             weekday = time.weekday()
             hour = time.hour
             min = time.minute
-            # This needs to be edited to be able to handle the two different use cases
-            # i.e. Arrive By & Depart At. This is a good base for taking in the code though
         else:
             time = request.form['time'].split(":")
-            date = request.form['date'].split("-")
-            year = int(date[0])
-            month = int(date[1])
-            day = int(date[2])
+            date = request.form['date'].split(" ")
+            year = int(date[2])
+            dates = {'January,':1, 'February,':2, 'March,':3, 'April,':4, 'May,':5, 'June,':6, 'July,':7, 'August,':8, 'September,':9, 'October,':10, 'November,':11, 'December,':12 }
+            month = dates[date[1]]
+
+            day = int(date[0])
             weekday = datetime(year, month, day).weekday()
             hour = int(time[0])
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
-        
+
         # THE DICTIONARY!
         # Take google places api call from everything and keep it here.
         route_options = everything(src, dest, time)[0]
         lat_long_list = everything(src, dest, time)[1]
-        print("Route options:", route_options)
-        print("Printing:",lat_long_list)
 
         return render_template('route_options.html', **locals())
 
@@ -338,13 +345,6 @@ def get_all_stop_info():
 def get_bikes():
     bikes = dbi().bikes()
     return json.dumps(bikes)
-
-#-------------------------------------------------------------------------#
-
-@app.route("/api/fare_data")
-def get_fares():
-    fares = dbi().fares()
-    return fares
 
 
 # =================================== DB ==================================#

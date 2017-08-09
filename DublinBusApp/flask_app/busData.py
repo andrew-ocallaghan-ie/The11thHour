@@ -13,6 +13,12 @@ import datetime
 from bs4 import BeautifulSoup
 import urllib.request
 
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    import sklearn, pandas as pd
+
 # http://scikit-learn.org/stable/
 from sklearn.externals import joblib
 
@@ -76,9 +82,9 @@ class api:
         """Returns a JSON list with info about a given stop in a given direction"""
 
         engine = get_db()
-        sql = "SELECT st.Stop_ID, Stop_name, Lat, Lon, Stop_sequence, Routes_serviced, Direction \
-               FROM All_routes.Stops st, All_routes.Sequence sq \
-               WHERE st.Stop_ID = sq.Stop_ID AND Route = %s AND Direction = %s;"
+        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Stop_sequence, Routes_serviced_at_stop, Direction \
+               FROM All_routes.new_all_routes sq \
+               WHERE  Route = %s AND Direction = %s;"
         result = engine.execute(sql, (routenum, direction))
         all_data = result.fetchall()
 
@@ -203,10 +209,9 @@ class dbi:
         dart_dataframe = pd.DataFrame(dart_all_data,
                                  columns=["dist_dart_start", "dist_dart_end", "start_dart_name", "end_dart_name", "start_cat", "end_cat"])
         dart_dataframe['low_score_dart'] = dart_dataframe["dist_dart_start"] + dart_dataframe["dist_dart_end"]
-        dart_dataframe['walking_dist_dart'] = int(dart_dataframe.low_score_dart.values[0] / 0.05)
-        dart_dataframe = dart_dataframe.loc[dart_dataframe.low_score_dart.idxmin()]
-        dart_dataframe.drop(['low_score_dart','dist_dart_start','dist_dart_end', 'end_cat'])
-        print ("dart_dataframe",dart_dataframe)
+        # dart_dataframe['walking_dist_dart'] = int(dart_dataframe.low_score_dart.values[0] / 0.05)
+        # dart_dataframe = dart_dataframe.loc[dart_dataframe.low_score_dart.idxmin()]
+        # dart_dataframe.drop(['low_score_dart','dist_dart_start','dist_dart_end', 'end_cat'])
         return dart_dataframe
 
 
@@ -264,8 +269,9 @@ class dbi:
         self.end_stop_seq = dataframe.End_Stop_Sequence
         self.start_route = dataframe.Route
         self.direction = dataframe.Direction
+        self.fare_route = dataframe['Route'].str.lower()
 
-        return (dataframe, self.extract_lat_lon_stops())
+        return (dataframe, self.extract_lat_lon_stops(), self.fares())
 
     # --------------------------------------------------------------------------#
 
@@ -277,11 +283,14 @@ class dbi:
         sql = 'SELECT lat, lon FROM All_routes.new_all_routes\
         WHERE Stop_sequence >= %s AND Stop_sequence<= %s AND Route = %s AND Direction = %s;'
 
-        result = engine.execute(sql, (int(self.start_stop_seq.values[0]), int(self.end_stop_seq.values[0]), int(self.start_route.values[0]), int(self.direction.values[0])))
+        result = engine.execute(sql, (int(self.start_stop_seq.values[0]), int(self.end_stop_seq.values[0]), (self.start_route.values[0]), int(self.direction.values[0])))
         all_co_ord_data = result.fetchall()
 
         for row in all_co_ord_data:
             co_ords.append({"lat": row[0], "lng": row[1]})
+
+        co_ords.pop()
+
         print ('co_ords', co_ords)
 
         return (co_ords)
@@ -310,8 +319,6 @@ class dbi:
 
         # Temperature
         current_temp = data['hourly_forecast'][0]['temp']['metric']
-        # Rainfall
-        # current_rain = data['hourly_forecast'][0]['qpf']['metric']
         # Windspeed
         current_wind = data['hourly_forecast'][0]['wspd']['metric']
 
@@ -319,6 +326,44 @@ class dbi:
         return (current_temp, current_wind)
 
     # --------------------------------------------------------------------------#
+
+    def weather_scraper(self, time):
+        '''Returns a summary of the current weather from the Wunderground API'''
+        # API URI
+
+        same_hour = time.hour == datetime.datetime.now().hour
+        same_day = time.date() == datetime.datetime.now().date()
+        if same_hour and same_day:
+            hour = 0
+        else:
+            diff = (time - datetime.datetime.now()).total_seconds() / (60 * 60)
+            hour = round(diff)
+        api = 'http://api.wunderground.com/api'
+        # API Parameters
+        city = '/IE/Dublin'
+        app_id = '/0d675ef957ce972d'
+        api_type = '/hourly10day'
+
+        URI = api + app_id + api_type + '/q' + city + '.json'
+
+        # Loading Data
+        try:
+            req = requests.get(URI)
+            data = req.json()
+
+        except:
+            data = []
+            print(traceback.format_exc())
+
+        temp = data['hourly_forecast'][hour]['temp']['metric']
+        wind_speed = data['hourly_forecast'][hour]['wspd']['metric']
+
+        # Returning Summary
+        return(temp, wind_speed)
+
+    # --------------------------------------------------------------------------#
+
+
     def bikes(self):
         APIKEY = 'a360b2a061d254a3a5891e4415511251899f6df1'
         NAME = "Dublin"
@@ -333,12 +378,12 @@ class dbi:
     #--------------------------------------------------------------------------#
     def fares(self):
 
-
-        with urllib.request.urlopen("http://www.dublinbus.ie/en/Fare-Calculator/Fare-Calculator-Results/?routeNumber=46a&direction=O&board=31&alight=38") as response:
+        with urllib.request.urlopen("https://www.dublinbus.ie/Fare-Calculator/Fare-Calculator-Results/?routeNumber=" + self.fare_route.values[0] + "&direction=I&board=" + str( self.start_stop_seq.values[0]) + "&alight=" + str(self.end_stop_seq.values[0])) as response:
             data = response.read()
             soup = BeautifulSoup(data, 'html.parser')
-            r = soup.find('span', {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
-        return (r.text)
+            fare = soup.find('span',
+                             {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
+        return (fare.text)
 
     # --------------------------------------------------------------------------#
     def extract_holidays(self):
@@ -387,14 +432,15 @@ class dbi:
 def dataframe_to_dict(dataframe):
     # this converts the interesting routes to a dictionary
     route_options = dataframe.transpose().to_dict()
+    new_options = {}
     i = 1
     break_at = len(route_options)
     for option in route_options:
         if i > break_at:
             break
-        route_options[str(i)] = route_options.pop(option)
+        new_options[str(i)] = route_options[option]
         i += 1
-    return route_options
+    return new_options
 
 
 def everything(src, dest, time):
@@ -415,7 +461,7 @@ def everything(src, dest, time):
     else:
         is_school_holiday = 0
 
-    weather = dbi().scrape_weather()
+    weather = dbi().weather_scraper(time)
     current_temp, current_wind = weather
 
     route_options = dbi().find_nearby_stops(src, dest)[0]
@@ -432,11 +478,13 @@ def everything(src, dest, time):
 
     def sched_speed(dataframe):
         direction = int(list(dataframe.Direction.unique())[0])
+        direction = int(list(dataframe.Direction.unique())[0])
         route = list(dataframe.Route.unique())[0]
         dataframe['max_stop_sequence'] = dbi().get_max_sequence(route, direction)
         dataframe['scheduled_time'] = dbi().get_sched_time(route, direction)
         dataframe['sched_speed'] = dataframe.scheduled_time / dataframe.max_stop_sequence
         dataframe['walking_mins'] =int(dataframe.low_score / 0.05)
+        dataframe['fare'] = dbi().priority_options(dataframe)[2]
         dataframe.drop(['max_stop_sequence', 'scheduled_time'], axis=1)
         return dataframe
 
@@ -475,8 +523,8 @@ def everything(src, dest, time):
         route = list(df.Route.unique())[0]
         predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
         time_options = list(df['time_bin'])
-        columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
-                   'Start_Stop_Sequence']
+        # columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+        #            'Start_Stop_Sequence']
         other_columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
                          'Start_Stop_Sequence']
         prediction_list = []
