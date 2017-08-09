@@ -3,16 +3,20 @@
 #------------------------------------------------------------------------------#
 
 #https://docs.python.org/3/library/concurrent.futures.html
-from concurrent.futures import ThreadPoolExecutor #not needed
+#from concurrent.futures import ThreadPoolExecutor #not needed
 from concurrent.futures import ProcessPoolExecutor
 
 from datetime import date
 
+#conda install -c conda-forge geopandas
+from geopandas import GeoDataFrame
+from geopandas import sjoin
+
 #https://pandas.pydata.org/pandas-docs/stable/
 import pandas as pd
 
-#conda install -c conda-forge geopandas
-import geopandas
+#http://numba.pydata.org/numba-doc/dev/user/vectorize.html
+from numba import vectorize
 
 #http://www.numpy.org/
 import numpy as np
@@ -28,6 +32,9 @@ from os import path
 
 #https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.stats.hmean.html
 from scipy.stats import hmean
+
+#http://toblerity.org/shapely/shapely.geometry.html
+from shapely.geometry import Point
 
 #http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
 from sklearn import preprocessing
@@ -48,17 +55,17 @@ from sklearn.metrics.classification import accuracy_score
 #http://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
 from sklearn.model_selection import GridSearchCV 
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import cross_val_score
 
 #http://scikit-learn.org/stable/modules/classes.html#module-sklearn.pipeline
 from sklearn.pipeline import make_pipeline
 
+
 from time import time
+
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 #warnings.simplefilter(action='ignore', category = DtypeWarning)
-
 
 #------------------------------------------------------------------------------#
 #------------------------------CLASSES-----------------------------------------#
@@ -84,26 +91,19 @@ class cleaning:
         self.df.columns = columns
 
     #--------------------------------------------------------------------------#
-    #Geospatial join to certain prevision
-    #inner join on lineID direction and StopID
-    def drop_it_like_its_stop(self):
-        '''drops any data classified as NOT at stop'''
-        self.df = self.df[self.df.At_Stop == 1]
-
-    #--------------------------------------------------------------------------#
     
     def drop_useless_columns(self):
         '''drops poorly defined, un-used, non-critical columns'''
-        useless = ['Congestion', 'Delay', 'Block_ID', 'Operator', 'Lat', 'Lon', 'At_Stop']
+        useless = ['Congestion', 'Delay', 'Block_ID', 
+                   'Operator', 'At_Stop','Timeframe', 'Stop_ID']
         self.df = self.df.drop(useless, axis=1)
-        
+                
     #--------------------------------------------------------------------------#
 
     def fix_journey_pattern_id(self):
         '''takes nulls and re-derives them'''
-        single_journeys = [ 'Timeframe', 'LineID', 'Vehicle_Journey_ID',  
-                           'Vehicle_ID' ]
-        grouped_df = self.df.groupby(single_journeys)
+        single_journeys = [ 'LineID', 'Vehicle_Journey_ID', 'Vehicle_ID' ]
+        grouped_df = self.df.groupby(single_journeys, sort=False)
             
         def re_derive_nulls(df):
             '''if there are 2 Journey Pattern IDs  AND one is null AND the other is valid,
@@ -114,7 +114,7 @@ class cleaning:
                 valid = options.pop()
                 df.Journey_Pattern_ID = valid
             return df
-            
+          
         self.df =  grouped_df.apply(re_derive_nulls)
         
     #--------------------------------------------------------------------------# 
@@ -140,28 +140,77 @@ class cleaning:
    
     #--------------------------------------------------------------------------#
     
-    def remove_idling(self):
-        '''creates stops_made column'''
-        single_journeys = ['Timeframe', 'Journey_Pattern_ID', 'Vehicle_Journey_ID', 'Vehicle_ID']
-        grouped_df = self.df.groupby(single_journeys)
+    def remove_ideling(self):
+        '''drops lat lon replicas for idelling in a vicinity'''
+        self.df = self.df.sort_values('Timestamp')
+        single_journeys = ['Journey_Pattern_ID', 'Vehicle_Journey_ID', 'Vehicle_ID', 'Lat', 'Lon']
+        self.df.drop_duplicates(single_journeys, keep='first')
+    
+    
+    def drop_not_stop_info(self):
         
-        def remove_idle_at_stop(df):
-            '''drops repeated stop_ids after at stop==1 filter'''
-            return df.drop_duplicates(subset='Stop_ID', keep='first')
+        def empty_df():
+            columns = ['Lat_left', 'Lon_left', 'Stop_Sequence', 'geometry',
+                       'index_right', 'Timestamp', 'LineID', 'Direction', 'Journey_Pattern_ID',
+                       'Vehicle_Journey_ID', 'Lon_right', 'Lat_right', 'Vehicle_ID']            
+            return  pd.DataFrame(columns=columns)
         
-        self.df = grouped_df.apply(remove_idle_at_stop)
+        def init_geo_df(df):
+            crs = {'init': 'epsg:4326'}
+            geometry = [Point(xy) for xy in zip(df.Lon, df.Lat)]
+            return GeoDataFrame(df, crs=crs, geometry=geometry)
         
+        
+        def cheat(df):
+            df.sort_values(['dist'])
+            return df[df.dist == df.dist.min()]
+        
+        seq_df= pd.read_hdf('route_seq')
+        seq_df = seq_df[['LineID', 'Lat', 'Lon', 'Direction','Stop_Sequence']]
+        seq_df = init_geo_df(seq_df)
+        seq_df.geometry = seq_df.geometry.buffer(0.00002) #still a lot of rows,
+        
+        def closest(df):
+            route = df.LineID.unique()[0]
+            direction = df.Direction.unique()[0]
+            seq_df_narrow = seq_df[(seq_df.LineID==route) & (seq_df.Direction==direction)]
+            seq_df_narrow = seq_df_narrow.drop(['LineID','Direction'], axis = 1)
+            #print('Direction' in set(df.columns))
+            
+            try:
+                combined = sjoin(seq_df_narrow, df, how="inner", op='intersects')
+                #combined = combined.drop(['index_right'], axis = 1)
+                #print(combined.columns)
+                return combined
+            except:
+                print('viva la excepcion!')
+                return empty_df()    
+            
+        
+        self.df = init_geo_df(self.df)
+        self.df = self.df.groupby(['LineID','Direction'], sort = False).apply(closest)
+        
+        @vectorize(nopython=True)
+        def distance(x1,y1,x2,y2):
+            return (x1-x2)**2 + (y1-y2)**2        
+        self.df['dist'] = distance(self.df.Lat_left.values,  self.df.Lon_left.values, 
+                                   self.df.Lat_right.values, self.df.Lon_right.values)
+
+        single_journeys = ['Journey_Pattern_ID','Vehicle_Journey_ID', 'Vehicle_ID', 'Stop_Sequence']
+        self.df = self.df.groupby(single_journeys, sort=False).apply(cheat)
+        print(self.df.head())
+            
     #--------------------------------------------------------------------------#
     
     def clean(self):
         '''executes above instructions'''
-        self.drop_it_like_its_stop() # drop at stop == 0
         self.drop_useless_columns() # drops lat, lon, delay etc.
         self.fix_journey_pattern_id() # re-derieves JPID
         self.drop_literal_nulls() # drops 'null' from JPID
         self.fix_direction_column() # actually fixes direction
         self.fix_line_id() # fixes lineid from JPID
-        self.remove_idling() # 
+        self.remove_ideling()
+        self.drop_not_stop_info()
         return self.df
         
     #--------------------------------------------------------------------------#
@@ -204,9 +253,10 @@ class preparing:
     def create_start_end_times(self):
         '''creates start and end times columns for df'''
         as_delta = pd.to_timedelta
-        single_journeys = ['Vehicle_Journey_ID', 'Timeframe', 'Vehicle_ID', 'Journey_Pattern_ID']
-        self.df['End_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(max)
-        self.df['Start_Time'] = self.df.groupby(single_journeys)['Timestamp'].transform(min)
+        single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID', 'Journey_Pattern_ID']
+        self.df['End_Time'] = self.df.groupby(single_journeys, sort=False)['Timestamp'].transform(max)
+        self.df['Start_Time'] = self.df.groupby(single_journeys, sort=False)['Timestamp'].transform(min)
+        #numba
         self.df['Journey_Time'] = self.df.End_Time - self.df.Start_Time
         self.df.Journey_Time = as_delta(self.df.Journey_Time, unit='us').astype('timedelta64[m]')
     
@@ -214,7 +264,7 @@ class preparing:
     
     def drop_impossible_journey_times(self):
         '''returns rows where journey times are greater than zero'''
-        as_delta = pd.to_timedelta
+        #numba
         self.df = self.df[(self.df.Journey_Time) > 0]
             
     #--------------------------------------------------------------------------#       
@@ -242,38 +292,27 @@ class preparing:
                 
     #--------------------------------------------------------------------------#
 
-    def create_stop_sequence(self): #create_stop_sequence
+    def create_max_stop_sequence(self): #create_stop_sequence
         '''creates stop sequence column by merging with sequence dataframe'''
-        
-        def get_sequence_dataframe():
-            '''retrieves and prepares sequence dataframe'''
-            sequence_dataframe = pd.read_hdf('route_seq')
-            sequence_dataframe.LineID = sequence_dataframe.LineID.astype('str')
-            sequence_dataframe.Direction = sequence_dataframe.Direction.astype('str')
-            sequence_dataframe.Stop_ID = sequence_dataframe.Stop_ID.astype('str')
-            unique_signiture = ['LineID', 'Direction', 'Destination']
-            grouped_df = sequence_dataframe.groupby(unique_signiture)
-            sequence_dataframe['Max_Stop_Sequence'] = grouped_df.Stop_Sequence.transform(max)
-            excess_columns = ['Stop_name', 'Destination']
-            sequence_dataframe = sequence_dataframe.drop(excess_columns, axis=1)
-            return sequence_dataframe
- 
-        shared_columns = ['LineID', 'Stop_ID', 'Direction']
-        self.df = pd.merge(self.df, get_sequence_dataframe(), how='inner', on=shared_columns)
+        unique_signiture = ['LineID', 'Direction']
+        grouped = self.df.groupby(unique_signiture, sort=False)
+        self.df['Max_Stop_Sequence'] = grouped.Stop_Sequence.transform(max)
     
     #--------------------------------------------------------------------------#
     
     def create_start_end_stops(self):
         '''creates start and end stops and the difference between them'''
-        single_journeys = ['Vehicle_Journey_ID', 'Timeframe', 'Vehicle_ID', 'Journey_Pattern_ID']
-        self.df['End_Stop'] = self.df.groupby(single_journeys)['Stop_Sequence'].transform(max)
-        self.df['Start_Stop'] = self.df.groupby(single_journeys)['Stop_Sequence'].transform(min)
+        single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID', 'Journey_Pattern_ID']
+        self.df['End_Stop'] = self.df.groupby(single_journeys, sort=False)['Stop_Sequence'].transform(max)
+        self.df['Start_Stop'] = self.df.groupby(single_journeys, sort=False)['Stop_Sequence'].transform(min)
+        #numba
         self.df['Journey_Length'] = self.df.End_Stop - self.df.Start_Stop
     
     #--------------------------------------------------------------------------#
     
     def drop_impossible_journey_lengths(self):
         '''if a journey is 1 row, its invalid and should be dropped'''
+        #numba
         self.df = self.df[self.df.Journey_Length > 0]
     
     #--------------------------------------------------------------------------#
@@ -282,8 +321,10 @@ class preparing:
         '''creates columns measuring number of stops left (FEATURE)
          and time remaining (TARGET FEATURE), for journey'''
         as_delta = pd.to_timedelta
+        #numba
         self.df['Time_To_Travel'] = self.df.End_Time - self.df.Timestamp
         self.df.Time_To_Travel = as_delta(self.df.Time_To_Travel, unit='us').astype('timedelta64[m]')
+        #numba
         self.df['Stops_To_Travel'] = (self.df.End_Stop.astype(int) - self.df.Stop_Sequence.astype(int))
         
     #--------------------------------------------------------------------------#
@@ -292,20 +333,6 @@ class preparing:
         '''creates scheduled speed which is the scheduled mean rate of stop traversal'''
         self.df['Scheduled_Speed_Per_Stop'] = self.df.Scheduled_Time_OP/self.df.Max_Stop_Sequence
         
-        def get_mean_speed_at_time(df):
-            '''calculates mean speed for each journey, 
-            they are averaged using harmonic mean to get avg journey speed in timebin'''
-            df['Journey_Speed'] = (df.Journey_Length) / df.Journey_Time
-            single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID']
-            hmean_df = df.groupby(single_journeys).first()
-            hmean_df['Speed_At_Time'] = hmean_df.Journey_Speed.apply(hmean, axis=None)
-            columns_to_merge = ['LineID', 'Direction', 'Time_Bin_Start', 'Speed_At_Time']
-            hmean_df = hmean_df[columns_to_merge] 
-            df=pd.merge(df, hmean_df, how='inner', on=['LineID','Direction','Time_Bin_Start'])
-            return df
-            
-        self.df = self.df.groupby(['LineID', 'Direction', 'Time_Bin_Start']).apply(get_mean_speed_at_time)
-        self.df = self.df.drop(['Journey_Speed'], axis=1)
     
     #--------------------------------------------------------------------------#
     
@@ -329,9 +356,9 @@ class preparing:
     
     def drop_non_modeling_columns(self):
         '''drops columns that can't be modeled, improves write speed'''
-        useful = ['LineID',"Day_Of_Week", "Time_Bin_Start", "Wind_Speed",
-                   "Temperature", "Holiday", "Scheduled_Speed_Per_Stop",
-                    "Stops_To_Travel","Stop_Sequence",'Speed_At_Time', 
+        useful = ['LineID','Direction',"Day_Of_Week", "Time_Bin_Start", "Wind_Speed",
+                   "Temperature", 'Vehicle_Journey_ID','Vehicle_ID',"Holiday", "Scheduled_Speed_Per_Stop",
+                    "Stops_To_Travel","Stop_Sequence", 'Journey_Length','Journey_Time',
                     'Time_To_Travel']
         self.df = self.df = self.df[useful]
     
@@ -344,7 +371,7 @@ class preparing:
         self.drop_impossible_journey_times() # drops end_to_end journey times == 0
         self.create_holiday() # creates category for school holidays
         self.create_scheduled_time_op() # creates scheduled travel time        
-        self.create_stop_sequence() # creates stop sequences for routes
+        self.create_max_stop_sequence() # creates stop sequences for routes
         self.create_start_end_stops() #journey stop start and end stops
         self.create_travel_stops_and_times() #stops left to travel time left to travel
         self.drop_impossible_journey_lengths() #drops journies of 0 stops
@@ -365,6 +392,7 @@ class extracting:
         path_to_files = list(map(lambda data: path.join(path_to_folder, data), all_files))
         self.files = path_to_files
         
+        
     #--------------------------------------------------------------------------#
     
     def extract(self, route):
@@ -374,10 +402,33 @@ class extracting:
         accumulator = accumulator[accumulator.LineID == route].drop(['LineID'], axis=1)
         for data in self.files:
             df = pd.read_hdf(data)
-            df =df[df.LineID == route].drop(['LineID'], axis=1)
+            df = df[df.LineID == route].drop(['LineID'], axis=1)
             accumulator, df = accumulator.align(df, axis=1)
             accumulator = pd.concat([accumulator, df])
         return accumulator
+    
+    #--------------------------------------------------------------------------#
+    
+    def make_mean_speed(self, df):
+        def get_mean_speed_at_time(df):
+            '''calculates mean speed for each journey, 
+            they are averaged using harmonic mean to get avg journey speed in timebin'''
+            df['Journey_Speed'] = (df.Journey_Length) / df.Journey_Time
+            single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID']
+            hmean_df = df.groupby(single_journeys, sort=False).first()
+            hmean_df['Speed_At_Time'] = hmean_df.Journey_Speed.apply(hmean, axis=None)
+            columns_to_merge = ['Direction', 'Time_Bin_Start', 'Speed_At_Time']
+            hmean_df = hmean_df[columns_to_merge] 
+            df=pd.merge(df, hmean_df, how='inner', on=['Direction','Time_Bin_Start'])
+            return df
+    
+        df = df.groupby(['Direction', 'Time_Bin_Start'], sort=False).apply(get_mean_speed_at_time)
+        df = df.drop(['Journey_Speed'], axis=1)
+        return df
+            
+            
+    def extract_and_analyse(self, route):
+        return self.make_mean_speed(self.extract(route))
 
 #------------------------------------------------------------------------------#
 
@@ -542,17 +593,21 @@ def get_all_routes():
         for data in path_to_files:
             df = pd.read_hdf(data)
             routes = routes.union(set(df.LineID.unique()))
-        discards = ['46A','38A','41C','44','1','102',
-                    '11','111','114','116','118',
-                    '120','122','123','13','130',
-                    '14','140','145','14C', '15','150','151','15A','15B',
-                    '16','161','17A','18','184','185'
-                    '220','236','238','239','25','25A','25B','25X','26',
-                    '27','270','27A','27B','29A',
-                    '31','31B','32','32X','33A','33B','33X','37','38','39','39A',
-                    '40','40B', '40D','41','41B','42','43']
-        for route in discards:
-            routes.discard(route)
+#         discards = ['46A','38A','41C','44',
+#                     '1','102',
+#                     '11','111','114','116','118',
+#                     '120','122','123','13','130',
+#                     '14','140','145','14C', '15','150','151','15A','15B',
+#                     '16','161','17A','18','184','185'
+#                     '220','236','238','239','25','25A','25B','25X','26',
+#                     '27','270','27A','27B','29A',
+#                     '31','31B','32','32X','33A','33B','33X','37','38','39','39A',
+#                     '40','40B', '40D','41','41B','42','43','44B','45A','46E','47',
+#                     '51D','51X','53','56A','59',
+#                     '61','63','65','65B','66','66B','66X','67','67X','68','69','69X' ]
+         
+#        for route in discards:
+ #           routes.discard(route)
         #print(len(routes), sorted(routes, key=str))
         return routes
     
@@ -561,7 +616,7 @@ def get_all_routes():
 def extraction(route):
     '''splits data by route'''
     results = []
-    df = extracting().extract(route)
+    df = extracting().extract_and_analyse(route)
     write_address = path.join(getcwd(), 'routes', 'xbeta'+str(route)+'.h5')
     df.to_hdf(write_address, key='moo', mode = 'w')        
     results.append(route +'it worked!')
@@ -588,8 +643,8 @@ def main1():
     '''multiprocesses cleaning and prep of raw data, cpu heavy'''
     path_to_raw = path.join(getcwd(), 'DayRawCopy')
     files = listdir(path_to_raw)
-    with ProcessPoolExecutor(max_workers=3) as Executor:
-        for file, result in tqdm(zip(files, Executor.map(re_construction, files, chunksize=2))):
+    with ProcessPoolExecutor(max_workers=1) as Executor:
+        for file, result in tqdm(zip(files, Executor.map(re_construction, files, chunksize=1))):
             #print(file[:-4], result)
             #add to log
             pass
@@ -612,7 +667,7 @@ def main3():
     in the final steps these results are gathered and saved'''
     path_to_folder = path.join(getcwd(), 'routes' )
     files = listdir(path_to_folder)
-    pool = ProcessPoolExecutor(max_workers=1)
+    pool = ProcessPoolExecutor(max_workers=3)
     RF_records, DB_records, MS_records = [], [], []
     results = zip(files, pool.map(quantification, files))
     for data_file, summary in tqdm(results):
@@ -635,10 +690,10 @@ if __name__ == '__main__':
     def processing():
         setup_folders()
         t1=time()
-        #main1()
+        main1()
         t2=time()
         print((t2-t1)//60, 'Mins to re_construct')
-        #main2()
+        main2()
         t3=time()
         print((t3-t2)//60, 'Mins to extract')
         main3()
