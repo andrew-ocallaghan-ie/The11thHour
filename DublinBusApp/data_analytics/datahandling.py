@@ -457,7 +457,7 @@ class modelling:
         scaler = preprocessing.StandardScaler().fit(self.X_train.drop(['Speed_At_Time'], axis=1)) #normalisation
         #print(self.X_train.drop(['Speed_At_Time'], axis=1).shape, self.X_train.drop(['Speed_At_Time'], axis=1).columns)
         pipeline = make_pipeline(preprocessing.StandardScaler(), 
-                                 RandomForestRegressor(n_estimators=10, n_jobs=-1))
+                                 RandomForestRegressor(n_estimators=10, n_jobs=1))
         hyperparameters = {'randomforestregressor__max_features':[ None, 'sqrt', 'log2'],
                            'randomforestregressor__max_depth':[None, 5, 3, 1]}
         reg = GridSearchCV(pipeline, hyperparameters, cv=8)
@@ -643,7 +643,7 @@ def main1():
     '''multiprocesses cleaning and prep of raw data, cpu heavy'''
     path_to_raw = path.join(getcwd(), 'DayRawCopy')
     files = listdir(path_to_raw)
-    with ProcessPoolExecutor(max_workers=1) as Executor:
+    with ProcessPoolExecutor(max_workers=3) as Executor:
         for file, result in tqdm(zip(files, Executor.map(re_construction, files, chunksize=1))):
             #print(file[:-4], result)
             #add to log
@@ -667,7 +667,7 @@ def main3():
     in the final steps these results are gathered and saved'''
     path_to_folder = path.join(getcwd(), 'routes' )
     files = listdir(path_to_folder)
-    pool = ProcessPoolExecutor(max_workers=3)
+    pool = ProcessPoolExecutor(max_workers=2)
     RF_records, DB_records, MS_records = [], [], []
     results = zip(files, pool.map(quantification, files))
     for data_file, summary in tqdm(results):
