@@ -32,7 +32,7 @@ import pandas as pd
 
 #pymysql.install_as_MySQLdb()
 
-from flask import  jsonify
+from flask import jsonify
 import json
 
 # View site @ http://localhost:5000/
@@ -64,6 +64,15 @@ class RegisterForm(Form):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        if request.form['submit'] == 'normal':
+            dest = request.form['destination']
+        elif request.form['submit'] == 'work':
+            pass
+            # MAKE DEST = USERS WORK ADDRESS
+        elif request.form['submit'] == 'home':
+            pass
+            # MAKE DEST = USERS HOME ADDRESS
+
         src = request.form['origin']
         dest = request.form['destination']
         now_arrive_depart_selection = request.form['now_arrive_depart']
@@ -73,22 +82,30 @@ def index():
             weekday = time.weekday()
             hour = time.hour
             min = time.minute
-            # This needs to be edited to be able to handle the two different use cases
-            # i.e. Arrive By & Depart At. This is a good base for taking in the code though
         else:
             time = request.form['time'].split(":")
-            date = request.form['date'].split("-")
-            year = int(date[0])
-            month = int(date[1])
-            day = int(date[2])
+            date = request.form['date'].split(" ")
+            year = int(date[2])
+            dates = {'January,':1, 'February,':2, 'March,':3, 'April,':4, 'May,':5, 'June,':6, 'July,':7, 'August,':8, 'September,':9, 'October,':10, 'November,':11, 'December,':12 }
+            month = dates[date[1]]
+
+            day = int(date[0])
             weekday = datetime(year, month, day).weekday()
             hour = int(time[0])
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
-        
-        #THE DICTIONARY!
-        #take googleplaces api call from everything and keep it here.
-        route_options = everything(src, dest, time)
+
+        # THE DICTIONARY!
+        # Take google places api call from everything and keep it here.
+        try:
+            route_options = everything(src, dest, time)[0]
+            lat_long_list = everything(src, dest, time)[1]
+        except IndexError as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            error_html = "No valid routes found for " + src + " to " + dest + " please try a more detailed or different address."
+            return render_template('home.html', **locals())
 
         return render_template('route_options.html', **locals())
 
@@ -104,10 +121,21 @@ def route_search():
     if request.method == 'POST':
         users_route = request.form['user_route']
 
+        route_list = api().stop_and_route_lists()[0]
+        if users_route not in route_list:
+            error_html = 'Error. ' + users_route + ' is an invalid route. Please select a valid route from the dropdown list.'
+            return render_template('route_search.html', **locals())
+
+
         if request.form.get('direction') == 'on':
-            direction = 1
-        else:
             direction = 0
+        else:
+            direction = 1
+
+        if direction == 1:
+            html = "Route " + users_route + " Stops Northbound"
+        elif direction == 0:
+            html = "Route " + users_route + " Stops Southbound"
 
     return render_template('route_search.html', **locals())
 
@@ -121,7 +149,20 @@ def stop_search():
 
     if request.method == 'POST':
         stop_num = request.form['user_stop']
-        print(stop_num)
+        try:
+            int(stop_num)
+        except ValueError as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            error_html = "Stop ID must be a number."
+            return render_template('stop_search.html', **locals())
+
+        stop_list = api().stop_and_route_lists()[1]
+        if int(stop_num) not in stop_list:
+            error_html = 'Error. ' + stop_num + ' is an invalid stop. Please select a valid stop ID from the dropdown list.'
+            return render_template('stop_search.html', **locals())
+
         return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())
@@ -341,7 +382,6 @@ def get_bikes():
     return json.dumps(bikes)
 
 
-
 # =================================== DB ==================================#
 
 
@@ -369,7 +409,6 @@ def get_db():
 # =================================== DB ==================================#
 
 # Setting app to run only if this file is run directly.
-app.secret_key='secret123'
-app.config['SESSION_TYPE'] = 'filesystem'
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.secret_key = 'secret123'
+    app.run(debug=True)

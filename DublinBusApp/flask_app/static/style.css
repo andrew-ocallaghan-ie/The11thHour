@@ -49,9 +49,9 @@ nav .brand-logo{
     width: 50%;
 }
 
-/*#now_arrive_depart{*/
-    /*color: #A7ADB3;*/
-/*}*/
+.home_work button{
+    width:250px;
+}
 
 #inputs #origin, #inputs #destination, #inputs select, #inputs button{
     margin-top: 8px;
@@ -114,7 +114,7 @@ margin-bottom:5px;
     padding-left: 10px;
 }
 
-.route_options .running_man img{
+.route_options .running_man img, .route_options .journey_fare img{
     height: 20px;
     width: 20px;
     vertical-align: middle;
@@ -253,6 +253,10 @@ input#user_stop{
 @media (max-width: 768px) {
     #map, #panomap, #pano{
         height: 200px;
+    }
+
+    .route_options .running_man img, .route_options .journey_fare img{
+        display: none;
     }
 }
 

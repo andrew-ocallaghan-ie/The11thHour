@@ -45,7 +45,7 @@
 
             function createMarker(lat,lng,name,category,color,stop_id) {
                 var marker_vis;
-                if (category == "1" || category == "User Location"){
+                if (category == '1' || category == "User Location"){
                     marker_vis = true
                 } else {
                     marker_vis = false
@@ -80,7 +80,7 @@
                   markers.infowindow.setContent(contentString);
                   markers.infowindow.open(map, this);}
                   if(marker.mycategory=="dart"){
-                    var station_name = marker.myname.replace(/ /g, "%20")
+                    var station_name = marker.myname.replace(/ /g, "%20");
                     var site = 'https://api.irishrail.ie/realtime/realtime.asmx/getStationDataByNameXML_withNumMins?StationDesc='+station_name+'&NumMins=20';
                     var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select objStationData.Destination, objStationData.Exparrival from xml where url="' + site + '"') + '&format=xml&callback=?';
                     $.getJSON(yql, function (data) {
@@ -97,9 +97,9 @@
                       }
                   if(marker.mycategory=="dublinbike"){
                       
-                     var id = marker.myid
+                     var id = marker.myid;
                      
-                     var site = 'https://api.jcdecaux.com/vls/v1/stations/'+id+'?contract=Dublin&apiKey=a360b2a061d254a3a5891e4415511251899f6df1'
+                     var site = 'https://api.jcdecaux.com/vls/v1/stations/'+id+'?contract=Dublin&apiKey=a360b2a061d254a3a5891e4415511251899f6df1';
                      jQuery.getJSON(site,null,function(data){
                          
                      var contentString='<h3>'+name+'</h3>'+'<br>'+'available bikes '+data.available_bikes + '<br>' +'availbale stands ' + data.available_bike_stands;
@@ -156,9 +156,13 @@
             // Google Map
             function myMap() {
 
+                var mid_lat, mid_lon;
+
                 $.getJSON($SCRIPT_ROOT + '/api/routes/{{users_route}}/{{direction}}', function (json) {
                     // Looping through elements in JSON file.
 
+                    mid_lat = parseFloat(json.stops[parseInt(json.stops.length / 2)].lat);
+                    mid_lon = parseFloat(json.stops[parseInt(json.stops.length / 2)].lon);
 
                     for (var i = 0; i < json.stops.length; i++) {
                         // Creating Marker
@@ -227,34 +231,31 @@
                 // Map options
                 var mapOptions = {
                     center: myCenter,
-                    zoom: 12,
+                    zoom: 11,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
 
                 // Creating map
                 map = new google.maps.Map(mapCanvas, mapOptions);
 
-            }
-
-            //get user geolocation
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                var marker = new google.maps.Marker({
-                    position: geolocate,
-                    map: map,
-                    title: 'You are here',
-                icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                                strokeColor: '#463274',
-                                strokeWeight: 1.5,
-                                fillColor: '#45ADA8',
-                                fillOpacity: 0.4,
-                                scale: 10
-                            }
+                //get user geolocation
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    var marker = new google.maps.Marker({
+                        position: geolocate,
+                        map: map,
+                        title: 'You are here',
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor: '#463274',
+                            strokeWeight: 1.5,
+                            fillColor: '#45ADA8',
+                            fillOpacity: 0.4,
+                            scale: 10
+                        }
+                    });
                 });
-{#                    'Latitude:' + position.coords.latitude  +#}
-{#                    'Longitude:' + position.coords.longitude#}
-            });
+            }
 
             $(document).ready(function() {
                 $('select').material_select();

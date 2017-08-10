@@ -39,29 +39,40 @@
     <div class="container">
         <div class="row" id="inputs">
             <div class="col-sm-6">
+                <span class="error_message">{{ error_html }}</span>
                 <form method="POST">
-                    <input type="text" class="form-control" id="origin" name="origin" placeholder="Start">
+                    <input type="text" class="form-control collapse in" id="origin" name="origin" placeholder="Start">
                     <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
 
                     <select class="input-field" name="now_arrive_depart" id="now_arrive_depart">
                       <option value="0">Now</option>
-                      <option value="1">Arrive By</option>
-                      <option value="2">Leave At</option>
+                      <option value="1">Leave At</option>
+{#                      <option value="2">Arrive By</option>#}
                     </select>
-{#                    <input type="time" id="time_input" name="time" class="collapse date_time">#}
-{#                    <input type="date" id="date_input" name="date" class="collapse date_time">#}
 
                     <input type="time" id="time_input" name="time" class="collapse date_time timepicker">
                     <input type="date" id="date_input" name="date" class="collapse date_time datepicker">
 
-                    <button class="btn waves-effect waves-light" type="submit">GO!
+                    <input type="checkbox" id="use_location">
+                    <label for="use_location">Use current location as start</label>
+
+                    <button class="btn waves-effect waves-light" type="submit" name="submit" value="normal">GO!
                         <i class="material-icons right">send</i>
                     </button>
+
               </form>
             </div>
-
-            <div class="col-sm-6 route_options">
-                {{html}}
+            <div class="col-sm-6 home_work">
+                <form method="POST">
+                    {% if session.logged_in %}
+                    <button class="btn waves-effect waves-light" type="submit" name="submit" value="home">Get me Home
+                        <i class="material-icons right">home</i>
+                    </button>
+                    <button class="btn waves-effect waves-light" type="submit" name="submit" value="work">Get me to Work
+                        <i class="material-icons right">work</i>
+                    </button>
+                    {% endif %}
+                </form>
             </div>
         </div>
     </div>
@@ -74,7 +85,9 @@
     <script>
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year,
+            selectYears: 0, // Creates a dropdown of 15 years to control year,
+            min: true,
+            max: 10,
             today: 'Today',
             clear: 'Clear',
             close: 'Ok',
@@ -88,10 +101,19 @@
             donetext: 'OK', // text for done-button
             cleartext: 'Clear', // text for clear-button
             canceltext: 'Cancel', // Text for cancel-button
-            autoclose: false, // automatic close timepicker
+            autoclose: true, // automatic close timepicker
             ampmclickable: true // make AM PM clickable
         });
 
+        if (navigator.geolocation){
+            document.getElementById("use_location").style.display = "block"
+        } else {
+            document.getElementById("use_location").style.display = "none"
+        }
+
+        $('#use_location').on('click', function(){
+                $('#origin').collapse("toggle")
+        });
 
     </script>
 
