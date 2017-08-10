@@ -54,59 +54,59 @@
 {#            createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);#}
 {#            createMarker({{ dest_lat }},{{ dest_long }},"Destination","User Location",'red', 1);#}
 
-            var polylinePath = new google.maps.Polyline({
-                path: flightPlanCoordinates,
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 3
-            });
-
-            polylinePath.setMap(map);
-
+{#            var polylinePath = new google.maps.Polyline({#}
+{#                path: flightPlanCoordinates,#}
+{#                geodesic: true,#}
+{#                strokeColor: '#FF0000',#}
+{#                strokeOpacity: 1.0,#}
+{#                strokeWeight: 3#}
+{#            });#}
+{##}
+{#            polylinePath.setMap(map);#}
+{##}
 {#            runSnapToRoad(polylinePath);#}
-
-            // Snap a user-created polyline to roads and draw the snapped path
-            function runSnapToRoad(path) {
-
-                var pathValues = [];
-                for (var i = 0; i < path.getLength(); i++) {
-                    pathValues.push(path.getAt(i).toUrlValue());
-                }
-                $.get('https://roads.googleapis.com/v1/snapToRoads', {
-                    interpolate: true,
-                    key: AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc,
-                    path: pathValues.join('|')
-                }, function(data) {
-                    processSnapToRoadResponse(data);
-                    drawSnappedPolyline();
-                });
-            }
-
-        // Store snapped polyline returned by the snap-to-road service.
-        function processSnapToRoadResponse(data) {
-            snappedCoordinates = [];
-            placeIdArray = [];
-            for (var i = 0; i < data.snappedPoints.length; i++) {
-                var latlng = new google.maps.LatLng(
-                    data.snappedPoints[i].location.latitude,
-                    data.snappedPoints[i].location.longitude);
-                snappedCoordinates.push(latlng);
-                placeIdArray.push(data.snappedPoints[i].placeId);
-            }
-        }
-
-        // Draws the snapped polyline (after processing snap-to-road response).
-        function drawSnappedPolyline() {
-          var snappedPolyline = new google.maps.Polyline({
-            path: snappedCoordinates,
-            strokeColor: 'black',
-            strokeWeight: 3
-          });
-          snappedPolyline.setMap(map);
-          polylines.push(snappedPolyline);
-        }
-
+{##}
+{#            // Snap a user-created polyline to roads and draw the snapped path#}
+{#            function runSnapToRoad(path) {#}
+{##}
+{#                var pathValues = [];#}
+{#                for (var i = 0; i < path.getLength(); i++) {#}
+{#                    pathValues.push(path.getAt(i).toUrlValue());#}
+{#                }#}
+{#                $.get('https://roads.googleapis.com/v1/snapToRoads', {#}
+{#                    interpolate: true,#}
+{#                    key: AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc,#}
+{#                    path: pathValues.join('|')#}
+{#                }, function(data) {#}
+{#                    processSnapToRoadResponse(data);#}
+{#                    drawSnappedPolyline();#}
+{#                });#}
+{#            }#}
+{##}
+{#        // Store snapped polyline returned by the snap-to-road service.#}
+{#        function processSnapToRoadResponse(data) {#}
+{#            snappedCoordinates = [];#}
+{#            placeIdArray = [];#}
+{#            for (var i = 0; i < data.snappedPoints.length; i++) {#}
+{#                var latlng = new google.maps.LatLng(#}
+{#                    data.snappedPoints[i].location.latitude,#}
+{#                    data.snappedPoints[i].location.longitude);#}
+{#                snappedCoordinates.push(latlng);#}
+{#                placeIdArray.push(data.snappedPoints[i].placeId);#}
+{#            }#}
+{#        }#}
+{##}
+{#        // Draws the snapped polyline (after processing snap-to-road response).#}
+{#        function drawSnappedPolyline() {#}
+{#          var snappedPolyline = new google.maps.Polyline({#}
+{#            path: snappedCoordinates,#}
+{#            strokeColor: 'black',#}
+{#            strokeWeight: 3#}
+{#          });#}
+{#          snappedPolyline.setMap(map);#}
+{#          polylines.push(snappedPolyline);#}
+{#        }#}
+{##}
         }
 
         function moveCenter(lat, long){
@@ -137,7 +137,6 @@
             });
         });
 
-
         $(window).bind('resize load', function() {
             if ($(this).height() < 415) {
                 $('#collapse_map').removeClass('in');
@@ -147,6 +146,13 @@
                 $('#collapse_map').addClass('in');
             }
         });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                var lat = navigator.geolocation.coords.latitude;
+                var long = navigator.geolocation.coords.longitude;
+            }
+        }
 
     </script>
 

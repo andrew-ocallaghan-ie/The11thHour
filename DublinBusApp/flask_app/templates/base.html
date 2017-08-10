@@ -156,9 +156,13 @@
             // Google Map
             function myMap() {
 
+                var mid_lat, mid_lon;
+
                 $.getJSON($SCRIPT_ROOT + '/api/routes/{{users_route}}/{{direction}}', function (json) {
                     // Looping through elements in JSON file.
 
+                    mid_lat = parseFloat(json.stops[parseInt(json.stops.length / 2)].lat);
+                    mid_lon = parseFloat(json.stops[parseInt(json.stops.length / 2)].lon);
 
                     for (var i = 0; i < json.stops.length; i++) {
                         // Creating Marker
@@ -227,32 +231,31 @@
                 // Map options
                 var mapOptions = {
                     center: myCenter,
-                    zoom: 12,
+                    zoom: 11,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
 
                 // Creating map
                 map = new google.maps.Map(mapCanvas, mapOptions);
 
-            }
-
-            //get user geolocation
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                var marker = new google.maps.Marker({
-                    position: geolocate,
-                    map: map,
-                    title: 'You are here',
-                icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                                strokeColor: '#463274',
-                                strokeWeight: 1.5,
-                                fillColor: '#45ADA8',
-                                fillOpacity: 0.4,
-                                scale: 10
-                            }
+                //get user geolocation
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    var marker = new google.maps.Marker({
+                        position: geolocate,
+                        map: map,
+                        title: 'You are here',
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            strokeColor: '#463274',
+                            strokeWeight: 1.5,
+                            fillColor: '#45ADA8',
+                            fillOpacity: 0.4,
+                            scale: 10
+                        }
+                    });
                 });
-            });
+            }
 
             $(document).ready(function() {
                 $('select').material_select();

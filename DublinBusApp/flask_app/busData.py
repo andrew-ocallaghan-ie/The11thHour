@@ -89,6 +89,7 @@ class api:
         all_data = result.fetchall()
 
         stops = []
+        stop_id_list = []
 
         for row in all_data:
             stop = {
@@ -106,15 +107,13 @@ class api:
         # Returning info
         return jsonify({'stops': stops})
 
-
-
         # --------------------------------------------------------------------------#
 
     def all_bus_stop_info(self):
         """Returns the stop information as a JSON dictionary. This is to make it faster to lookup individual stops."""
 
         engine = get_db()
-        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Routes_serviced FROM All_routes.new_all_routes ORDER BY abs(Stop_ID);"
+        sql = "SELECT Stop_ID, Stop_name, Lat, Lon, Routes_serviced_at_stop FROM All_routes.new_all_routes ORDER BY abs(Stop_ID);"
         result = engine.execute(sql)
         all_data = result.fetchall()
         stops = {}
@@ -150,6 +149,23 @@ class api:
 
         # Returning info
         return jsonify({'stops': stops})
+
+        # --------------------------------------------------------------------------#
+
+    def stop_and_route_lists(self):
+        engine = get_db()
+        sql = "SELECT Route, Stop_ID FROM All_routes.new_all_routes;"
+        result = engine.execute(sql)
+        all_data = result.fetchall()
+        stops = set()
+        routes = set()
+
+        for row in all_data:
+            routes.add(row[0])
+            stops.add(row[1])
+
+        # Returning info
+        return (list(routes), list(stops))
 
         # --------------------------------------------------------------------------#
 

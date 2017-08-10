@@ -27,7 +27,6 @@
          });
      }
 
-
 </script>
 
 <div id="map"></div>
@@ -35,6 +34,7 @@
     <div class="row" id="inputs">
 
         <div class="col-sm-6">
+            {{ error_html }}
 
             <form method="POST">
 
@@ -73,7 +73,7 @@
           </form>
         </div>
 
-        <h4>Route {{users_route}} Stops {{direction}}</h4>
+        <h4>{{ html }}</h4>
         <div class="col-sm-6" id="list_the_bus_stops">
             <div id="bus_stops"></div>
             <!--Calls the function to add the autocomplete info to the search bar-->

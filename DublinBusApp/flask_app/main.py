@@ -95,8 +95,15 @@ def index():
 
         # THE DICTIONARY!
         # Take google places api call from everything and keep it here.
-        route_options = everything(src, dest, time)[0]
-        lat_long_list = everything(src, dest, time)[1]
+        try:
+            route_options = everything(src, dest, time)[0]
+            lat_long_list = everything(src, dest, time)[1]
+        except IndexError as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            error_html = "No valid routes found for " + src + " to " + dest + " please try a more detailed or different address."
+            return render_template('home.html', **locals())
 
         return render_template('route_options.html', **locals())
 
@@ -112,10 +119,21 @@ def route_search():
     if request.method == 'POST':
         users_route = request.form['user_route']
 
+        route_list = api().stop_and_route_lists()[0]
+        if users_route not in route_list:
+            error_html = 'Error. ' + users_route + ' is an invalid route. Please select a valid route from the dropdown list.'
+            return render_template('route_search.html', **locals())
+
+
         if request.form.get('direction') == 'on':
-            direction = 1
-        else:
             direction = 0
+        else:
+            direction = 1
+
+        if direction == 1:
+            html = "Route " + users_route + " Stops Northbound"
+        elif direction == 0:
+            html = "Route " + users_route + " Stops Southbound"
 
     return render_template('route_search.html', **locals())
 
@@ -129,7 +147,20 @@ def stop_search():
 
     if request.method == 'POST':
         stop_num = request.form['user_stop']
-        print(stop_num)
+        try:
+            int(stop_num)
+        except ValueError as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            error_html = "Stop ID must be a number."
+            return render_template('stop_search.html', **locals())
+
+        stop_list = api().stop_and_route_lists()[1]
+        if int(stop_num) not in stop_list:
+            error_html = 'Error. ' + stop_num + ' is an invalid stop. Please select a valid stop ID from the dropdown list.'
+            return render_template('stop_search.html', **locals())
+
         return render_template('bus_stop.html', **locals())
 
     return render_template('stop_search.html', **locals())

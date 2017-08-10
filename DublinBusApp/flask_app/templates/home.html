@@ -39,6 +39,7 @@
     <div class="container">
         <div class="row" id="inputs">
             <div class="col-sm-6">
+                <span class="error_message">{{ error_html }}</span>
                 <form method="POST">
                     <input type="text" class="form-control collapse in" id="origin" name="origin" placeholder="Start">
                     <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
@@ -84,7 +85,9 @@
     <script>
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year,
+            selectYears: 0, // Creates a dropdown of 15 years to control year,
+            min: true,
+            max: 10,
             today: 'Today',
             clear: 'Clear',
             close: 'Ok',
@@ -98,7 +101,7 @@
             donetext: 'OK', // text for done-button
             cleartext: 'Clear', // text for clear-button
             canceltext: 'Cancel', // Text for cancel-button
-            autoclose: false, // automatic close timepicker
+            autoclose: true, // automatic close timepicker
             ampmclickable: true // make AM PM clickable
         });
 
@@ -111,15 +114,6 @@
         $('#use_location').on('click', function(){
                 $('#origin').collapse("toggle")
         });
-
-{#        if (document.getElementById("use_location").checked = true){#}
-{#            console.log("checked");#}
-{#            document.getElementById("origin").style.display = "none"#}
-{#        } else {#}
-{#            document.getElementById("origin").style.display = "block";#}
-{#            console.log("unchecked")#}
-{#        }#}
-
 
     </script>
 
