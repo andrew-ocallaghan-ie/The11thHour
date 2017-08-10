@@ -30,7 +30,7 @@ import requests
 # http://pandas.pydata.org/
 import pandas as pd
 
-#pymysql.install_as_MySQLdb()
+pymysql.install_as_MySQLdb()
 
 from flask import jsonify
 import json
@@ -50,8 +50,8 @@ class RegisterForm(Form):
     name = StringField('Name', [validators.length(min=1, max=50)])
     username = StringField('Username', [validators.length(min=4, max=25)])
     email = StringField('Email', [validators.length(min=4, max=50)])
-    work = StringField('Work')
-    home = StringField('home')
+    work = StringField('Work(optional)')
+    home = StringField('Home(optional)')
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
