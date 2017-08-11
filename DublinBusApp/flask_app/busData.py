@@ -192,17 +192,22 @@ class dbi:
         location = (lat, long)
         return location
 
+        #------------------------------------------------------------------------------------#
+
     def find_darts(self, src, dest):
         """
         Finds darts
         """
+        #try:
         src_lat, src_lon = self.location_from_address(src)
         dest_lat, dest_lon = self.location_from_address(dest)
+        mid_point_lat = (src_lat + dest_lat) / 2
+        mid_point_lon = (src_lon + dest_lon) / 2
         engine = get_db()
-        radius = 0.8
+        radius = 1
         """use 6371 as constant and drop degree conv."""
-        sql = "SELECT  distance_in_km_start_dart, distance_in_km_end_dart, start_dart_name, end_dart_name, start_cat, end_cat\
-         FROM(SELECT  s.Address as start_dart_name, s.category as start_cat, 111.111 *\
+        sql = "SELECT  distance_in_km_start_dart, distance_in_km_end_dart, start_dart_name, end_dart_name, start_cat, end_cat, start_stop_id, end_stop_id\
+         FROM(SELECT s.Address as start_dart_name, s.category as start_cat, s.Stop_ID as start_stop_id, 111.111 *\
                  DEGREES(ACOS(COS(RADIANS(%s))\
          * COS(RADIANS(s.Lat))\
          * COS(RADIANS(%s - s.Lon))\
@@ -211,7 +216,7 @@ class dbi:
                      FROM All_routes.dublinbike_dart_luas s\
                      HAVING distance_in_km_start_dart< %s) As start_dart\
                      JOIN\
-         (SELECT DISTINCT e.Address as end_dart_name, e.category as end_cat,111.111 * \
+         (SELECT e.Address as end_dart_name, e.category as end_cat, e.Stop_ID as end_stop_id, 111.111 * \
          DEGREES(ACOS(COS(RADIANS(%s))\
          * COS(RADIANS(e.Lat))\
          * COS(RADIANS(%s - e.Lon))\
@@ -219,17 +224,50 @@ class dbi:
          * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end_dart'\
                      FROM All_routes.dublinbike_dart_luas e\
                      HAVING distance_in_km_end_dart< %s) As end_dart\
-         WHERE start_cat='luas'  OR start_cat='dart' and start_cat = end_cat"
+         WHERE start_cat != 'dublinbike' and end_cat != 'dublinbike' and start_cat = end_cat"
         dart_result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
         dart_all_data = dart_result.fetchall()
         dart_dataframe = pd.DataFrame(dart_all_data,
-                                 columns=["dist_dart_start", "dist_dart_end", "start_dart_name", "end_dart_name", "start_cat", "end_cat"])
+                                      columns=["dist_dart_start", "dist_dart_end", "Start_Stop_Name", "End_Stop_Name",
+                                               "Route", "end_cat", "end_stop_id", "start_stop_id"])
         dart_dataframe['low_score_dart'] = dart_dataframe["dist_dart_start"] + dart_dataframe["dist_dart_end"]
-        # dart_dataframe['walking_dist_dart'] = int(dart_dataframe.low_score_dart.values[0] / 0.05)
-        # dart_dataframe = dart_dataframe.loc[dart_dataframe.low_score_dart.idxmin()]
-        # dart_dataframe.drop(['low_score_dart','dist_dart_start','dist_dart_end', 'end_cat'])
-        return dart_dataframe
+        dart_dataframe['stops_travelled'] = (dart_dataframe.end_stop_id - dart_dataframe.start_stop_id)
+        dart_dataframe['Direction'] = 1
+        dart_dataframe['Route'] = dart_dataframe.end_cat
+        dart_dataframe['Predictions'] = dart_dataframe.apply(lambda x: [abs(dart_dataframe.stops_travelled.values[0]*2)], axis=1)
+        print ('dart dataframe', dart_dataframe.Predictions)
+        dart_dataframe['walking_mins'] = int(dart_dataframe.low_score_dart.values[0] / 0.2)
+        dart_dataframe['mid_point_lat'] = mid_point_lat
+        dart_dataframe['mid_point_lon'] = mid_point_lon
+        print ('dart dataframe',dart_dataframe)
 
+        return self.dart_dataframe_to_dict(dart_dataframe)
+        #except:
+            #pass
+
+         #-----------------------------------------------------------------------------------#
+
+    def dart_dataframe_to_dict(self, dart_dataframe):
+
+        dart_dataframe = pd.concat([dart_dataframe, pd.DataFrame(columns=list(['Start_Stop_ID', 'End_Stop_ID',
+                                                                               'Start_Stop_Sequence',
+                                                                               'End_Stop_Sequence',
+                                                                               'Distance_in_km_from_start',
+                                                                               'Distance_in_km_from_end',
+                                                                               'mid_point_lat', 'mid_point_lon',
+                                                                               'low_score',
+                                                                               'Stops_To_Travel',
+                                                                               'temp', 'wind', 'day', 'holiday',
+                                                                               'time_bin', 'time',
+                                                                               'max_stop_sequence', 'scheduled_time',
+                                                                               'sched_speed', 'fare',
+                                                                               'pretty_times']))])
+        dart_dataframe.fillna(value='None', method=None, axis=None, inplace=False)
+        print ('dart dataframe', dart_dataframe)
+        self.route_options_dartluas = dart_dataframe
+        return self.route_options_dartluas
+
+        #----------------------------------------------------------------------------#
 
     def find_nearby_stops(self, src, dest):
         """
@@ -243,7 +281,7 @@ class dbi:
         self.mid_point_lat = (src_lat + dest_lat) / 2
         self.mid_point_lon = (src_lon + dest_lon) / 2
         engine = get_db()
-        radius = 0.3
+        radius = 0.6
 
         """use 6371 as constant and drop degree conv."""
         sql = "SELECT  start_route, start_direction, start_stop, end_stop, start_stop_seq, end_stop_seq, distance_in_km_start, distance_in_km_end, start_stop_name, end_stop_name\
@@ -275,6 +313,8 @@ class dbi:
         dataframe['mid_point_lat']=self.mid_point_lat
         dataframe['mid_point_lon']=self.mid_point_lon
         return self.priority_options(dataframe)
+
+        #------------------------------------------------------------------------------------#
 
     def priority_options(self, dataframe):
         # this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
@@ -393,13 +433,19 @@ class dbi:
 
     #--------------------------------------------------------------------------#
     def fares(self):
-
-        with urllib.request.urlopen("https://www.dublinbus.ie/Fare-Calculator/Fare-Calculator-Results/?routeNumber=" + self.fare_route.values[0] + "&direction=I&board=" + str( self.start_stop_seq.values[0]) + "&alight=" + str(self.end_stop_seq.values[0])) as response:
-            data = response.read()
-            soup = BeautifulSoup(data, 'html.parser')
-            fare = soup.find('span',
-                             {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
-        return (fare.text)
+        try:
+            if self.direction.values[0] == 1:
+                direction = 'I'
+            else:
+                direction = 'O'
+            with urllib.request.urlopen("https://www.dublinbus.ie/Fare-Calculator/Fare-Calculator-Results/?routeNumber=" + self.fare_route.values[0] + "&direction=I&board=" + str( self.start_stop_seq.values[0]) + "&alight=" + str(self.end_stop_seq.values[0])) as response:
+                data = response.read()
+                soup = BeautifulSoup(data, 'html.parser')
+                fare = soup.find('span',
+                                 {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
+            return (fare.text)
+        except:
+            pass
 
     # --------------------------------------------------------------------------#
     def extract_holidays(self):
@@ -445,8 +491,14 @@ class dbi:
         time = all_data[0]
         return time
 
-def dataframe_to_dict(dataframe):
+def dataframe_to_dict(src, dest, dataframe):
     # this converts the interesting routes to a dictionary
+    darts = dbi().find_darts(src, dest)
+
+    try:
+        dataframe = pd.concat([darts, dataframe], axis=0)
+    except:
+        pass
     route_options = dataframe.transpose().to_dict()
     new_options = {}
     i = 1
@@ -454,9 +506,12 @@ def dataframe_to_dict(dataframe):
     for option in route_options:
         if i > break_at:
             break
+        #route_options[str(i)] = route_options.pop(option)
         new_options[str(i)] = route_options[option]
         i += 1
+    print('full dataframe predictions', dataframe.Predictions)
     return new_options
+
 
 
 def everything(src, dest, time):
@@ -550,8 +605,10 @@ def everything(src, dest, time):
         '''add stop name to df,'''
         df["Predictions"] = [prediction_list]
 
+
+
         return df
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
 
-    return (dataframe_to_dict(route_options), lat_long_list)
+    return (dataframe_to_dict(src, dest, route_options), lat_long_list)
