@@ -198,52 +198,52 @@ class dbi:
         """
         Finds darts
         """
-        #try:
-        src_lat, src_lon = self.location_from_address(src)
-        dest_lat, dest_lon = self.location_from_address(dest)
-        mid_point_lat = (src_lat + dest_lat) / 2
-        mid_point_lon = (src_lon + dest_lon) / 2
-        engine = get_db()
-        radius = 1
-        """use 6371 as constant and drop degree conv."""
-        sql = "SELECT  distance_in_km_start_dart, distance_in_km_end_dart, start_dart_name, end_dart_name, start_cat, end_cat, start_stop_id, end_stop_id\
-         FROM(SELECT s.Address as start_dart_name, s.category as start_cat, s.Stop_ID as start_stop_id, 111.111 *\
-                 DEGREES(ACOS(COS(RADIANS(%s))\
-         * COS(RADIANS(s.Lat))\
-         * COS(RADIANS(%s - s.Lon))\
-         + SIN(RADIANS(%s))\
-         * SIN(RADIANS(s.Lat))))  AS 'distance_in_km_start_dart'\
-                     FROM All_routes.dublinbike_dart_luas s\
-                     HAVING distance_in_km_start_dart< %s) As start_dart\
-                     JOIN\
-         (SELECT e.Address as end_dart_name, e.category as end_cat, e.Stop_ID as end_stop_id, 111.111 * \
-         DEGREES(ACOS(COS(RADIANS(%s))\
-         * COS(RADIANS(e.Lat))\
-         * COS(RADIANS(%s - e.Lon))\
-         + SIN(RADIANS(%s))\
-         * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end_dart'\
-                     FROM All_routes.dublinbike_dart_luas e\
-                     HAVING distance_in_km_end_dart< %s) As end_dart\
-         WHERE start_cat != 'dublinbike' and end_cat != 'dublinbike' and start_cat = end_cat"
-        dart_result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
-        dart_all_data = dart_result.fetchall()
-        dart_dataframe = pd.DataFrame(dart_all_data,
-                                      columns=["dist_dart_start", "dist_dart_end", "Start_Stop_Name", "End_Stop_Name",
-                                               "Route", "end_cat", "end_stop_id", "start_stop_id"])
-        dart_dataframe['low_score_dart'] = dart_dataframe["dist_dart_start"] + dart_dataframe["dist_dart_end"]
-        dart_dataframe['stops_travelled'] = (dart_dataframe.end_stop_id - dart_dataframe.start_stop_id)
-        dart_dataframe['Direction'] = 1
-        dart_dataframe['Route'] = dart_dataframe.end_cat
-        dart_dataframe['Predictions'] = dart_dataframe.apply(lambda x: [abs(dart_dataframe.stops_travelled.values[0]*2)], axis=1)
-        print ('dart dataframe', dart_dataframe.Predictions)
-        dart_dataframe['walking_mins'] = int(dart_dataframe.low_score_dart.values[0] / 0.2)
-        dart_dataframe['mid_point_lat'] = mid_point_lat
-        dart_dataframe['mid_point_lon'] = mid_point_lon
-        print ('dart dataframe',dart_dataframe)
+        try:
+            src_lat, src_lon = self.location_from_address(src)
+            dest_lat, dest_lon = self.location_from_address(dest)
+            mid_point_lat = (src_lat + dest_lat) / 2
+            mid_point_lon = (src_lon + dest_lon) / 2
+            engine = get_db()
+            radius = 1
+            """use 6371 as constant and drop degree conv."""
+            sql = "SELECT  distance_in_km_start_dart, distance_in_km_end_dart, start_dart_name, end_dart_name, start_cat, end_cat, start_stop_id, end_stop_id\
+             FROM(SELECT s.Address as start_dart_name, s.category as start_cat, s.Stop_ID as start_stop_id, 111.111 *\
+                     DEGREES(ACOS(COS(RADIANS(%s))\
+             * COS(RADIANS(s.Lat))\
+             * COS(RADIANS(%s - s.Lon))\
+             + SIN(RADIANS(%s))\
+             * SIN(RADIANS(s.Lat))))  AS 'distance_in_km_start_dart'\
+                         FROM All_routes.dublinbike_dart_luas s\
+                         HAVING distance_in_km_start_dart< %s) As start_dart\
+                         JOIN\
+             (SELECT e.Address as end_dart_name, e.category as end_cat, e.Stop_ID as end_stop_id, 111.111 * \
+             DEGREES(ACOS(COS(RADIANS(%s))\
+             * COS(RADIANS(e.Lat))\
+             * COS(RADIANS(%s - e.Lon))\
+             + SIN(RADIANS(%s))\
+             * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end_dart'\
+                         FROM All_routes.dublinbike_dart_luas e\
+                         HAVING distance_in_km_end_dart< %s) As end_dart\
+             WHERE start_cat != 'dublinbike' and end_cat != 'dublinbike' and start_cat = end_cat"
+            dart_result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
+            dart_all_data = dart_result.fetchall()
+            dart_dataframe = pd.DataFrame(dart_all_data,
+                                          columns=["dist_dart_start", "dist_dart_end", "Start_Stop_Name", "End_Stop_Name",
+                                                   "Route", "end_cat", "end_stop_id", "start_stop_id"])
+            dart_dataframe['low_score_dart'] = dart_dataframe["dist_dart_start"] + dart_dataframe["dist_dart_end"]
+            dart_dataframe['stops_travelled'] = (dart_dataframe.end_stop_id - dart_dataframe.start_stop_id)
+            dart_dataframe['Direction'] = 1
+            dart_dataframe['Route'] = dart_dataframe.end_cat
+            dart_dataframe['Predictions'] = dart_dataframe.apply(lambda x: [abs(dart_dataframe.stops_travelled.values[0]*2)], axis=1)
+            print ('dart dataframe', dart_dataframe.Predictions)
+            dart_dataframe['walking_mins'] = int(dart_dataframe.low_score_dart.values[0] / 0.2)
+            dart_dataframe['mid_point_lat'] = mid_point_lat
+            dart_dataframe['mid_point_lon'] = mid_point_lon
+            print ('dart dataframe',dart_dataframe)
 
-        return self.dart_dataframe_to_dict(dart_dataframe)
-        #except:
-            #pass
+            return self.dart_dataframe_to_dict(dart_dataframe)
+        except:
+            pass
 
          #-----------------------------------------------------------------------------------#
 
