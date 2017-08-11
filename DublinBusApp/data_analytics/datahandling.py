@@ -9,6 +9,7 @@ from concurrent.futures import ProcessPoolExecutor
 from datetime import date
 
 #conda install -c conda-forge geopandas
+#http://geopandas.org/
 from geopandas import GeoDataFrame
 from geopandas import sjoin
 
@@ -29,9 +30,6 @@ from os import getcwd
 from os import listdir
 from os import makedirs
 from os import path
-
-#https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.stats.hmean.html
-from scipy.stats import hmean
 
 #http://toblerity.org/shapely/shapely.geometry.html
 from shapely.geometry import Point
@@ -59,10 +57,10 @@ from sklearn.model_selection import train_test_split
 #http://scikit-learn.org/stable/modules/classes.html#module-sklearn.pipeline
 from sklearn.pipeline import make_pipeline
 
-
+#https://docs.python.org/3.6/library/time.html
 from time import time
 
-
+#https://docs.python.org/3.1/library/warnings.html
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 #warnings.simplefilter(action='ignore', category = DtypeWarning)
@@ -73,12 +71,11 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
  
 class cleaning:
     #https://data.dublinked.ie/dataset/dublin-bus-gps-sample-data-from-dublin-city-council-insight-project
-    '''Class that carries out cleaning action on a dataframe
+    '''Class that carries out cleaning action on a dataframe.
      - initialised with a pandas dataframe of raw Dublin Bus AVL data
      - assumes column names from DublinBus AVL data
      - single attribute 'df'
      - calls the 'clean' method to execute all other methods in order '''
-    
     #--------------------------------------------------------------------------#
 
     def __init__(self, df):
@@ -94,19 +91,24 @@ class cleaning:
     
     def drop_useless_columns(self):
         '''drops poorly defined, un-used, non-critical columns'''
-        useless = ['Congestion', 'Delay', 'Block_ID', 
-                   'Operator', 'At_Stop','Timeframe', 'Stop_ID']
+        useless = ['Congestion',  #ambiguous definition and behaviour
+                   'Delay',       #ambiguous definition and behaviour
+                   'Block_ID',    #ambiguous definition and behaviour
+                   'Operator',    #not used in analysis
+                   'At_Stop',     #innacurate
+                   'Stop_ID'      #innacurate
+                   ]
         self.df = self.df.drop(useless, axis=1)
                 
     #--------------------------------------------------------------------------#
 
     def fix_journey_pattern_id(self):
-        '''takes nulls and re-derives them'''
+        '''takes nulls in Journey Patter ID and re-derives them using this method'''
         single_journeys = [ 'LineID', 'Vehicle_Journey_ID', 'Vehicle_ID' ]
         grouped_df = self.df.groupby(single_journeys, sort=False)
             
         def re_derive_nulls(df):
-            '''if there are 2 Journey Pattern IDs  AND one is null AND the other is valid,
+            '''if there are 2 Journey Pattern IDs  AND one is null AND other is valid,
              reassign whole group to valid the Journey Pattern ID'''
             options =set(df.Journey_Pattern_ID.unique()) 
             if len(options) == 2 and 'null' in options:
@@ -115,25 +117,25 @@ class cleaning:
                 df.Journey_Pattern_ID = valid
             return df
           
-        self.df =  grouped_df.apply(re_derive_nulls)
+        self.df =  grouped_df.apply(re_derive_nulls).reset_index()
         
     #--------------------------------------------------------------------------# 
     
     def drop_literal_nulls(self):
-        '''drops rows where Journey Pattern ID is not 'null' literal'''
+        '''drops rows where Journey Pattern ID is not 'null' str literal'''
         self.df = self.df[self.df.Journey_Pattern_ID != 'null' ]
         
     #--------------------------------------------------------------------------#  
     
     def fix_direction_column(self):
-        '''Re-derives Direction from Journey Patter ID'''
+        '''Re-derives Direction from Journey Patter ID. 4th index'''
         self.df.Journey_Pattern_ID = self.df.Journey_Pattern_ID.astype('str')    
         self.df.Direction = self.df.Journey_Pattern_ID.str[4]
     
     #--------------------------------------------------------------------------#
     
     def fix_line_id(self):
-        '''Re-derives LineID from Journey Pattern ID'''
+        '''Re-derives LineID from Journey Pattern ID. first indices [0-4)'''
         self.df.Journey_Pattern_ID = self.df.Journey_Pattern_ID.astype('str')
         self.df.LineID = self.df.Journey_Pattern_ID.str[:4]
         self.df.LineID = self.df.LineID.str.lstrip('0') #strips leading zeros
@@ -141,84 +143,92 @@ class cleaning:
     #--------------------------------------------------------------------------#
     
     def remove_ideling(self):
-        '''drops lat lon replicas for idelling in a vicinity'''
+        '''drops lat lon replicas for idelling in a certain locality'''
         self.df = self.df.sort_values('Timestamp')
-        single_journeys = ['Journey_Pattern_ID', 'Vehicle_Journey_ID', 'Vehicle_ID', 'Lat', 'Lon']
+        single_journeys = ['Journey_Pattern_ID', 'Vehicle_Journey_ID',
+                           'Vehicle_ID', 'Lat', 'Lon']
         self.df.drop_duplicates(single_journeys, keep='first')
     
+    #--------------------------------------------------------------------------#
     
     def drop_not_stop_info(self):
+        '''merges processed N.T.A. DB stop info with raw data
+         for resolve stop positions and stopIDs and sequence'''
         
         def empty_df():
+            '''help handle occasional goepandas sjoin error in a groupby'''
             columns = ['Lat_left', 'Lon_left', 'Stop_Sequence', 'geometry',
-                       'index_right', 'Timestamp', 'LineID', 'Direction', 'Journey_Pattern_ID',
-                       'Vehicle_Journey_ID', 'Lon_right', 'Lat_right', 'Vehicle_ID']            
+                       'index_right', 'Timestamp', 'LineID', 'Direction',
+                       'Journey_Pattern_ID', 'Vehicle_Journey_ID', 'Lon_right',
+                       'Lat_right', 'Vehicle_ID'] #column structure of 'combined'            
             return  pd.DataFrame(columns=columns)
         
         def init_geo_df(df):
+            '''inits geodf given source df with Lat Lon attributes'''
             crs = {'init': 'epsg:4326'}
             geometry = [Point(xy) for xy in zip(df.Lon, df.Lat)]
             return GeoDataFrame(df, crs=crs, geometry=geometry)
         
-        
-        def cheat(df):
-            df.sort_values(['dist'])
-            return df[df.dist == df.dist.min()]
-        
         seq_df= pd.read_hdf('route_seq')
         seq_df = seq_df[['LineID', 'Lat', 'Lon', 'Direction','Stop_Sequence']]
         seq_df = init_geo_df(seq_df)
-        seq_df.geometry = seq_df.geometry.buffer(0.00002) #still a lot of rows,
+        seq_df.geometry = seq_df.geometry.buffer(0.002) #catchment radius for stop,
+        self.df = init_geo_df(self.df)
         
-        def closest(df):
+        def closest_stop(df):
+            '''maps each row for route and direction permutation to...
+             nearest valid stop within that route-direction set'''
             route = df.LineID.unique()[0]
             direction = df.Direction.unique()[0]
-            seq_df_narrow = seq_df[(seq_df.LineID==route) & (seq_df.Direction==direction)]
-            seq_df_narrow = seq_df_narrow.drop(['LineID','Direction'], axis = 1)
-            #print('Direction' in set(df.columns))
-            
+            seq_df2 = seq_df[(seq_df.LineID==route) & (seq_df.Direction==direction)]
+            seq_df2 = seq_df2.drop(['LineID','Direction'], axis = 1)
             try:
-                combined = sjoin(seq_df_narrow, df, how="inner", op='intersects')
-                #combined = combined.drop(['index_right'], axis = 1)
-                #print(combined.columns)
+                combined = sjoin(seq_df2, df, how='inner', op='intersects')
                 return combined
-            except:
+            except: 
                 print('viva la excepcion!')
-                return empty_df()    
-            
+                return empty_df() #I handle the geopandas empty array error!    
         
-        self.df = init_geo_df(self.df)
-        self.df = self.df.groupby(['LineID','Direction'], sort = False).apply(closest)
+        pattern = ['LineID', 'Direction']
+        self.df = self.df.groupby(pattern, sort=False).apply(closest_stop).reset_index(drop=True)
+        print('closest stop finished')
         
         @vectorize(nopython=True)
         def distance(x1,y1,x2,y2):
             return (x1-x2)**2 + (y1-y2)**2        
         self.df['dist'] = distance(self.df.Lat_left.values,  self.df.Lon_left.values, 
                                    self.df.Lat_right.values, self.df.Lon_right.values)
-
-        single_journeys = ['Journey_Pattern_ID','Vehicle_Journey_ID', 'Vehicle_ID', 'Stop_Sequence']
-        self.df = self.df.groupby(single_journeys, sort=False).apply(cheat)
-        print(self.df.head())
+        
+        def closest_entry(df):
+            '''takes rows that minimise distance to their local stop'''
+            df.sort_values(['dist'])
+            return df[df.dist == df.dist.min()]
+        
+        single_journeys = ['Journey_Pattern_ID','Vehicle_Journey_ID',
+                           'Vehicle_ID', 'Stop_Sequence']
+        self.df = self.df.groupby(single_journeys, sort=False).apply(closest_entry).reset_index(drop=True)
             
     #--------------------------------------------------------------------------#
     
     def clean(self):
         '''executes above instructions'''
-        self.drop_useless_columns() # drops lat, lon, delay etc.
-        self.fix_journey_pattern_id() # re-derieves JPID
-        self.drop_literal_nulls() # drops 'null' from JPID
-        self.fix_direction_column() # actually fixes direction
-        self.fix_line_id() # fixes lineid from JPID
-        self.remove_ideling()
+        self.drop_useless_columns()
+        self.fix_journey_pattern_id() 
+        self.drop_literal_nulls()    
+        self.fix_direction_column()  
+        self.fix_line_id()         
+        self.remove_ideling()  
+        print('starting merge')  
         self.drop_not_stop_info()
+        print('merge over')
         return self.df
         
     #--------------------------------------------------------------------------#
 
 class preparing:
-    '''class prepares dataframe with new columns
+    '''class prepares dataframe with derived columns necessary for modeling
     - single attribute 'df' 
-    - carry out operations in order'''
+    - 'prepare' method carries out operations in order'''
 
     def __init__(self, dataframe):
         '''initialises dataframe as df'''
@@ -246,7 +256,7 @@ class preparing:
             return df
         
         self.df = make_time_bin_start(self.df)
-        self.df = self.df.drop(["Hour"], axis=1)
+        self.df = self.df.drop(['Hour'], axis=1)
      
     #--------------------------------------------------------------------------#   
     
@@ -254,9 +264,9 @@ class preparing:
         '''creates start and end times columns for df'''
         as_delta = pd.to_timedelta
         single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID', 'Journey_Pattern_ID']
-        self.df['End_Time'] = self.df.groupby(single_journeys, sort=False)['Timestamp'].transform(max)
-        self.df['Start_Time'] = self.df.groupby(single_journeys, sort=False)['Timestamp'].transform(min)
-        #numba
+        grouped_df = self.df.groupby(single_journeys, sort=False)
+        self.df['End_Time'] = grouped_df['Timestamp'].transform(max)
+        self.df['Start_Time'] = grouped_df['Timestamp'].transform(min)
         self.df['Journey_Time'] = self.df.End_Time - self.df.Start_Time
         self.df.Journey_Time = as_delta(self.df.Journey_Time, unit='us').astype('timedelta64[m]')
     
@@ -264,7 +274,6 @@ class preparing:
     
     def drop_impossible_journey_times(self):
         '''returns rows where journey times are greater than zero'''
-        #numba
         self.df = self.df[(self.df.Journey_Time) > 0]
             
     #--------------------------------------------------------------------------#       
@@ -303,16 +312,15 @@ class preparing:
     def create_start_end_stops(self):
         '''creates start and end stops and the difference between them'''
         single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID', 'Journey_Pattern_ID']
-        self.df['End_Stop'] = self.df.groupby(single_journeys, sort=False)['Stop_Sequence'].transform(max)
-        self.df['Start_Stop'] = self.df.groupby(single_journeys, sort=False)['Stop_Sequence'].transform(min)
-        #numba
+        grouped_df = self.df.groupby(single_journeys, sort=False)
+        self.df['End_Stop'] = grouped_df['Stop_Sequence'].transform(max)
+        self.df['Start_Stop'] = grouped_df['Stop_Sequence'].transform(min)
         self.df['Journey_Length'] = self.df.End_Stop - self.df.Start_Stop
     
     #--------------------------------------------------------------------------#
     
     def drop_impossible_journey_lengths(self):
-        '''if a journey is 1 row, its invalid and should be dropped'''
-        #numba
+        '''if a journey has no stop delta it cannot be measured and thus is invalid'''
         self.df = self.df[self.df.Journey_Length > 0]
     
     #--------------------------------------------------------------------------#
@@ -321,10 +329,8 @@ class preparing:
         '''creates columns measuring number of stops left (FEATURE)
          and time remaining (TARGET FEATURE), for journey'''
         as_delta = pd.to_timedelta
-        #numba
         self.df['Time_To_Travel'] = self.df.End_Time - self.df.Timestamp
         self.df.Time_To_Travel = as_delta(self.df.Time_To_Travel, unit='us').astype('timedelta64[m]')
-        #numba
         self.df['Stops_To_Travel'] = (self.df.End_Stop.astype(int) - self.df.Stop_Sequence.astype(int))
         
     #--------------------------------------------------------------------------#
@@ -333,13 +339,11 @@ class preparing:
         '''creates scheduled speed which is the scheduled mean rate of stop traversal'''
         self.df['Scheduled_Speed_Per_Stop'] = self.df.Scheduled_Time_OP/self.df.Max_Stop_Sequence
         
-    
     #--------------------------------------------------------------------------#
     
     def create_weather_columns(self):
         '''creates weather columns such as temerature and windspeed
         merges weather info with df by timestamp'''
-        
         def get_weather_dataframe():
             '''gets weather dataframe and prepares it for merge'''
             weather_dataframe = pd.read_hdf('weather')
@@ -355,43 +359,47 @@ class preparing:
     #--------------------------------------------------------------------------#
     
     def drop_non_modeling_columns(self):
-        '''drops columns that can't be modeled, improves write speed'''
-        useful = ['LineID','Direction',"Day_Of_Week", "Time_Bin_Start", "Wind_Speed",
-                   "Temperature", 'Vehicle_Journey_ID','Vehicle_ID',"Holiday", "Scheduled_Speed_Per_Stop",
-                    "Stops_To_Travel","Stop_Sequence", 'Journey_Length','Journey_Time',
-                    'Time_To_Travel']
+        '''drops columns that can't be modeled,
+        keeps coluumns that are essential for further data handling'''
+        useful = ['LineID', 'Vehicle_Journey_ID', 'Vehicle_ID','Timestamp','Timeframe', #grouping
+                  'Journey_Length','Journey_Time', #mean speed
+                  'Direction', 'Day_Of_Week', 'Time_Bin_Start',
+                  'Wind_Speed', 'Temperature', 
+                  'Holiday', 'Scheduled_Speed_Per_Stop',
+                  'Stops_To_Travel', 'Stop_Sequence', 
+                  'Time_To_Travel'] #target feature
         self.df = self.df = self.df[useful]
     
     #--------------------------------------------------------------------------#
    
     def prepare(self):
         '''applies predefined preparation methods'''
-        self.create_time_categories()  # time, day, hour columns
-        self.create_start_end_times() # creates start and end times
-        self.drop_impossible_journey_times() # drops end_to_end journey times == 0
-        self.create_holiday() # creates category for school holidays
-        self.create_scheduled_time_op() # creates scheduled travel time        
-        self.create_max_stop_sequence() # creates stop sequences for routes
-        self.create_start_end_stops() #journey stop start and end stops
-        self.create_travel_stops_and_times() #stops left to travel time left to travel
-        self.drop_impossible_journey_lengths() #drops journies of 0 stops
-        self.create_speeds_per_stop() # scheduled speed
-        self.create_weather_columns() # creates weather columns
-        self.drop_non_modeling_columns() # drops excess columns
+        print('prep')
+        self.create_time_categories()
+        self.create_start_end_times()      
+        self.drop_impossible_journey_times() 
+        self.create_holiday()              
+        self.create_scheduled_time_op()            
+        self.create_max_stop_sequence()    
+        self.create_start_end_stops()      
+        self.create_travel_stops_and_times() 
+        self.drop_impossible_journey_lengths() 
+        self.create_speeds_per_stop()      
+        self.create_weather_columns()
+        self.drop_non_modeling_columns()
         return self.df
 
 #------------------------------------------------------------------------------#
     
 class extracting:
     '''class for separating data by route
-    is initialised with list of file paths'''
+    - relies on re_con folder of reconstructed data'''
     
     def __init__(self):
         path_to_folder = path.join(getcwd(), 're_con')
         all_files = listdir(path_to_folder)
         path_to_files = list(map(lambda data: path.join(path_to_folder, data), all_files))
         self.files = path_to_files
-        
         
     #--------------------------------------------------------------------------#
     
@@ -410,35 +418,44 @@ class extracting:
     #--------------------------------------------------------------------------#
     
     def make_mean_speed(self, df):
-        def get_mean_speed_at_time(df):
+        '''calculates expected rate of stop traversal at for...
+        a route-direction at a given time'''
+        dir_time = ['Direction', 'Time_Bin_Start']
+        
+        def mean_speed_at_time(df):
             '''calculates mean speed for each journey, 
             they are averaged using harmonic mean to get avg journey speed in timebin'''
-            df['Journey_Speed'] = (df.Journey_Length) / df.Journey_Time
-            single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID']
-            hmean_df = df.groupby(single_journeys, sort=False).first()
-            hmean_df['Speed_At_Time'] = hmean_df.Journey_Speed.apply(hmean, axis=None)
-            columns_to_merge = ['Direction', 'Time_Bin_Start', 'Speed_At_Time']
-            hmean_df = hmean_df[columns_to_merge] 
-            df=pd.merge(df, hmean_df, how='inner', on=['Direction','Time_Bin_Start'])
+            df['Journey_Speed'] =  df.Journey_Time / df.Journey_Length
+            single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID','Timeframe']
+            hmean_df = df.groupby(single_journeys).first()
+            signature = ['Time_Bin_Start', 'Direction', 'Day_Of_Week']
+            hmean_df['Speed_At_Time'] = hmean_df.groupby([signature]).Journey_Speed.mean().values[0]
+            cols_to_merge = ['Direction', 'Time_Bin_Start', 'Speed_At_Time']
+            hmean_df = hmean_df.reset_index()[cols_to_merge].drop_duplicates()
+            df=pd.merge(df, hmean_df, how='inner', on=dir_time)
             return df
-    
-        df = df.groupby(['Direction', 'Time_Bin_Start'], sort=False).apply(get_mean_speed_at_time)
-        df = df.drop(['Journey_Speed'], axis=1)
+        
+        df = df.groupby(dir_time, sort=False).apply(mean_speed_at_time).reset_index(drop=True)
         return df
-            
-            
+              
     def extract_and_analyse(self, route):
+        '''applies above methods in order'''
         return self.make_mean_speed(self.extract(route))
 
 #------------------------------------------------------------------------------#
-
+#Exceptions Number of Samples Error: 104, 142
 class modelling:
-    '''class that contains processes for modeling''' 
+    '''class that contains processes for modeling
+    - trains models on data
+    - records model metrics for identical test sets for rf, ms, db''' 
     
     def __init__(self):
         '''creats columns for record dataframe'''
-        self.metric_columns = ['route', 'r2', 'exp_variance', 'rmse', 'mae', 'ten_percent_delta', 
-                          'five_min_delta','five_min_late']
+        self.metric_columns = ['route', 'r2', 'exp_variance', 'rmse', 'mae', 
+                               'five_pc_delta','ten_pc_delta',
+                               'twenty_five_pc_delta', 'fifty_pc_delta'
+                               'two_half_min_delta','five_min_delta','ten_min_delta',
+                               'five_min_late']
         self.record_rf = pd.DataFrame(columns=self.metric_columns)
         self.record_db = pd.DataFrame(columns=self.metric_columns)
         self.record_ms = pd.DataFrame(columns=self.metric_columns)
@@ -449,11 +466,11 @@ class modelling:
         '''creates rf regressor for data,
         preprocessing, and hyper parameters are costly to training time
         they only provide marginal gains to accuracy'''
-        data_columns = ["Day_Of_Week", "Time_Bin_Start", "Wind_Speed", 
-                        "Temperature", "Holiday", "Scheduled_Speed_Per_Stop",
-                        "Stops_To_Travel","Stop_Sequence",'Speed_At_Time']
+        data_columns = ['Direction', 'Day_Of_Week', 'Time_Bin_Start', 'Wind_Speed', 
+                        'Temperature', 'Holiday', 'Scheduled_Speed_Per_Stop',
+                        'Stops_To_Travel','Stop_Sequence','Speed_At_Time']
         self.X_train, self.X_test, self.y_train, self.y_test = \
-        train_test_split(data[data_columns],np.ravel(data["Time_To_Travel"]), test_size=0.2, random_state=33)
+        train_test_split(data[data_columns], np.ravel(data['Time_To_Travel']), test_size=0.2, random_state=33)
         scaler = preprocessing.StandardScaler().fit(self.X_train.drop(['Speed_At_Time'], axis=1)) #normalisation
         #print(self.X_train.drop(['Speed_At_Time'], axis=1).shape, self.X_train.drop(['Speed_At_Time'], axis=1).columns)
         pipeline = make_pipeline(preprocessing.StandardScaler(), 
@@ -472,34 +489,38 @@ class modelling:
         actual = self.y_test
         
         def choose_model(estimator):
-            '''choses sets of results for model'''
+            '''creates results for specified model'''
             df = pd.DataFrame(self.X_test)
             if estimator == 'DB':
                 return df.Stops_To_Travel * df.Scheduled_Speed_Per_Stop
             elif estimator == 'RF':
-                #print(self.X_test.drop(['Speed_At_Time'], axis=1).columns)
                 return self.model.predict(self.X_test.drop(['Speed_At_Time'], axis=1))
             elif estimator == 'MS':
                 return   df.Stops_To_Travel /  df.Speed_At_Time
             else:    
-                print('Invalid: Choose either "RF", "DB","MS"')                    
-                
+                print('Invalid: Choose either', 'RF', 'DB','MS')                    
         
         def manipulate_dataframe(estimations): #rf_pred OR db_pred
             '''prediction column is assigned to estimations
             tolerance columns are defined'''
             df = pd.DataFrame(self.X_test)
             df['actual'] = actual
-            df["predicted"] = estimations            
-            df['ten_percent_delta'] = np.where( abs(df.actual-df.predicted)/df.actual <= 0.1, 1, 0)
-            df['five_min_delta'] = np.where(abs(df.actual-df.predicted)/df.actual <= 5, 1, 0)
-            df['five_min_late'] = np.where( (df.actual-df.predicted)/df.actual <= 5, 1, 0)
+            df['predicted'] = estimations
+            df['delta'] = df.actual - df.predicted
+            df['margin'] = df.delta/df.actual
+            df['five_pc_margin'] = np.where(abs(df.margin) <= 0.05, 1, 0)
+            df['ten_pc_margin'] =  np.where(abs(df.margin) <= 0.1, 1, 0)
+            df['twenty_five_pc_margin'] = np.where(abs(df.margin) <= 0.25, 1, 0)
+            df['fifty_pc_margin'] = np.where(abs(df.margin) <= 0.5, 1, 0)
+            df['two_half_min_delta'] = np.where(abs(df.delta) <= 2.5, 1, 0)
+            df['five_min_delta'] = np.where(abs(df.delta) <= 5, 1, 0)
+            df['ten_min_delta'] = np.where(abs(df.delta) <= 5, 1, 0)
+            df['five_min_late'] = np.where( (df.delta) <= 5, 1, 0)
             df['true'] = 1
             return df
         
         def assign_metrics(estimations): #rf_pred OR db_pred
             '''scores are based on either Db or Rf depending on current and previous input'''
-            #print(estimations)
             self.rsquared =  r2_score(actual, estimations)
             self.rmse = mean_squared_error(actual, estimations)**0.5
             self.mae = mean_absolute_error(actual, estimations)
@@ -521,7 +542,7 @@ class modelling:
                   self.rel_acc, self.abs_acc, self.late_acc ]
         keys = self.metric_columns
         row = dict(zip(keys, values))
-        record = pd.DataFrame(data=row, columns=self.metric_columns, index =[route])
+        record = pd.DataFrame(data=row, columns=self.metric_columns, index=[route])
         if estimator == 'RF':
             self.record_rf = self.record_rf.append(record)
         elif estimator == 'DB':
@@ -529,7 +550,7 @@ class modelling:
         elif estimator == 'MS':
             self.record_ms = self.record_ms.append(record)   
         else:
-            print("You've recorded incorrectly")
+            print('Youve recorded incorrectly')
     #--------------------------------------------------------------------------#
         
     def model_route(self, data, route):
@@ -580,7 +601,7 @@ def re_construction(data_file):
     df = preparing(df).prepare()
     write_address = path.join(getcwd(), 're_con' , data_file[:-4] + '.h5')
     df.to_hdf(write_address, key='moo', mode='w')
-    return "wooot"
+    return 'wooot'
     
 #------------------------------------------------------------------------------#
     
@@ -593,22 +614,6 @@ def get_all_routes():
         for data in path_to_files:
             df = pd.read_hdf(data)
             routes = routes.union(set(df.LineID.unique()))
-#         discards = ['46A','38A','41C','44',
-#                     '1','102',
-#                     '11','111','114','116','118',
-#                     '120','122','123','13','130',
-#                     '14','140','145','14C', '15','150','151','15A','15B',
-#                     '16','161','17A','18','184','185'
-#                     '220','236','238','239','25','25A','25B','25X','26',
-#                     '27','270','27A','27B','29A',
-#                     '31','31B','32','32X','33A','33B','33X','37','38','39','39A',
-#                     '40','40B', '40D','41','41B','42','43','44B','45A','46E','47',
-#                     '51D','51X','53','56A','59',
-#                     '61','63','65','65B','66','66B','66X','67','67X','68','69','69X' ]
-         
-#        for route in discards:
- #           routes.discard(route)
-        #print(len(routes), sorted(routes, key=str))
         return routes
     
 #------------------------------------------------------------------------------#    
@@ -643,21 +648,17 @@ def main1():
     '''multiprocesses cleaning and prep of raw data, cpu heavy'''
     path_to_raw = path.join(getcwd(), 'DayRawCopy')
     files = listdir(path_to_raw)
-    with ProcessPoolExecutor(max_workers=3) as Executor:
+    with ProcessPoolExecutor(max_workers=2) as Executor:
         for file, result in tqdm(zip(files, Executor.map(re_construction, files, chunksize=1))):
-            #print(file[:-4], result)
-            #add to log
             pass
 
 #------------------------------------------------------------------------------#
    
 def main2():
-    '''seperates routes into seperate files, ready for training'''
+    '''seperates routes into seperate files, ready for training, io heavy'''
     routes = get_all_routes()
-    with ProcessPoolExecutor(max_workers=4) as Executor:
+    with ProcessPoolExecutor(max_workers=3) as Executor:
         for route, result in tqdm(zip(routes, Executor.map(extraction, routes, chunksize = 4))):
-            #print(route, result)
-            #add to log
             pass
 #------------------------------------------------------------------------------#
     
@@ -675,7 +676,6 @@ def main3():
         RF_records.append(RF_row) #collects all RF results
         DB_records.append(DB_row) #collects all DB results
         MS_records.append(MS_row) #collects all MS results
-        #add file to log
     pd.concat(RF_records, axis=0, ignore_index=True).to_csv('RF_Model_Summary.csv')
     pd.concat(DB_records, axis=0, ignore_index=True).to_csv('DB_Model_Summary.csv')
     pd.concat(MS_records, axis=0, ignore_index=True).to_csv('MS_Model_Summary.csv')
@@ -702,3 +702,4 @@ if __name__ == '__main__':
 
     processing()
     #print(re_construction('siri.20121106.csv'))
+    #print(extraction('1'))
