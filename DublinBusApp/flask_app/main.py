@@ -30,7 +30,7 @@ import requests
 # http://pandas.pydata.org/
 import pandas as pd
 
-pymysql.install_as_MySQLdb()
+#pymysql.install_as_MySQLdb()
 
 from flask import jsonify
 import json
@@ -50,8 +50,8 @@ class RegisterForm(Form):
     name = StringField('Name', [validators.length(min=1, max=50)])
     username = StringField('Username', [validators.length(min=4, max=25)])
     email = StringField('Email', [validators.length(min=4, max=50)])
-    work = StringField('Work(optional)')
-    home = StringField('Home(optional)')
+    work = StringField('Work Address(optional)')
+    home = StringField('Home Address(optional)')
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
@@ -63,15 +63,24 @@ class RegisterForm(Form):
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if 'logged_in' in session:
+        username = session['username']
+        engine = get_db()
+        sql_home = "SELECT home FROM users WHERE username = %s"
+        result_home = engine.execute(sql_home, [username])
+        data_home = result_home.fetchall()
+        print(data_home[0][0])
+        sql_work = "SELECT work FROM users WHERE username = %s"
+        result_work = engine.execute(sql_home, [username])
+        data_work = result_work.fetchall()
+        print(data_work[0][0])
     if request.method == 'POST':
         if request.form['submit'] == 'normal':
             dest = request.form['destination']
         elif request.form['submit'] == 'work':
-            pass
-            # MAKE DEST = USERS WORK ADDRESS
+            dest = data_work[0][0]
         elif request.form['submit'] == 'home':
-            pass
-            # MAKE DEST = USERS HOME ADDRESS
+            dest = data_home[0][0]
 
         src = request.form['origin']
         dest = request.form['destination']
