@@ -449,7 +449,7 @@ class modelling:
         '''creats columns for record dataframe'''
         self.metric_columns = ['route', 'r2', 'exp_variance', 'rmse', 'mae', 
                                'five_pc_margin','ten_pc_margin', 
-                               'twenty_five_pc_margin', 'fifty_pc_margin'
+                               'twenty_five_pc_margin', 'fifty_pc_margin',
                                'two_half_min_delta','five_min_delta','ten_min_delta',
                                'five_min_late']
         self.record_rf = pd.DataFrame(columns=self.metric_columns)
