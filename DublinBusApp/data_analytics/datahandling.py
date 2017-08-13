@@ -172,7 +172,7 @@ class cleaning:
         seq_df= pd.read_hdf('route_seq')
         seq_df = seq_df[['LineID', 'Lat', 'Lon', 'Direction','Stop_Sequence']]
         seq_df = init_geo_df(seq_df)
-        seq_df.geometry = seq_df.geometry.buffer(0.002) #catchment radius for stop,
+        seq_df.geometry = seq_df.geometry.buffer(0.004) #catchment radius for stop,
         self.df = init_geo_df(self.df)
         
         def closest_stop(df):
@@ -406,33 +406,29 @@ class extracting:
     def extract(self, route):
         '''extracts single route from files and returns df of that route
         read and write to hdfs for speed'''
-        accumulator = pd.read_hdf(self.files[0])
-        accumulator = accumulator[accumulator.LineID == route].drop(['LineID'], axis=1)
+        accumulator = []
         for data in self.files:
             df = pd.read_hdf(data)
             df = df[df.LineID == route].drop(['LineID'], axis=1)
-            accumulator, df = accumulator.align(df, axis=1)
-            accumulator = pd.concat([accumulator, df])
-        return accumulator
+            accumulator.append(df)
+        df = pd.concat(accumulator, axis = 0).reset_index()
+        return df
     
     #--------------------------------------------------------------------------#
     
     def make_mean_speed(self, df):
         '''calculates expected rate of stop traversal at for...
         a route-direction at a given time'''
-        dir_time = ['Direction', 'Time_Bin_Start']
+        dir_time = ['Direction', 'Day_Of_Week','Time_Bin_Start']
+        df['Journey_Speed'] =  df.Journey_Time / df.Journey_Length
         
         def mean_speed_at_time(df):
-            '''calculates mean speed for each journey, 
-            they are averaged using harmonic mean to get avg journey speed in timebin'''
-            df['Journey_Speed'] =  df.Journey_Time / df.Journey_Length
+            '''calculates mean speed for each journey on given day at given time
+            Speed computed with harmonic mean of mean speeds for each journey'''
+            #recipricol of mean of recipricols
             single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID','Timeframe']
-            hmean_df = df.groupby(single_journeys).first()
-            signature = ['Time_Bin_Start', 'Direction', 'Day_Of_Week']
-            hmean_df['Speed_At_Time'] = hmean_df.groupby([signature]).Journey_Speed.mean().values[0]
-            cols_to_merge = ['Direction', 'Time_Bin_Start', 'Speed_At_Time']
-            hmean_df = hmean_df.reset_index()[cols_to_merge].drop_duplicates()
-            df=pd.merge(df, hmean_df, how='inner', on=dir_time)
+            undersampled = df.groupby(single_journeys).first()
+            df['Speed_At_Time'] = 1/undersampled.Journey_Speed.mean()
             return df
         
         df = df.groupby(dir_time, sort=False).apply(mean_speed_at_time).reset_index(drop=True)
@@ -452,8 +448,8 @@ class modelling:
     def __init__(self):
         '''creats columns for record dataframe'''
         self.metric_columns = ['route', 'r2', 'exp_variance', 'rmse', 'mae', 
-                               'five_pc_delta','ten_pc_delta',
-                               'twenty_five_pc_delta', 'fifty_pc_delta'
+                               'five_pc_margin','ten_pc_margin', 
+                               'twenty_five_pc_margin', 'fifty_pc_margin'
                                'two_half_min_delta','five_min_delta','ten_min_delta',
                                'five_min_late']
         self.record_rf = pd.DataFrame(columns=self.metric_columns)
@@ -514,7 +510,7 @@ class modelling:
             df['fifty_pc_margin'] = np.where(abs(df.margin) <= 0.5, 1, 0)
             df['two_half_min_delta'] = np.where(abs(df.delta) <= 2.5, 1, 0)
             df['five_min_delta'] = np.where(abs(df.delta) <= 5, 1, 0)
-            df['ten_min_delta'] = np.where(abs(df.delta) <= 5, 1, 0)
+            df['ten_min_delta'] = np.where(abs(df.delta) <= 10, 1, 0)
             df['five_min_late'] = np.where( (df.delta) <= 5, 1, 0)
             df['true'] = 1
             return df
@@ -525,13 +521,18 @@ class modelling:
             self.rmse = mean_squared_error(actual, estimations)**0.5
             self.mae = mean_absolute_error(actual, estimations)
             self.exp_var = explained_variance_score(actual, estimations)
-            self.rel_acc = accuracy_score(data.true, data.ten_percent_delta)
-            self.abs_acc = accuracy_score(data.true, data.five_min_delta)
-            self.late_acc = accuracy_score(data.true, data.five_min_late)
+            self.five_pc = accuracy_score(data.true, data.five_pc_margin)
+            self.ten_pc = accuracy_score(data.true, data.ten_pc_margin)
+            self.twenty_five_pc = accuracy_score(data.true, data.twenty_five_pc_margin)
+            self.fifty_pc = accuracy_score(data.true, data.fifty_pc_margin)
+            self.two_half_min = accuracy_score(data.true, data.two_half_min_delta)
+            self.five_min = accuracy_score(data.true, data.five_min_delta)
+            self.ten_min = accuracy_score(data.true, data.ten_min_delta)
+            self.five_min_late = accuracy_score(data.true, data.five_min_late)
            
         estimations = choose_model(estimator)    
         data = manipulate_dataframe(estimations)
-        assign_metrics(estimations) #rf_pred OR db_pred
+        assign_metrics(estimations) #rf_pred OR db_pred OR ms_pred
         
     #--------------------------------------------------------------------------#
         
@@ -539,7 +540,8 @@ class modelling:
         print(route)
         '''takes most recently evaluated test metrics and stores them in record'''
         values = [route, self.rsquared, self.exp_var, self.rmse, self.mae, 
-                  self.rel_acc, self.abs_acc, self.late_acc ]
+                  self.five_pc, self.ten_pc, self.twenty_five_pc, self.fifty_pc,
+                  self.two_half_min, self.five_min, self.ten_min, self.five_min_late]
         keys = self.metric_columns
         row = dict(zip(keys, values))
         record = pd.DataFrame(data=row, columns=self.metric_columns, index=[route])
@@ -701,5 +703,3 @@ if __name__ == '__main__':
         print((t4-t3)//60, 'Mins to quantify')
 
     processing()
-    #print(re_construction('siri.20121106.csv'))
-    #print(extraction('1'))
