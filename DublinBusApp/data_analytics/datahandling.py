@@ -152,11 +152,15 @@ class cleaning:
     #--------------------------------------------------------------------------#
     
     def drop_not_stop_info(self):
-        '''merges processed N.T.A. DB stop info with raw data
-         for resolve stop positions and stopIDs and sequence'''
+        '''merges processed N.T.A. DublinBus stop info with raw data
+         for resolving stop positions and stopIDs and sequence'''
         
         def empty_df():
-            '''help handle occasional goepandas sjoin error in a groupby'''
+            '''helps handle occasional goepandas sjoin error in a groupby
+            where sjoin is expected to return an empty dataframe, it instead fails
+            this constructs the empty df allowing all the results of 
+            'groupby(x).apply(closest_stop) to be re_concatenated into 1 df'''
+            
             columns = ['Lat_left', 'Lon_left', 'Stop_Sequence', 'geometry',
                        'index_right', 'Timestamp', 'LineID', 'Direction',
                        'Journey_Pattern_ID', 'Vehicle_Journey_ID', 'Lon_right',
@@ -195,12 +199,13 @@ class cleaning:
         
         @vectorize(nopython=True)
         def distance(x1,y1,x2,y2):
+            '''performs euclidean 2d euclidean distance calculation on arrays'''
             return (x1-x2)**2 + (y1-y2)**2        
         self.df['dist'] = distance(self.df.Lat_left.values,  self.df.Lon_left.values, 
                                    self.df.Lat_right.values, self.df.Lon_right.values)
         
         def closest_entry(df):
-            '''takes rows that minimise distance to their local stop'''
+            '''takes rows for each journey that minimise distance to local stop'''
             df.sort_values(['dist'])
             return df[df.dist == df.dist.min()]
         
@@ -218,9 +223,7 @@ class cleaning:
         self.fix_direction_column()  
         self.fix_line_id()         
         self.remove_ideling()  
-        print('starting merge')  
         self.drop_not_stop_info()
-        print('merge over')
         return self.df
         
     #--------------------------------------------------------------------------#
@@ -261,7 +264,7 @@ class preparing:
     #--------------------------------------------------------------------------#   
     
     def create_start_end_times(self):
-        '''creates start and end times columns for df'''
+        '''creates start times and end times and journey times columns for df'''
         as_delta = pd.to_timedelta
         single_journeys = ['Vehicle_Journey_ID', 'Vehicle_ID', 'Journey_Pattern_ID']
         grouped_df = self.df.groupby(single_journeys, sort=False)
@@ -420,7 +423,7 @@ class extracting:
         '''calculates expected rate of stop traversal at for...
         a route-direction at a given time'''
         dir_time = ['Direction', 'Day_Of_Week','Time_Bin_Start']
-        df['Journey_Speed'] =  df.Journey_Time / df.Journey_Length
+        df['Journey_Speed'] =  df.Journey_Time / df.Journey_Length #recipricol speed
         
         def mean_speed_at_time(df):
             '''calculates mean speed for each journey on given day at given time
@@ -433,13 +436,15 @@ class extracting:
         
         df = df.groupby(dir_time, sort=False).apply(mean_speed_at_time).reset_index(drop=True)
         return df
+    
+    #--------------------------------------------------------------------------#
               
     def extract_and_analyse(self, route):
         '''applies above methods in order'''
         return self.make_mean_speed(self.extract(route))
 
 #------------------------------------------------------------------------------#
-#Exceptions Number of Samples Error: 104, 142
+#Exceptions Number of Samples Error: 104, 142 for catchment  <0.00025
 class modelling:
     '''class that contains processes for modeling
     - trains models on data
@@ -466,9 +471,10 @@ class modelling:
                         'Temperature', 'Holiday', 'Scheduled_Speed_Per_Stop',
                         'Stops_To_Travel','Stop_Sequence','Speed_At_Time']
         self.X_train, self.X_test, self.y_train, self.y_test = \
-        train_test_split(data[data_columns], np.ravel(data['Time_To_Travel']), test_size=0.2, random_state=33)
-        scaler = preprocessing.StandardScaler().fit(self.X_train.drop(['Speed_At_Time'], axis=1)) #normalisation
-        #print(self.X_train.drop(['Speed_At_Time'], axis=1).shape, self.X_train.drop(['Speed_At_Time'], axis=1).columns)
+        train_test_split(data[data_columns], np.ravel(data['Time_To_Travel']),
+                        test_size=0.2, random_state=33)
+        scaler = preprocessing.StandardScaler()
+        scaler = scaler.fit(self.X_train.drop(['Speed_At_Time'], axis=1)) #normalisation
         pipeline = make_pipeline(preprocessing.StandardScaler(), 
                                  RandomForestRegressor(n_estimators=10, n_jobs=1))
         hyperparameters = {'randomforestregressor__max_features':[ None, 'sqrt', 'log2'],
@@ -529,7 +535,8 @@ class modelling:
             self.five_min = accuracy_score(data.true, data.five_min_delta)
             self.ten_min = accuracy_score(data.true, data.ten_min_delta)
             self.five_min_late = accuracy_score(data.true, data.five_min_late)
-           
+        
+        #executes functions defined within this method   
         estimations = choose_model(estimator)    
         data = manipulate_dataframe(estimations)
         assign_metrics(estimations) #rf_pred OR db_pred OR ms_pred
@@ -552,11 +559,10 @@ class modelling:
         elif estimator == 'MS':
             self.record_ms = self.record_ms.append(record)   
         else:
-            print('Youve recorded incorrectly')
+            print('recorded incorrectly')
     #--------------------------------------------------------------------------#
         
     def model_route(self, data, route):
-        print(route, 'im in here')
         '''runs modeling process for a set of data'''
         self.create_model(data)
         self.create_test_metrics('RF')
@@ -694,12 +700,12 @@ if __name__ == '__main__':
         t1=time()
         main1()
         t2=time()
-        print((t2-t1)//60, 'Mins to re_construct')
+        print((t2-t1)//60, 'Minutess to re_construct')
         main2()
         t3=time()
-        print((t3-t2)//60, 'Mins to extract')
+        print((t3-t2)//60, 'Minutess to extract')
         main3()
         t4=time()
-        print((t4-t3)//60, 'Mins to quantify')
+        print((t4-t3)//60, 'Minutess to quantify')
 
     processing()
