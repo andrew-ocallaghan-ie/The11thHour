@@ -13,7 +13,7 @@
             {% for key, value in route_options.items() %}
                 $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
 
-                    for (i = {{ value["Start_Stop_Sequence"] }}-1; i < {{ value["End_Stop_Sequence"] }}; i++) {
+                    for (i = {{ value["Start_Stop_Sequence"] }} -1; i <= {{ value["End_Stop_Sequence"] }}-1; i++) {
                         var lat = json.stops[i].lat;
                         var lng = json.stops[i].lon;
                         var name = json.stops[i].name;
@@ -21,20 +21,23 @@
                         var category = "{{ key }}";
                         var color = '#4682b4';
                         var marker = createMarker(lat, lng, name, category, color, id);
-                        polylineArray.push({"lat": lat, "lng": lng});
                     }
                 });
             {% endfor %}
 
-            var flightPlanCoordinates = [
-                {lat: 53.3827, lng: -6.14843},
-                {lat: 53.382, lng: -6.15114},
-                {lat: 53.3812, lng: -6.1555},
-                {lat: 53.3806, lng: -6.15922}
-                ];
+{#        var list_of_path = [];#}
+
+            var flightPlanCoordinates = {{ lat_long_list | safe }};
+
+{#            {% for pairing in lat_long_list %}#}
+{#                list_of_path.push(parseFloat({{ pairing.lat | safe }}) + "|" + parseFloat({{ pairing.lng | safe }}));#}
+{#                console.log({{ pairing | safe }});#}
+{#            {% endfor %}#}
 
             // Centre of map
-            var myCenter = new google.maps.LatLng(53.3827, -6.14843);
+            var mid_lat = {{ route_options['1']['mid_point_lat'] | safe }};
+            var mid_long = {{ route_options['1']['mid_point_lon'] | safe }};
+            var myCenter = new google.maps.LatLng(mid_lat, mid_long);
 
             // Initializing canvas
             var mapCanvas = document.getElementById("map");
@@ -51,17 +54,59 @@
 {#            createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);#}
 {#            createMarker({{ dest_lat }},{{ dest_long }},"Destination","User Location",'red', 1);#}
 
-
-            var polylinePath = new google.maps.Polyline({
-              path: flightPlanCoordinates,
-              geodesic: true,
-              strokeColor: '#FF0000',
-              strokeOpacity: 1.0,
-              strokeWeight: 3
-            });
-
-            polylinePath.setMap(map);
-
+{#            var polylinePath = new google.maps.Polyline({#}
+{#                path: flightPlanCoordinates,#}
+{#                geodesic: true,#}
+{#                strokeColor: '#FF0000',#}
+{#                strokeOpacity: 1.0,#}
+{#                strokeWeight: 3#}
+{#            });#}
+{##}
+{#            polylinePath.setMap(map);#}
+{##}
+{#            runSnapToRoad(polylinePath);#}
+{##}
+{#            // Snap a user-created polyline to roads and draw the snapped path#}
+{#            function runSnapToRoad(path) {#}
+{##}
+{#                var pathValues = [];#}
+{#                for (var i = 0; i < path.getLength(); i++) {#}
+{#                    pathValues.push(path.getAt(i).toUrlValue());#}
+{#                }#}
+{#                $.get('https://roads.googleapis.com/v1/snapToRoads', {#}
+{#                    interpolate: true,#}
+{#                    key: AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc,#}
+{#                    path: pathValues.join('|')#}
+{#                }, function(data) {#}
+{#                    processSnapToRoadResponse(data);#}
+{#                    drawSnappedPolyline();#}
+{#                });#}
+{#            }#}
+{##}
+{#        // Store snapped polyline returned by the snap-to-road service.#}
+{#        function processSnapToRoadResponse(data) {#}
+{#            snappedCoordinates = [];#}
+{#            placeIdArray = [];#}
+{#            for (var i = 0; i < data.snappedPoints.length; i++) {#}
+{#                var latlng = new google.maps.LatLng(#}
+{#                    data.snappedPoints[i].location.latitude,#}
+{#                    data.snappedPoints[i].location.longitude);#}
+{#                snappedCoordinates.push(latlng);#}
+{#                placeIdArray.push(data.snappedPoints[i].placeId);#}
+{#            }#}
+{#        }#}
+{##}
+{#        // Draws the snapped polyline (after processing snap-to-road response).#}
+{#        function drawSnappedPolyline() {#}
+{#          var snappedPolyline = new google.maps.Polyline({#}
+{#            path: snappedCoordinates,#}
+{#            strokeColor: 'black',#}
+{#            strokeWeight: 3#}
+{#          });#}
+{#          snappedPolyline.setMap(map);#}
+{#          polylines.push(snappedPolyline);#}
+{#        }#}
+{##}
         }
 
         function moveCenter(lat, long){
@@ -92,49 +137,6 @@
             });
         });
 
-        // Snap a user-created polyline to roads and draw the snapped path
-        function runSnapToRoad(path) {
-          var pathValues = [];
-          for (var i = 0; i < path.getLength(); i++) {
-            pathValues.push(path.getAt(i).toUrlValue());
-          }
-
-          $.get('https://roads.googleapis.com/v1/snapToRoads', {
-            interpolate: true,
-            key: apiKey,
-            path: pathValues.join('|')
-          }, function(data) {
-            processSnapToRoadResponse(data);
-            drawSnappedPolyline();
-            getAndDrawSpeedLimits();
-          });
-        }
-
-        // Store snapped polyline returned by the snap-to-road service.
-        function processSnapToRoadResponse(data) {
-          snappedCoordinates = [];
-          placeIdArray = [];
-          for (var i = 0; i < data.snappedPoints.length; i++) {
-            var latlng = new google.maps.LatLng(
-                data.snappedPoints[i].location.latitude,
-                data.snappedPoints[i].location.longitude);
-            snappedCoordinates.push(latlng);
-            placeIdArray.push(data.snappedPoints[i].placeId);
-          }
-        }
-
-        // Draws the snapped polyline (after processing snap-to-road response).
-        function drawSnappedPolyline() {
-          var snappedPolyline = new google.maps.Polyline({
-            path: snappedCoordinates,
-            strokeColor: 'black',
-            strokeWeight: 3
-          });
-
-          snappedPolyline.setMap(map);
-          polylines.push(snappedPolyline);
-        }
-
         $(window).bind('resize load', function() {
             if ($(this).height() < 415) {
                 $('#collapse_map').removeClass('in');
@@ -145,6 +147,12 @@
             }
         });
 
+        function getLocation() {
+            if (navigator.geolocation) {
+                var lat = navigator.geolocation.coords.latitude;
+                var long = navigator.geolocation.coords.longitude;
+            }
+        }
 
     </script>
 
@@ -154,18 +162,20 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-9 route_options">
+            <div class="col-sm-12 route_options">
                 <h3>Route Options</h3>
                 {%  for route in route_options.items() %}
                 <div id={{ route[0] }} value='{{ route[1]['mid_point_lat'] }}, {{ route[1]['mid_point_lon'] }}' class='route_option_box' data-toggle='collapse' data-target='#collapse_map'>
                     <div class='option_route'>{{ route[1]["Route"] }}</div>
                     <div class='option_src_dest'>{{ route[1]['Start_Stop_Name'] }} <b>&#8594</b> {{ route[1]['End_Stop_Name'] }}</div>
-                    <div class='option_journey_time'>{{ route[1]["Predictions"][0] }}mins</div>
-                    <span class="tooltipped running_man" data-position="top" data-delay="50" data-tooltip="3min walk"><img src="../static/images/walk_man.png"></span>
+                    <div class='option_journey_time'>{{ route[1]["Predictions"][0]}}mins</div>
+                    <span class="tooltipped running_man" data-position="top" data-delay="50" data-tooltip="{{ route[1]['walking_mins'] }}min walk"><img src="../static/images/walk_man.png"></span>
+                    <span class="tooltipped journey_fare" data-position="top" data-delay="50" data-tooltip="{{ route[1]['fare'] }}"><img src="../static/images/euro.png"></span>
                 </div>
                 {% endfor %}
             </div>
-            <div class="col-sm-3">
+        <div class="row">
+            <div class="col-sm-12">
                 <canvas id="chart"></canvas>
             </div>
         </div>
@@ -187,9 +197,8 @@
          var chartDemo = new Chart(ctx, {
           type: 'line',
           data: {
-              labels: {{ route_options['Option 1']['pretty_times'] | safe }},
+              labels: {{ route_options['pretty_times'] | safe }},
               datasets: [
-
                   {%  for route in route_options.items() %}
                       {
                   fill: true,
@@ -200,7 +209,6 @@
                   borderWidth: 1
                       },
                   {% endfor %} ]},
-
              options: {
                  maintainAspectRatio: false,
                  responsive: true,
