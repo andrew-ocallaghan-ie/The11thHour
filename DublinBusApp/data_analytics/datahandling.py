@@ -176,7 +176,7 @@ class cleaning:
         seq_df= pd.read_hdf('route_seq')
         seq_df = seq_df[['LineID', 'Lat', 'Lon', 'Direction','Stop_Sequence']]
         seq_df = init_geo_df(seq_df)
-        seq_df.geometry = seq_df.geometry.buffer(0.004) #catchment radius for stop,
+        seq_df.geometry = seq_df.geometry.buffer(0.00025) #catchment radius for stop, in degrees
         self.df = init_geo_df(self.df)
         
         def closest_stop(df):
@@ -195,7 +195,6 @@ class cleaning:
         
         pattern = ['LineID', 'Direction']
         self.df = self.df.groupby(pattern, sort=False).apply(closest_stop).reset_index(drop=True)
-        print('closest stop finished')
         
         @vectorize(nopython=True)
         def distance(x1,y1,x2,y2):
@@ -308,7 +307,7 @@ class preparing:
         '''creates stop sequence column by merging with sequence dataframe'''
         unique_signiture = ['LineID', 'Direction']
         grouped = self.df.groupby(unique_signiture, sort=False)
-        self.df['Max_Stop_Sequence'] = grouped.Stop_Sequence.transform(max)
+        self.df['Max_Stop_Sequence'] = grouped.Stop_Sequence.transform(max).reset_index(drop=True)
     
     #--------------------------------------------------------------------------#
     
@@ -377,13 +376,12 @@ class preparing:
    
     def prepare(self):
         '''applies predefined preparation methods'''
-        print('prep')
         self.create_time_categories()
         self.create_start_end_times()      
         self.drop_impossible_journey_times() 
         self.create_holiday()              
         self.create_scheduled_time_op()            
-        self.create_max_stop_sequence()    
+        self.create_max_stop_sequence()
         self.create_start_end_stops()      
         self.create_travel_stops_and_times() 
         self.drop_impossible_journey_lengths() 
@@ -419,6 +417,12 @@ class extracting:
     
     #--------------------------------------------------------------------------#
     
+    def drop_outliers(self, df):
+        '''keep lower 95% of data'''
+        return df[df.Journey_Time <= df.Journey_Time.quantile(0.95)]
+    
+    #--------------------------------------------------------------------------#
+    
     def make_mean_speed(self, df):
         '''calculates expected rate of stop traversal at for...
         a route-direction at a given time'''
@@ -441,7 +445,10 @@ class extracting:
               
     def extract_and_analyse(self, route):
         '''applies above methods in order'''
-        return self.make_mean_speed(self.extract(route))
+        df = self.extract(route)
+        df = self.drop_outliers(df)
+        df = self.make_mean_speed(df)
+        return df
 
 #------------------------------------------------------------------------------#
 #Exceptions Number of Samples Error: 104, 142 for catchment  <0.00025
@@ -656,7 +663,7 @@ def main1():
     '''multiprocesses cleaning and prep of raw data, cpu heavy'''
     path_to_raw = path.join(getcwd(), 'DayRawCopy')
     files = listdir(path_to_raw)
-    with ProcessPoolExecutor(max_workers=2) as Executor:
+    with ProcessPoolExecutor(max_workers=3) as Executor:
         for file, result in tqdm(zip(files, Executor.map(re_construction, files, chunksize=1))):
             pass
 
@@ -665,7 +672,7 @@ def main1():
 def main2():
     '''seperates routes into seperate files, ready for training, io heavy'''
     routes = get_all_routes()
-    with ProcessPoolExecutor(max_workers=3) as Executor:
+    with ProcessPoolExecutor(max_workers=4) as Executor:
         for route, result in tqdm(zip(routes, Executor.map(extraction, routes, chunksize = 4))):
             pass
 #------------------------------------------------------------------------------#
@@ -709,3 +716,4 @@ if __name__ == '__main__':
         print((t4-t3)//60, 'Minutess to quantify')
 
     processing()
+    #print(re_construction('siri.20121106.csv'))
