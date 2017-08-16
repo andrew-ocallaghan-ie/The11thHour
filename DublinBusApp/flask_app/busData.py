@@ -235,11 +235,9 @@ class dbi:
             dart_dataframe['Direction'] = 1
             dart_dataframe['Route'] = dart_dataframe.end_cat
             dart_dataframe['Predictions'] = dart_dataframe.apply(lambda x: [abs(dart_dataframe.stops_travelled.values[0]*2)], axis=1)
-            print ('dart dataframe', dart_dataframe.Predictions)
             dart_dataframe['walking_mins'] = int(dart_dataframe.low_score_dart.values[0] / 0.2)
             dart_dataframe['mid_point_lat'] = mid_point_lat
             dart_dataframe['mid_point_lon'] = mid_point_lon
-            print ('dart dataframe',dart_dataframe)
 
             return self.dart_dataframe_to_dict(dart_dataframe)
         except:
@@ -263,7 +261,6 @@ class dbi:
                                                                                'sched_speed', 'fare',
                                                                                'pretty_times']))])
         dart_dataframe.fillna(value='None', method=None, axis=None, inplace=False)
-        print ('dart dataframe', dart_dataframe)
         self.route_options_dartluas = dart_dataframe
         return self.route_options_dartluas
 
@@ -347,7 +344,6 @@ class dbi:
 
         co_ords.pop()
 
-        print ('co_ords', co_ords)
 
         return (co_ords)
 
@@ -509,7 +505,6 @@ def dataframe_to_dict(src, dest, dataframe):
         #route_options[str(i)] = route_options.pop(option)
         new_options[str(i)] = route_options[option]
         i += 1
-    print('full dataframe predictions', dataframe.Predictions)
     return new_options
 
 

@@ -79,11 +79,6 @@ def index():
 
     if request.method == 'POST':
 
-        # latitude = request.json.get('latitude')
-        # longitude = request.json.get('longitude')
-        # print(latitude)
-        # print(longitude)
-
         if request.form['submit'] == 'normal':
             dest = request.form['destination']
         elif request.form['submit'] == 'work':
@@ -101,11 +96,14 @@ def index():
             data_home = result_home.fetchall()
             dest = data_home[0][0]
 
-        if request.form['use_location']:
-            pass
-        print('value of use location', request.form['use_location'])
 
-        src = request.form['origin']
+        use_geolocation = request.form.getlist('user_location')
+        if use_geolocation == ["on"]:
+            lat = request.form['users_lat_text']
+            long = request.form['users_long_text']
+            src = request.form['origin']
+        else:
+            src = request.form['origin']
 
         now_arrive_depart_selection = request.form['now_arrive_depart']
         if now_arrive_depart_selection == '0':

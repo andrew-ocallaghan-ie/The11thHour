@@ -32,6 +32,16 @@
             });
         });
 
+        //get user geolocation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var user_lat = position.coords.latitude;
+                var user_lon = position.coords.longitude;
+                $("#users_lat").val(user_lat);
+                $("#users_long").val(user_lon);
+            });
+        }
+
 
     </script>
 
@@ -54,12 +64,16 @@
                     <input type="time" id="time_input" name="time" class="collapse date_time timepicker">
                     <input type="date" id="date_input" name="date" class="collapse date_time datepicker">
 
-                    <input type="checkbox" id="use_location">
+                    <input type="checkbox" id="use_location" name="user_location">
                     <label for="use_location">Use current location as start</label>
 
                     <button class="btn waves-effect waves-light" type="submit" name="submit" value="normal">GO!
                         <i class="material-icons right">send</i>
                     </button>
+
+                    <input type="text" class="hidden_text_box" id="users_lat" name="users_lat_text">
+                    <input type="text" class="hidden_text_box" id="users_long" name="users_long_text">
+
 
               </form>
             </div>

@@ -11,6 +11,12 @@
 {#            var polylineArray = [];#}
 
             {% for key, value in route_options.items() %}
+                {%  if value["Route"] == 'dart' %}
+
+                {% elif value["Route"] == 'luas' %}
+
+                {%  else %}
+
                 $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
 
                     for (i = {{ value["Start_Stop_Sequence"] }} -1; i <= {{ value["End_Stop_Sequence"] }}-1; i++) {
@@ -23,6 +29,7 @@
                         createMarker(lat, lng, name, category, color, id);
                     }
                 });
+                {% endif %}
             {% endfor %}
 
 {#        var list_of_path = [];#}
