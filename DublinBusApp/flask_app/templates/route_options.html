@@ -5,10 +5,10 @@
         // Google Map
         function usersMap() {
 
-            directionsService = new google.maps.DirectionsService();
-            directionsDisplay = new google.maps.DirectionsRenderer();
+{#            directionsService = new google.maps.DirectionsService();#}
+{#            directionsDisplay = new google.maps.DirectionsRenderer();#}
 
-            var polylineArray = [];
+{#            var polylineArray = [];#}
 
             {% for key, value in route_options.items() %}
                 $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
@@ -20,14 +20,14 @@
                         var id = json.stops[i].id;
                         var category = "{{ key }}";
                         var color = '#4682b4';
-                        var marker = createMarker(lat, lng, name, category, color, id);
+                        createMarker(lat, lng, name, category, color, id);
                     }
                 });
             {% endfor %}
 
 {#        var list_of_path = [];#}
 
-            var flightPlanCoordinates = {{ lat_long_list | safe }};
+{#            var flightPlanCoordinates = {{ lat_long_list | safe }};#}
 
 {#            {% for pairing in lat_long_list %}#}
 {#                list_of_path.push(parseFloat({{ pairing.lat | safe }}) + "|" + parseFloat({{ pairing.lng | safe }}));#}
@@ -156,7 +156,7 @@
 
     </script>
 
-    <div class="collapse in" id="collapse_map" data-toggle="false">
+    <div class="" id="collapse_map" data-toggle="false">
         <div id="map"></div>
     </div>
 
