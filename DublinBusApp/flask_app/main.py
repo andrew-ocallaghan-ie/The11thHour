@@ -79,10 +79,10 @@ def index():
 
     if request.method == 'POST':
 
-        latitude = request.json.get('latitude')
-        longitude = request.json.get('longitude')
-        print(latitude)
-        print(longitude)
+        # latitude = request.json.get('latitude')
+        # longitude = request.json.get('longitude')
+        # print(latitude)
+        # print(longitude)
 
         if request.form['submit'] == 'normal':
             dest = request.form['destination']
@@ -104,7 +104,6 @@ def index():
         if request.form['use_location']:
             pass
         print('value of use location', request.form['use_location'])
-
 
         src = request.form['origin']
 
