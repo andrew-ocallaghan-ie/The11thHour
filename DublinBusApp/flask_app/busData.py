@@ -192,6 +192,19 @@ class dbi:
         location = (lat, long)
         return location
 
+        # ----------------------------------------------------------------------------------#
+
+    def address_from_location(self, lat, lon):
+        """Gets latitude & longitude from an address Returns a tuple of lat/long
+        Currently only takes the first search result"""
+        url = "https://maps.googleapis.com/maps/api/geocode/json?"
+        location_string = str(lat) + "," + str(lon)
+        params = {'latlng': location_string}
+        r = requests.get(url, params=params)
+        data = r.json()
+        address = data['results'][0]['formatted_address']
+        return address
+
         #------------------------------------------------------------------------------------#
 
     def find_darts(self, src, dest):
@@ -238,8 +251,12 @@ class dbi:
             dart_dataframe['walking_mins'] = int(dart_dataframe.low_score_dart.values[0] / 0.2)
             dart_dataframe['mid_point_lat'] = mid_point_lat
             dart_dataframe['mid_point_lon'] = mid_point_lon
+            self.start_stop_id_dart = dart_dataframe.start_stop_id
+            self.end_stop_id_dart = dart_dataframe.end_stop_id
+            self.start_route = dart_dataframe.end_cat
 
-            return self.dart_dataframe_to_dict(dart_dataframe)
+            return (self.dart_dataframe_to_dict(dart_dataframe), self.extract_lat_lon_stops_dart())
+
         except:
             pass
 
@@ -348,6 +365,25 @@ class dbi:
         return (co_ords)
 
     # --------------------------------------------------------------------------#
+
+    def extract_lat_lon_stops_dart(self):
+        '''Returns lat lon of all stops on route'''
+        co_ords_dart = []
+        engine = get_db()
+        sql = 'SELECT lat, lon FROM All_routes.dublinbike_dart_luas\
+           WHERE (Stop_Id BETWEEN %s AND %s) OR (Stop_Id BETWEEN %s AND %s) AND Category = %s;'
+        result = engine.execute(sql, (
+            int(self.start_stop_id_dart.values[0]), int(self.end_stop_id_dart.values[0]),
+            int(self.end_stop_id_dart.values[0]), int(self.start_stop_id_dart.values[0]), (self.start_route.values[0])))
+        all_co_ord_data_dart = result.fetchall()
+
+        for row in all_co_ord_data_dart:
+            co_ords_dart.append({"lat": row[0], "lng": row[1]})
+
+        return (co_ords_dart)
+
+    # --------------------------------------------------------------------------#
+
 
     def scrape_weather(self):
         '''Returns a summary of the current weather from the Wunderground API'''
@@ -489,12 +525,9 @@ class dbi:
 
 def dataframe_to_dict(src, dest, dataframe):
     # this converts the interesting routes to a dictionary
-    darts = dbi().find_darts(src, dest)
+    darts = dbi().find_darts(src, dest)[0]
 
-    try:
-        dataframe = pd.concat([darts, dataframe], axis=0)
-    except:
-        pass
+    dataframe = pd.concat([darts, dataframe], axis=0)
     route_options = dataframe.transpose().to_dict()
     new_options = {}
     i = 1
@@ -502,7 +535,6 @@ def dataframe_to_dict(src, dest, dataframe):
     for option in route_options:
         if i > break_at:
             break
-        #route_options[str(i)] = route_options.pop(option)
         new_options[str(i)] = route_options[option]
         i += 1
     return new_options
@@ -532,7 +564,6 @@ def everything(src, dest, time):
 
     route_options = dbi().find_nearby_stops(src, dest)[0]
     lat_long_list = dbi().find_nearby_stops(src, dest)[1]
-    darts = dbi().find_darts(src, dest)
     route_options.Direction = route_options.Direction.astype(int)
     route_options['Stops_To_Travel'] = route_options.End_Stop_Sequence - route_options.Start_Stop_Sequence
     route_options['temp'] = current_temp
@@ -543,7 +574,6 @@ def everything(src, dest, time):
     route_options['time'] = time
 
     def sched_speed(dataframe):
-        direction = int(list(dataframe.Direction.unique())[0])
         direction = int(list(dataframe.Direction.unique())[0])
         route = list(dataframe.Route.unique())[0]
         dataframe['max_stop_sequence'] = dbi().get_max_sequence(route, direction)
@@ -589,18 +619,14 @@ def everything(src, dest, time):
         route = list(df.Route.unique())[0]
         predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
         time_options = list(df['time_bin'])
-        # columns = ['day', 'time_bin', 'wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
-        #            'Start_Stop_Sequence']
-        other_columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
+        columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
                          'Start_Stop_Sequence']
         prediction_list = []
         for time in time_options[0]:
-            prediction = (predictor.predict([df['day'].values[0]] + [time] + df[other_columns].values[0].tolist())[0])
+            prediction = (predictor.predict([df['day'].values[0]] + [time] + df[columns].values[0].tolist())[0])
             prediction_list.append(round(float(prediction), 2))
         '''add stop name to df,'''
         df["Predictions"] = [prediction_list]
-
-
 
         return df
 

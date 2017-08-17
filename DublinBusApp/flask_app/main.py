@@ -63,19 +63,6 @@ class RegisterForm(Form):
 # Index Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # if 'logged_in' in session:
-    #     username = session['username']
-    #     engine = get_db()
-    #     sql_home = "SELECT home FROM users WHERE username = %s"
-    #     result_home = engine.execute(sql_home, [username])
-    #     data_home = result_home.fetchall()
-    #     dest = data_home[0][0]
-    #     print(data_home[0][0])
-    #     sql_work = "SELECT work FROM users WHERE username = %s"
-    #     result_work = engine.execute(sql_home, [username])
-    #     data_work = result_work.fetchall()
-    #     dest = data_work[0][0]
-    #     print(data_work[0][0])
 
     if request.method == 'POST':
 
@@ -84,8 +71,8 @@ def index():
         elif request.form['submit'] == 'work':
             username = session['username']
             engine = get_db()
-            sql_home = "SELECT home FROM users WHERE username = %s"
-            result_work = engine.execute(sql_home, [username])
+            sql_work = "SELECT work FROM users WHERE username = %s"
+            result_work = engine.execute(sql_work, [username])
             data_work = result_work.fetchall()
             dest = data_work[0][0]
         elif request.form['submit'] == 'home':
@@ -96,14 +83,18 @@ def index():
             data_home = result_home.fetchall()
             dest = data_home[0][0]
 
+        dest_lat = dbi().location_from_address(dest)[0]
+        dest_long = dbi().location_from_address(dest)[1]
 
         use_geolocation = request.form.getlist('user_location')
         if use_geolocation == ["on"]:
-            lat = request.form['users_lat_text']
-            long = request.form['users_long_text']
-            src = request.form['origin']
+            src_lat = request.form['users_lat_text']
+            src_long = request.form['users_long_text']
+            src = dbi().address_from_location(src_lat, src_long)
         else:
             src = request.form['origin']
+            src_lat = dbi().location_from_address(src)[0]
+            src_long = dbi().location_from_address(src)[1]
 
         now_arrive_depart_selection = request.form['now_arrive_depart']
         if now_arrive_depart_selection == '0':
@@ -125,8 +116,7 @@ def index():
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
 
-        # THE DICTIONARY!
-        # Take google places api call from everything and keep it here.
+
         try:
             route_options = everything(src, dest, time)[0]
             lat_long_list = everything(src, dest, time)[1]
@@ -280,29 +270,45 @@ def is_logged_in(f):
 
 # --------------------------------------------------------------------------#
 # Dashboard
-@app.route('/myroutes')
+@app.route('/myroutes', methods=['GET', 'POST'])
 @is_logged_in
 def myroutes():
     username = session['username']
     engine = get_db()
-    sql = "SELECT * FROM like_stop WHERE username = %s"
+    sql = "SELECT * FROM like_stop WHERE username = % s"
     result = engine.execute(sql, [username])
     all_data = result.fetchall()
+    sql_home = "SELECT home FROM users WHERE username = % s"
+    result_home = engine.execute(sql_home, [username])
+    data_home = result_home.fetchall()
+    sql_work = "SELECT work FROM users WHERE username = % s"
+    result_work = engine.execute(sql_work, [username])
+    data_work = result_work.fetchall()
+    work = data_work[0][0]
+    home = data_home[0][0]
 
     stopnamelist = [0] * len(all_data)
     stopidlist = [0] * len(all_data)
-    # print(stopnamelist)
     for a in range(0, len(all_data)):
         stopidlist[a] = all_data[a][1]
     Length = len(all_data)
     for a in range(0, len(all_data)):
         print(all_data[a]['stop_id'])
-        # stopnamelist[a]=all_data[a]['stop_id']
-        sql = "SELECT Stop_name FROM Stops WHERE Stop_ID = %s"
+        sql = "SELECT Stop_name FROM Stops WHERE Stop_ID = % s"
         stopnamelist[a] = engine.execute(sql, [all_data[a]['stop_id']]).fetchall()[0][0]
-    print(stopnamelist)
-    print(stopidlist)
-    return render_template('myroutes.html', **locals())
+
+    if request.method == 'POST':
+        if request.form['submit'] == 'work':
+            new_work = request.form['work']
+            sql_update ="UPDATE users SET work = % s WHERE username = % s"
+            result = engine.execute(sql_update, [new_work, username])
+            return redirect(url_for('myroutes'))
+        elif request.form['submit'] == 'home':
+            new_home = request.form['home']
+            sql_update ="UPDATE users SET home = % s WHERE username = % s"
+            result = engine.execute(sql_update, [new_home, username])
+            return redirect(url_for('myroutes'))
+    return render_template('myroutes.html', ** locals())
 
 
 # --------------------------------------------------------------------------#

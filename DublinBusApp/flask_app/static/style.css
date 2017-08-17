@@ -249,6 +249,10 @@ input#user_stop{
 	float: left;
 }
 
+.hidden_text_box{
+    display: none;
+}
+
 /* Landscape phones and down */
 @media (max-width: 768px) {
     #map, #panomap, #pano{

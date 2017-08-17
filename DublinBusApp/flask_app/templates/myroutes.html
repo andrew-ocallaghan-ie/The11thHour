@@ -6,7 +6,23 @@
     <div class="col-sm-6">
     <h3>Welcome back, <small> {{session.username}}</small></h3>
     <p id="demo"></p>
+    <p id="demo1"></p>
     </div>
+    <form method="POST">
+   <div class="col-sm-6 home_work">
+
+    <input type="text" class="form-control" id="home" name="home" placeholder="Please input new home address">
+    <button class="btn waves-effect waves-light" type="submit" name="submit" value="home">Change Home Address
+        <i class="material-icons right">home</i>
+    </button>
+
+   <input type="text" class="form-control" id="work" name="work" placeholder="Please input new work address">
+    <button class="btn waves-effect waves-light" type="submit" name="submit" value="work">Change Work Address
+        <i class="material-icons right">work</i>
+    </button>
+
+   </div>
+    </form>
     </div>
     <script>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -15,15 +31,21 @@
         var a = {{ stopnamelist|tojson }};
         var b = {{ stopidlist|tojson}};
         var c = 2084;
-        for(i=0;i<{{Length}};i++) {
+        var work = {{work|tojson}};
+        var home = {{home|tojson}};
+        var hometext = "Your home address is " + home;
+        var worktext = "<br>Your work address is " + work;
+
+       for(i=0;i<{{Length}};i++) {
             var stop_num = b[i];
             text += "<big> No"+b[i]+" "+a[i]+"</big>"+"<br><form class='info' action='{{url_for('stop_search')}}' method='post'><button class='button' value='" + stop_num + "' name='user_stop'><span>info</span></button></form><form class='go' action='{{url_for('stop_search')}}' method='post'><button class='button button3' value='" + stop_num + "' name='user_stop'><span>Go</span></button></form><form class='delete' action='{{url_for('delete')}}' method='post'><button class='button button2' value='" + stop_num + "' name='user_delete'><span>Delete</span></button></form></br>"
-        }    
-    document.getElementById("demo").innerHTML = text;
-        
-         jQuery.getJSON($SCRIPT_ROOT+"/api/stops",null,function(data){
+        }
+   document.getElementById("demo").innerHTML = text;
+    document.getElementById("demo1").innerHTML = hometext + worktext;
+
+        jQuery.getJSON($SCRIPT_ROOT+"/api/stops",null,function(data){
             var stations = data.stops;
-             
+
             for (i=0;i<{{Length}};i++){
                 var marker = new google.maps.Marker({
                     position:{
@@ -35,35 +57,34 @@
                     station_number:b[i],
                     icon: {
                                 path: google.maps.SymbolPath.CIRCLE,
-                                strokeColor: '#4682b4',
+                                strokeColor: '#4682b4 ',
                                 strokeWeight: 1.5,
-                                fillColor: '#45ADA8',
+                                fillColor: '#45ADA8 ',
                                 fillOpacity: 0.4,
                                 scale: 10
                             }
                 });
-                  
-                
+
                 // Create infowindow on mouseover
-                        var infowindow = new google.maps.InfoWindow();
+                var infowindow = new google.maps.InfoWindow();
 
-                        // Contents of infowindow
-                        var html = "No" + b[i] + " " +stations[b[i]][0] +"<form class='delete' action='{{url_for('stop_search')}}' method='post'><button class='button button2' value='" + b[i] + "' name='user_stop'><span>Go</span></button></form>";
-                        marker.html = html;
+                       // Contents of infowindow
+                var html = "No" + b[i] + " " +stations[b[i]][0] +"<form class='delete' action='{{url_for('stop_search')}}' method='post'><button class='button button2' value='" + b[i] + "' name='user_stop'><span>Go</span></button></form>";
+                marker.html = html;
 
 
-                        // Mouse Over Functionality
+                       // Mouse Over Functionality
                         google.maps.event.addListener(marker, 'mouseover', function () {
                             // Set contents
                             infowindow.setContent(this.html);
                             // Open infowindow
                             infowindow.open(map, this);
-                        }); 
+                        });
 
-                            
-            }
+
+           }
           });
 
-    </script>
+   </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
 {% endblock %}

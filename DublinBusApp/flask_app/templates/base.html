@@ -105,11 +105,13 @@
                       });
                       markers.infowindow.open(map, this);
                   }
+                  else if (marker.mycategory=="User Location") {
+                      var contentString='<h6>'+ marker.myname +'</h6>';
+                      markers.infowindow.setContent(contentString);
+                      markers.infowindow.open(map, this);
+                  }
                   else {
                       var contentString = '<a href=/stop/' + marker.myid + '><h6>' + marker.myname + '</h6></a><br>Stop ID: ' + marker.myid;
-                      console.log(marker.mycategory);
-                      console.log(marker.myid);
-                      console.log(marker.myname);
                       markers.infowindow.setContent(contentString);
                       markers.infowindow.open(map, this);
                   }

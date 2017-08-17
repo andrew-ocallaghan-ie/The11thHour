@@ -58,8 +58,8 @@
             // Creating map
             map = new google.maps.Map(mapCanvas, mapOptions);
 
-{#            createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);#}
-{#            createMarker({{ dest_lat }},{{ dest_long }},"Destination","User Location",'red', 1);#}
+            createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);
+            createMarker({{ dest_lat }},{{ dest_long }},"Destination","User Location",'red', 1);
 
 {#            var polylinePath = new google.maps.Polyline({#}
 {#                path: flightPlanCoordinates,#}
