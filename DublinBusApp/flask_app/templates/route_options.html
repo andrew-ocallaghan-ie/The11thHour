@@ -10,28 +10,6 @@
 
 {#            var polylineArray = [];#}
 
-            {% for key, value in route_options.items() %}
-                {%  if value["Route"] == 'dart' %}
-
-                {% elif value["Route"] == 'luas' %}
-
-                {%  else %}
-
-                $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
-
-                    for (i = {{ value["Start_Stop_Sequence"] }} -1; i <= {{ value["End_Stop_Sequence"] }}-1; i++) {
-                        var lat = json.stops[i].lat;
-                        var lng = json.stops[i].lon;
-                        var name = json.stops[i].name;
-                        var id = json.stops[i].id;
-                        var category = "{{ key }}";
-                        var color = '#4682b4';
-                        createMarker(lat, lng, name, category, color, id);
-                    }
-                });
-                {% endif %}
-            {% endfor %}
-
 {#        var list_of_path = [];#}
 
 {#            var flightPlanCoordinates = {{ lat_long_list | safe }};#}
@@ -114,6 +92,37 @@
 {#          polylines.push(snappedPolyline);#}
 {#        }#}
 {##}
+
+            {% for key, value in route_options.items() %}
+                {%  if value["Route"] == 'DART' %}
+                    {% for thing in dart_lat_long_list %}
+                        var lat = {{ thing['lat'] | safe}};
+                        var lng = {{ thing['lng'] | safe}};
+                        var name = "Dart Stop";
+                        var id = '1';
+                        var category = "{{ key }}";
+                        var color = '#4682b4';
+                        createMarker(lat, lng, name, category, color, id);
+                    {% endfor %}
+
+                {% elif value["Route"] == 'luas' %}
+                    console.log("Luas options here");
+                {%  else %}
+
+                $.getJSON($SCRIPT_ROOT + '/api/routes/' + '{{ value["Route"] }}' + '/' + '{{ value["Direction"] }}', function (json) {
+
+                    for (i = {{ value["Start_Stop_Sequence"] }} -1; i <= {{ value["End_Stop_Sequence"] }}-1; i++) {
+                        var lat = json.stops[i].lat;
+                        var lng = json.stops[i].lon;
+                        var name = json.stops[i].name;
+                        var id = json.stops[i].id;
+                        var category = "{{ key }}";
+                        var color = '#4682b4';
+                        createMarker(lat, lng, name, category, color, id);
+                    }
+                });
+                {% endif %}
+            {% endfor %}
         }
 
         function moveCenter(lat, long){
@@ -132,15 +141,15 @@
         $(document).ready(function(){
             $('.tooltipped').tooltip({delay: 50});
             $(".route_option_box").click(function(){
-                 var isExpanded = $("#collapse_map").attr("aria-expanded");
-                 if (isExpanded == 'true' || isExpanded == undefined){
+{#                 var isExpanded = $("#collapse_map").attr("aria-expanded");#}
+{#                 if (isExpanded == 'true' || isExpanded == undefined){#}
                      hideAll();
-                 } else if (isExpanded == 'false'){
+{#                 } else if (isExpanded == 'false'){#}
                      show($(this).attr('id'));
                      var lat = parseFloat($(this).attr('value').split(',')[0]);
                      var long = parseFloat($(this).attr('value').split(',')[1]);
                      moveCenter(lat, long);
-                 }
+{#                 }#}
             });
         });
 
@@ -154,16 +163,9 @@
             }
         });
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                var lat = navigator.geolocation.coords.latitude;
-                var long = navigator.geolocation.coords.longitude;
-            }
-        }
-
     </script>
 
-    <div class="" id="collapse_map" data-toggle="false">
+    <div id="collapse_map">
         <div id="map"></div>
     </div>
 
@@ -172,10 +174,10 @@
             <div class="col-sm-12 route_options">
                 <h3>Route Options</h3>
                 {%  for route in route_options.items() %}
-                <div id={{ route[0] }} value='{{ route[1]['mid_point_lat'] }}, {{ route[1]['mid_point_lon'] }}' class='route_option_box' data-toggle='collapse' data-target='#collapse_map'>
+                <div id={{ route[0] }} value='{{ route[1]['mid_point_lat'] }}, {{ route[1]['mid_point_lon'] }}' class='route_option_box' data-toggle='collapse'> <!--data-target='#collapse_map'-->
                     <div class='option_route'>{{ route[1]["Route"] }}</div>
                     <div class='option_src_dest'>{{ route[1]['Start_Stop_Name'] }} <b>&#8594</b> {{ route[1]['End_Stop_Name'] }}</div>
-                    <div class='option_journey_time'>{{ route[1]["Predictions"][0]}}mins</div>
+                    <div class='option_journey_time'>{{ route[1]["total_time"]}}mins</div>
                     <span class="tooltipped running_man" data-position="top" data-delay="50" data-tooltip="{{ route[1]['walking_mins'] }}min walk"><img src="../static/images/walk_man.png"></span>
                     <span class="tooltipped journey_fare" data-position="top" data-delay="50" data-tooltip="{{ route[1]['fare'] }}"><img src="../static/images/euro.png"></span>
                 </div>
@@ -204,15 +206,15 @@
          var chartDemo = new Chart(ctx, {
           type: 'line',
           data: {
-              labels: {{ route_options['pretty_times'] | safe }},
+              labels: {{ route_options['3']['pretty_times'] | safe }},
               datasets: [
                   {%  for route in route_options.items() %}
                       {
                   fill: true,
                   label: '{{ route[1]["Route"] }}',
                   data: {{ route[1]["Predictions"] }},
-                  backgroundColor: 'rgba(255, 193, 7, 0.2)',
-                  borderColor:'rgba(255, 193, 7, 1)',
+                  backgroundColor: '{{ route[1]["colour"] }}0.2)',
+                  borderColor:'{{ route[1]["colour"] }}1)',
                   borderWidth: 1
                       },
                   {% endfor %} ]},

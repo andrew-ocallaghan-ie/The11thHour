@@ -68,6 +68,14 @@ def index():
 
         if request.form['submit'] == 'normal':
             dest = request.form['destination']
+            use_geolocation = request.form.getlist('user_location')
+            if use_geolocation == ["on"]:
+                src_lat = request.form['users_lat_text']
+                src_long = request.form['users_long_text']
+                src = dbi().address_from_location(src_lat, src_long)
+            else:
+                src = request.form['origin']
+                src_lat, src_long = dbi().location_from_address(src)
         elif request.form['submit'] == 'work':
             username = session['username']
             engine = get_db()
@@ -75,6 +83,9 @@ def index():
             result_work = engine.execute(sql_work, [username])
             data_work = result_work.fetchall()
             dest = data_work[0][0]
+            src_lat = request.form['users_lat_text']
+            src_long = request.form['users_long_text']
+            src = dbi().address_from_location(src_lat, src_long)
         elif request.form['submit'] == 'home':
             username = session['username']
             engine = get_db()
@@ -82,19 +93,11 @@ def index():
             result_home = engine.execute(sql_home, [username])
             data_home = result_home.fetchall()
             dest = data_home[0][0]
-
-        dest_lat = dbi().location_from_address(dest)[0]
-        dest_long = dbi().location_from_address(dest)[1]
-
-        use_geolocation = request.form.getlist('user_location')
-        if use_geolocation == ["on"]:
             src_lat = request.form['users_lat_text']
             src_long = request.form['users_long_text']
             src = dbi().address_from_location(src_lat, src_long)
-        else:
-            src = request.form['origin']
-            src_lat = dbi().location_from_address(src)[0]
-            src_long = dbi().location_from_address(src)[1]
+
+        dest_lat, dest_long = dbi().location_from_address(dest)
 
         now_arrive_depart_selection = request.form['now_arrive_depart']
         if now_arrive_depart_selection == '0':
@@ -116,10 +119,9 @@ def index():
             min = int(time[1])
             time = datetime(year, month, day, hour, min)
 
-
         try:
-            route_options = everything(src, dest, time)[0]
-            lat_long_list = everything(src, dest, time)[1]
+            route_options, dart_lat_long_list = everything(src, dest, time)
+
         except IndexError as ex:
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
@@ -226,7 +228,6 @@ def login():
         # Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
-        print(username)
 
         engine = get_db()
         sql = "SELECT * FROM users WHERE username = %s"
@@ -293,7 +294,6 @@ def myroutes():
         stopidlist[a] = all_data[a][1]
     Length = len(all_data)
     for a in range(0, len(all_data)):
-        print(all_data[a]['stop_id'])
         sql = "SELECT Stop_name FROM Stops WHERE Stop_ID = % s"
         stopnamelist[a] = engine.execute(sql, [all_data[a]['stop_id']]).fetchall()[0][0]
 
@@ -318,10 +318,8 @@ def myroutes():
 def delete():
     if request.method == 'POST':
         username = session['username']
-        print(username)
         stop_id = request.form['user_delete']
 
-        print(stop_id, username)
         engine = get_db()
 
         sql = "DELETE FROM like_stop WHERE username = %s AND stop_id = %s"
@@ -351,7 +349,6 @@ def likestop():
 
         username = session['username']
 
-        print(stop_id, username)
         engine = get_db()
 
         sql = "SELECT * FROM like_stop WHERE username = %s AND stop_id = %s"
