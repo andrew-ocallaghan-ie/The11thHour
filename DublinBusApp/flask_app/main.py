@@ -109,16 +109,23 @@ def index():
             hour = time.hour
             min = time.minute
         else:
-            time = request.form['time'].split(":")
-            date = request.form['date'].split(" ")
-            year = int(date[2])
-            dates = {'January,':1, 'February,':2, 'March,':3, 'April,':4, 'May,':5, 'June,':6, 'July,':7, 'August,':8, 'September,':9, 'October,':10, 'November,':11, 'December,':12 }
-            month = dates[date[1]]
-            day = int(date[0])
-            weekday = datetime(year, month, day).weekday()
-            hour = int(time[0])
-            min = int(time[1])
-            time = datetime(year, month, day, hour, min)
+            try:
+                time = request.form['time'].split(":")
+                date = request.form['date'].split(" ")
+                year = int(date[2])
+                dates = {'January,':1, 'February,':2, 'March,':3, 'April,':4, 'May,':5, 'June,':6, 'July,':7, 'August,':8, 'September,':9, 'October,':10, 'November,':11, 'December,':12 }
+                month = dates[date[1]]
+                day = int(date[0])
+                weekday = datetime(year, month, day).weekday()
+                hour = int(time[0])
+                min = int(time[1])
+                time = datetime(year, month, day, hour, min)
+            except IndexError as ex:
+                template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+                message = template.format(type(ex).__name__, ex.args)
+                print(message)
+                error_html = "Error! Date input incorrect."
+                return render_template('home.html', **locals())
 
         try:
             route_options, dart_lat_long_list = everything(src, dest, time)
@@ -127,7 +134,7 @@ def index():
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             print(message)
-            error_html = "No valid routes found for " + src + " to " + dest + " please try a more detailed or different address."
+            error_html = "No valid routes found. Please try a more detailed or different address."
             return render_template('home.html', **locals())
 
         print("THE ROUTE OPTIONS ARE:", route_options)

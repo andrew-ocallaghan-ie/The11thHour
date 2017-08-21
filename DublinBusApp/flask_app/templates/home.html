@@ -48,55 +48,11 @@
 
     <div id="map"></div>
 
-{#    <div class="container">#}
-{#        <div class="row" id="inputs">#}
-{#            <div class="col-sm-6">#}
-{#                <span class="error_message">{{ error_html }}</span>#}
-{#                <form method="POST">#}
-{#                    <input type="text" class="form-control collapse in" id="origin" name="origin" placeholder="Start">#}
-{#                    <input type="text" class="form-control" id="destination" name="destination" placeholder="End">#}
-{##}
-{#                    <select class="input-field" name="now_arrive_depart" id="now_arrive_depart">#}
-{#                      <option value="0">Now</option>#}
-{#                      <option value="1">Leave At</option>#}
-{#                      <option value="2">Arrive By</option>#}
-{#                    </select>#}
-{##}
-{#                    <input type="time" id="time_input" name="time" class="collapse date_time timepicker">#}
-{#                    <input type="date" id="date_input" name="date" class="collapse date_time datepicker">#}
-{##}
-{#                    <input type="checkbox" id="use_location" name="user_location">#}
-{#                    <label for="use_location">Use current location as start</label>#}
-{##}
-{#                    <button class="btn waves-effect waves-light" type="submit" name="submit" value="normal">GO!#}
-{#                        <i class="material-icons right">send</i>#}
-{#                    </button>#}
-{##}
-{#                    <input type="text" class="hidden_text_box" id="users_lat" name="users_lat_text">#}
-{#                    <input type="text" class="hidden_text_box" id="users_long" name="users_long_text">#}
-{##}
-{#              </form>#}
-{#            </div>#}
-{#            <div class="col-sm-6 home_work">#}
-{#                <form method="POST">#}
-{#                    {% if session.logged_in %}#}
-{#                    <button class="btn waves-effect waves-light" type="submit" name="submit" value="home">Get me Home#}
-{#                        <i class="material-icons right">home</i>#}
-{#                    </button>#}
-{#                    <button class="btn waves-effect waves-light" type="submit" name="submit" value="work">Get me to Work#}
-{#                        <i class="material-icons right">work</i>#}
-{#                    </button>#}
-{#                    {% endif %}#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
     <form method="POST">
         <div class="container">
             <div class="row" id="inputs">
                 <div class="col-sm-6">
-                    <span class="error_message">{{ error_html }}</span>
+                    <div class='alert alert-danger'>{{ error_html }}</div>
 
                     <input type="text" class="form-control collapse in" id="origin" name="origin" placeholder="Start">
                     <input type="text" class="form-control" id="destination" name="destination" placeholder="End">
@@ -169,7 +125,7 @@
         }
 
         $('#use_location').on('click', function(){
-                $('#origin').collapse("toggle")
+            $('#origin').collapse("toggle")
         });
 
     </script>
