@@ -54,13 +54,20 @@
 
     // Used to show the amount of time in minutes until the bus arrives rather than just the arrival time
     function timeFromNow(input_time){
-        var currentTime = new Date();
-        var arrivalTime = new Date(input_time);
-        var diffTime = arrivalTime - currentTime;
-        var diffMins = Math.round(((diffTime % 86400000) % 3600000) / 60000);
+       var currentTime = new Date();
+       console.log(input_time);
+       var date = input_time.substring(0,2);
+       var month = input_time.substring(3,5);
+       var year = input_time.substring(6,10);
+       var hour = input_time.substring(11,13);
+       var min = input_time.substring(14,16);
+       var sec = input_time.substring(17,19);
+       var arrivalTime = new Date(year, month, date, hour, min, sec);
+       var diffTime = arrivalTime - currentTime;
+       var diffMins = Math.round(((diffTime % 86400000) % 3600000) / 60000);
 
-        if (diffMins == 0){
-            return "Due"
+       if (diffMins == 0){
+           return "Due"
         } else {
             return diffMins;
         }

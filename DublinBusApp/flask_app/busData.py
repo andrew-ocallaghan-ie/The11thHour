@@ -384,7 +384,8 @@ class dbi:
         co_ords_dart = []
         engine = get_db()
         sql = 'SELECT lat, lon FROM All_routes.dublinbike_dart_luas\
-           WHERE (Stop_Id BETWEEN %s AND %s) OR (Stop_Id BETWEEN %s AND %s) AND Category = %s;'
+            WHERE ((Stop_Id BETWEEN %s AND %s) OR (Stop_Id BETWEEN %s AND %s)) AND Category = %s;'
+
         result = engine.execute(sql, (
             int(self.start_stop_id_dart.values[0]), int(self.end_stop_id_dart.values[0]),
             int(self.end_stop_id_dart.values[0]), int(self.start_stop_id_dart.values[0]), (self.start_route.values[0])))
@@ -392,6 +393,11 @@ class dbi:
 
         for row in all_co_ord_data_dart:
             co_ords_dart.append({"lat": row[0], "lng": row[1]})
+
+        print("The Start ID is:", self.start_stop_id_dart.values[0])
+        print("The End ID is:", self.end_stop_id_dart.values[0])
+        print("The category is:", self.start_route.values[0])
+        print("Dart coords are:", co_ords_dart)
 
         return (co_ords_dart)
 
