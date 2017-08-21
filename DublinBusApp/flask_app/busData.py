@@ -224,8 +224,8 @@ class dbi:
         """
         Finds darts
         """
-        src_lat, src_lon = self.location_from_address(src)
-        dest_lat, dest_lon = self.location_from_address(dest)
+        src_lat, src_lon = src
+        dest_lat, dest_lon = dest
         mid_point_lat = (src_lat + dest_lat) / 2
         mid_point_lon = (src_lon + dest_lon) / 2
         engine = get_db()
@@ -299,15 +299,15 @@ class dbi:
 
         #----------------------------------------------------------------------------#
 
-    def find_nearby_stops(self, src, dest):
+    def find_nearby_stops(self, src, dest, hour):
         """
         Finds out the nearest stops to a given point
         Returns route, stop IDs, direction, seq in a list
         Todo include the stop names and max stop seq and scheduled number of stops to return the scheduled speed
         """
 
-        src_lat, src_lon = self.location_from_address(src)
-        dest_lat, dest_lon = self.location_from_address(dest)
+        src_lat, src_lon = src
+        dest_lat, dest_lon = dest
         self.mid_point_lat = (src_lat + dest_lat) / 2
         self.mid_point_lon = (src_lon + dest_lon) / 2
         engine = get_db()
@@ -331,10 +331,13 @@ class dbi:
         + SIN(RADIANS(%s))\
         * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end'\
                     FROM All_routes.new_all_routes e\
-                    HAVING distance_in_km_end< %s) as end\
+                    HAVING distance_in_km_end< %s) AS END\
+        Inner JOIN (SELECT DISTINCT hour, route FROM All_routes.Schedule) sh\
+        ON start_route = sh.route AND end_route = sh.route AND sh.hour = %s\
         WHERE start_route=end_route AND start_stop_seq<end_stop_seq AND start_direction=end_direction"
 
-        result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
+
+        result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius, hour))
         all_data = result.fetchall()
 
         dataframe = pd.DataFrame(all_data,
@@ -350,7 +353,6 @@ class dbi:
         # this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
         dataframe['low_score'] = dataframe["Distance_in_km_from_start"] + dataframe["Distance_in_km_from_end"]
         dataframe = dataframe.loc[dataframe.groupby('Route').low_score.idxmin()]
-        # return self.dataframe_to_dict(dataframe)
         self.start_stop_seq = dataframe.Start_Stop_Sequence
         self.end_stop_seq = dataframe.End_Stop_Sequence
         self.start_route = dataframe.Route
@@ -393,11 +395,6 @@ class dbi:
 
         for row in all_co_ord_data_dart:
             co_ords_dart.append({"lat": row[0], "lng": row[1]})
-
-        print("The Start ID is:", self.start_stop_id_dart.values[0])
-        print("The End ID is:", self.end_stop_id_dart.values[0])
-        print("The category is:", self.start_route.values[0])
-        print("Dart coords are:", co_ords_dart)
 
         return (co_ords_dart)
 
@@ -499,28 +496,16 @@ class dbi:
         max_seq = all_data[0]
         return max_seq
 
-    # --------------------------------------------------------------------------#
-    # def get_sched_time(self, route, direction):
-    #     """Return the max stop sequence for a route in a direction"""
-    #     engine = get_db()
-    #     print("THE ROUTE IS:", route)
-    #     print("THE DIRECTION IS:", direction)
-    #
-    #     sql = "SELECT Scheduled_Overall_Time FROM All_routes.routes_to_add_time WHERE Route = %s AND Direction = %s;"
-    #
-    #     result = engine.execute(sql, (route, direction))
-    #     all_data = result.fetchone()
-    #
-    #     print("THE RESULT IS:", all_data)
-    #
-    #     time = all_data[0]
-    #     return time
 
 def dataframe_to_dict(src, dest, dataframe):
     # this converts the interesting routes to a dictionary
-    darts, dart_lat_longs = dbi().find_darts(src, dest)
-    new_dataframe = pd.concat([darts, dataframe], axis=0)
-    new_dataframe['total_time'] = new_dataframe['first_pred'] + new_dataframe['walking_mins']
+    try:
+        darts, dart_lat_longs = dbi().find_darts(src, dest)
+        new_dataframe = pd.concat([darts, dataframe], axis=0)
+    except:
+        new_dataframe = dataframe
+        dart_lat_longs = []
+    new_dataframe['total_time'] = round((new_dataframe['first_pred'] + new_dataframe['walking_mins']), 2)
     new_dataframe = new_dataframe.sort_values("total_time")
     route_options = new_dataframe.transpose().to_dict()
     new_options = {}
@@ -533,7 +518,7 @@ def dataframe_to_dict(src, dest, dataframe):
         new_options[str(i)] = route_options[option]
         i += 1
 
-    graph_colours = ['num', 'rgba(255, 0, 0, ', 'rgba(0, 255, 0, ', 'rgba(0, 0, 255, ', 'rgba(255, 255, 0, ', 'rgba(255, 0, 255, ', 'rgba(0, 255, 255, ', 'rgba(125, 125, 125, ', 'rgba(255, 154, 66, ']
+    graph_colours = ['num', 'rgba(0, 0, 204, ', 'rgba(102, 0, 204, ', 'rgba(51, 51, 205, ', 'rgba(153, 51, 255, ', 'rgba(0, 128, 255, ', 'rgba(102, 178, 255, ']
     for i in range(1, len(new_options) + 1):
         new_options[str(i)]['colour'] = graph_colours[i]
 
@@ -562,7 +547,7 @@ def everything(src, dest, time):
     current_temp, current_wind = weather
 
 
-    route_options, lat_long_list, fares = dbi().find_nearby_stops(src, dest)
+    route_options, lat_long_list, fares = dbi().find_nearby_stops(src, dest, hour)
 
     route_options.Direction = route_options.Direction.astype(int)
     route_options['Stops_To_Travel'] = route_options.End_Stop_Sequence - route_options.Start_Stop_Sequence
@@ -577,11 +562,8 @@ def everything(src, dest, time):
         direction = int(list(dataframe.Direction.unique())[0])
         route = list(dataframe.Route.unique())[0]
         dataframe['max_stop_sequence'] = dbi().get_max_sequence(route, direction)
-        # dataframe['scheduled_time'] = dbi().get_sched_time(route, direction)
-        # dataframe['sched_speed'] = dataframe.scheduled_time / dataframe.max_stop_sequence
         dataframe['walking_mins'] =int(dataframe.low_score * 12)
         dataframe['fare'] = fares
-        # dataframe.drop(['max_stop_sequence', 'scheduled_time'], axis=1)
         return dataframe
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(sched_speed)
@@ -640,4 +622,5 @@ def everything(src, dest, time):
 
         return df
     route_options = route_options.groupby(['Route']).apply(make_predictions)
+
     return dataframe_to_dict(src, dest, route_options)

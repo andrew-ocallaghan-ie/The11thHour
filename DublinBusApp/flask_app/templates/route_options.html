@@ -5,20 +5,6 @@
         // Google Map
         function usersMap() {
 
-{#            directionsService = new google.maps.DirectionsService();#}
-{#            directionsDisplay = new google.maps.DirectionsRenderer();#}
-
-{#            var polylineArray = [];#}
-
-{#        var list_of_path = [];#}
-
-{#            var flightPlanCoordinates = {{ lat_long_list | safe }};#}
-
-{#            {% for pairing in lat_long_list %}#}
-{#                list_of_path.push(parseFloat({{ pairing.lat | safe }}) + "|" + parseFloat({{ pairing.lng | safe }}));#}
-{#                console.log({{ pairing | safe }});#}
-{#            {% endfor %}#}
-
             // Centre of map
             var mid_lat = {{ route_options['1']['mid_point_lat'] | safe }};
             var mid_long = {{ route_options['1']['mid_point_lon'] | safe }};
@@ -38,60 +24,6 @@
 
             createMarker({{ src_lat }},{{ src_long }},"Source","User Location",'red', 1);
             createMarker({{ dest_lat }},{{ dest_long }},"Destination","User Location",'red', 1);
-
-{#            var polylinePath = new google.maps.Polyline({#}
-{#                path: flightPlanCoordinates,#}
-{#                geodesic: true,#}
-{#                strokeColor: '#FF0000',#}
-{#                strokeOpacity: 1.0,#}
-{#                strokeWeight: 3#}
-{#            });#}
-{##}
-{#            polylinePath.setMap(map);#}
-{##}
-{#            runSnapToRoad(polylinePath);#}
-{##}
-{#            // Snap a user-created polyline to roads and draw the snapped path#}
-{#            function runSnapToRoad(path) {#}
-{##}
-{#                var pathValues = [];#}
-{#                for (var i = 0; i < path.getLength(); i++) {#}
-{#                    pathValues.push(path.getAt(i).toUrlValue());#}
-{#                }#}
-{#                $.get('https://roads.googleapis.com/v1/snapToRoads', {#}
-{#                    interpolate: true,#}
-{#                    key: AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc,#}
-{#                    path: pathValues.join('|')#}
-{#                }, function(data) {#}
-{#                    processSnapToRoadResponse(data);#}
-{#                    drawSnappedPolyline();#}
-{#                });#}
-{#            }#}
-{##}
-{#        // Store snapped polyline returned by the snap-to-road service.#}
-{#        function processSnapToRoadResponse(data) {#}
-{#            snappedCoordinates = [];#}
-{#            placeIdArray = [];#}
-{#            for (var i = 0; i < data.snappedPoints.length; i++) {#}
-{#                var latlng = new google.maps.LatLng(#}
-{#                    data.snappedPoints[i].location.latitude,#}
-{#                    data.snappedPoints[i].location.longitude);#}
-{#                snappedCoordinates.push(latlng);#}
-{#                placeIdArray.push(data.snappedPoints[i].placeId);#}
-{#            }#}
-{#        }#}
-{##}
-{#        // Draws the snapped polyline (after processing snap-to-road response).#}
-{#        function drawSnappedPolyline() {#}
-{#          var snappedPolyline = new google.maps.Polyline({#}
-{#            path: snappedCoordinates,#}
-{#            strokeColor: 'black',#}
-{#            strokeWeight: 3#}
-{#          });#}
-{#          snappedPolyline.setMap(map);#}
-{#          polylines.push(snappedPolyline);#}
-{#        }#}
-{##}
 
             {% for key, value in route_options.items() %}
                 {%  if value["Route"] == 'DART' %}
@@ -206,14 +138,18 @@
          var chartDemo = new Chart(ctx, {
           type: 'line',
           data: {
-              labels: {{ route_options['3']['pretty_times'] | safe }},
+              {%  if route_options['1']['Route'] == 'DART' | safe %}
+              labels: {{ route_options['2']['pretty_times'] | safe }},
+              {%  else %}
+              labels: {{ route_options['1']['pretty_times'] | safe }},
+              {% endif %}
               datasets: [
                   {%  for route in route_options.items() %}
                       {
                   fill: true,
                   label: '{{ route[1]["Route"] }}',
                   data: {{ route[1]["Predictions"] }},
-                  backgroundColor: '{{ route[1]["colour"] }}0.2)',
+                  backgroundColor: '{{ route[1]["colour"] }}0.1)',
                   borderColor:'{{ route[1]["colour"] }}1)',
                   borderWidth: 1
                       },
@@ -226,6 +162,14 @@
                      fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
                      display: true,
                      text: "Your Route Travel Times"
+                 },
+                 scales: {
+                     yAxes: [{
+                         display: true,
+                         ticks: {
+                             suggestedMin: 5
+                             }
+                     }]
                  }
              }
          });

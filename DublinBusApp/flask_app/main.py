@@ -72,10 +72,11 @@ def index():
             if use_geolocation == ["on"]:
                 src_lat = request.form['users_lat_text']
                 src_long = request.form['users_long_text']
-                src = dbi().address_from_location(src_lat, src_long)
+                src = (float(src_lat), float(src_long))
             else:
                 src = request.form['origin']
                 src_lat, src_long = dbi().location_from_address(src)
+                src = (src_lat, src_long)
         elif request.form['submit'] == 'work':
             username = session['username']
             engine = get_db()
@@ -85,7 +86,7 @@ def index():
             dest = data_work[0][0]
             src_lat = request.form['users_lat_text']
             src_long = request.form['users_long_text']
-            src = dbi().address_from_location(src_lat, src_long)
+            src = (float(src_lat), float(src_long))
         elif request.form['submit'] == 'home':
             username = session['username']
             engine = get_db()
@@ -95,9 +96,10 @@ def index():
             dest = data_home[0][0]
             src_lat = request.form['users_lat_text']
             src_long = request.form['users_long_text']
-            src = dbi().address_from_location(src_lat, src_long)
+            src = (float(src_lat), float(src_long))
 
         dest_lat, dest_long = dbi().location_from_address(dest)
+        dest = (dest_lat, dest_long)
 
         now_arrive_depart_selection = request.form['now_arrive_depart']
         if now_arrive_depart_selection == '0':
@@ -112,7 +114,6 @@ def index():
             year = int(date[2])
             dates = {'January,':1, 'February,':2, 'March,':3, 'April,':4, 'May,':5, 'June,':6, 'July,':7, 'August,':8, 'September,':9, 'October,':10, 'November,':11, 'December,':12 }
             month = dates[date[1]]
-
             day = int(date[0])
             weekday = datetime(year, month, day).weekday()
             hour = int(time[0])
@@ -148,7 +149,6 @@ def route_search():
         if users_route not in route_list:
             error_html = 'Error. ' + users_route + ' is an invalid route. Please select a valid route from the dropdown list.'
             return render_template('route_search.html', **locals())
-
 
         if request.form.get('direction') == 'on':
             direction = 0
