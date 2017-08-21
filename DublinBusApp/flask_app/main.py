@@ -129,6 +129,7 @@ def index():
             error_html = "No valid routes found for " + src + " to " + dest + " please try a more detailed or different address."
             return render_template('home.html', **locals())
 
+        print("THE ROUTE OPTIONS ARE:", route_options)
         return render_template('route_options.html', **locals())
 
     return render_template('home.html', **locals())

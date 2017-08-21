@@ -389,5 +389,6 @@ __pycache__/
 *.h5
 
 *.pkl
+*dat
 
 *.csv

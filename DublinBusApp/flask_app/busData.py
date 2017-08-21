@@ -500,21 +500,21 @@ class dbi:
         return max_seq
 
     # --------------------------------------------------------------------------#
-    def get_sched_time(self, route, direction):
-        """Return the max stop sequence for a route in a direction"""
-        engine = get_db()
-        print("THE ROUTE IS:", route)
-        print("THE DIRECTION IS:", direction)
-
-        sql = "SELECT Scheduled_Overall_Time FROM All_routes.routes_to_add_time WHERE Route = %s AND Direction = %s;"
-
-        result = engine.execute(sql, (route, direction))
-        all_data = result.fetchone()
-
-        print("THE RESULT IS:", all_data)
-
-        time = all_data[0]
-        return time
+    # def get_sched_time(self, route, direction):
+    #     """Return the max stop sequence for a route in a direction"""
+    #     engine = get_db()
+    #     print("THE ROUTE IS:", route)
+    #     print("THE DIRECTION IS:", direction)
+    #
+    #     sql = "SELECT Scheduled_Overall_Time FROM All_routes.routes_to_add_time WHERE Route = %s AND Direction = %s;"
+    #
+    #     result = engine.execute(sql, (route, direction))
+    #     all_data = result.fetchone()
+    #
+    #     print("THE RESULT IS:", all_data)
+    #
+    #     time = all_data[0]
+    #     return time
 
 def dataframe_to_dict(src, dest, dataframe):
     # this converts the interesting routes to a dictionary
@@ -577,11 +577,11 @@ def everything(src, dest, time):
         direction = int(list(dataframe.Direction.unique())[0])
         route = list(dataframe.Route.unique())[0]
         dataframe['max_stop_sequence'] = dbi().get_max_sequence(route, direction)
-        dataframe['scheduled_time'] = dbi().get_sched_time(route, direction)
-        dataframe['sched_speed'] = dataframe.scheduled_time / dataframe.max_stop_sequence
+        # dataframe['scheduled_time'] = dbi().get_sched_time(route, direction)
+        # dataframe['sched_speed'] = dataframe.scheduled_time / dataframe.max_stop_sequence
         dataframe['walking_mins'] =int(dataframe.low_score * 12)
         dataframe['fare'] = fares
-        dataframe.drop(['max_stop_sequence', 'scheduled_time'], axis=1)
+        # dataframe.drop(['max_stop_sequence', 'scheduled_time'], axis=1)
         return dataframe
 
     route_options = route_options.groupby(['Route', 'Direction']).apply(sched_speed)
@@ -617,20 +617,27 @@ def everything(src, dest, time):
 
     def make_predictions(df):
         route = list(df.Route.unique())[0]
-        predictor = joblib.load('static/pkls/' + str(route) + 'rf.pkl')
-        time_options = list(df['time_bin'])
-        columns = ['wind', 'temp', 'holiday', 'sched_speed', 'Stops_To_Travel',
-                         'Start_Stop_Sequence']
         prediction_list = []
+        try:
+            predictor = joblib.load('static/pkls/pickle' + route + 'dat')
+            time_options = list(df['time_bin'])
 
-        for time in time_options[0]:
-            prediction = (predictor.predict([df['day'].values[0]] + [time] + df[columns].values[0].tolist())[0])
-            prediction_list.append(round(float(prediction), 2))
-        df["Predictions"] = [prediction_list]
-        df["first_pred"] = prediction_list[0]
+            for time in time_options[0]:
+                x = df.Start_Stop_Sequence.values[0]
+                p = df.max_stop_sequence.values[0]
+                t = p-x
+                y = df.End_Stop_Sequence.values[0]
+                end = df.max_stop_sequence.values[0]
+                prediction = (predictor.predict([df.Direction.values[0]] + [df.day.values[0]] + [time] + [df.holiday.values[0]] + [x] + [df.temp.values[0]]+ [df.wind.values[0]] + [t] )[0])
+                ratio_distance = (y-x)/(end-x)
+                prediction = prediction * ratio_distance
+                prediction_list.append(round(float(prediction), 2))
+                '''add stop name to df,'''
+            df['Predictions'] = [prediction_list]
+            df["first_pred"] = prediction_list[0]
+        except:
+            pass
 
         return df
-
-    route_options = route_options.groupby(['Route', 'Direction']).apply(make_predictions)
-
-    return (dataframe_to_dict(src, dest, route_options))
+    route_options = route_options.groupby(['Route']).apply(make_predictions)
+    return dataframe_to_dict(src, dest, route_options)
