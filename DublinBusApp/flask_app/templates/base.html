@@ -288,67 +288,67 @@
             <a href="/" class="brand-logo"><i class="material-icons">directions_bus</i>Hustle Bustle</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-            <li><a href="route_search">Search by Route<span class="sr-only">(current)</span></a></li>
-            <li><a href="stop_search">Search by Stop</a></li>
-            <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
-            {% if session.logged_in %}
-                <li class="dropdown" id="My Routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My Routes</a></li>
-                <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-            {% else %}
-                <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
-                <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-log-in"></span> Login</a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
-                            <div class="form-group">
-                                <label>Username</label>
-                                <input type="text" name="username" class="form-control" value={{request.form.username}}>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" name="password" class="form-control" value={{request.form.password}}>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-              </li>
-          {% endif %}
-      </ul>
-      <ul class="side-nav" id="mobile-demo">
-          <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
-          <li><a href="stop_search">Search by stop</a></li>
-          <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
-          {% if session.logged_in %}
-              <li class="dropdown" id="My Routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a></li>
-              <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-          {% else %}
-              <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
-              <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-                  <div class="dropdown-menu">
-                      <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
-                          <div class="form-group">
-                              <label>Username</label>
-                              <input type="text" name="username" class="form-control" value={{request.form.username}}>
-                          </div>
-                          <div class="form-group">
-                              <label>Password</label>
-                              <input type="password" name="password" class="form-control" value={{request.form.password}}>
-                          </div>
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                      </form>
-                  </div>
-              </li>
-          {% endif %}
-      </ul>
-    </div>
+                <li><a href="route_search">Search by Route<span class="sr-only">(current)</span></a></li>
+                <li><a href="stop_search">Search by Stop</a></li>
+                <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
+                {% if session.logged_in %}
+                    <li class="dropdown" id="My Routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My Routes</a></li>
+                    <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                {% else %}
+                    <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+                    <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-log-in"></span> Login</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" name="username" class="form-control" value={{request.form.username}}>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" class="form-control" value={{request.form.password}}>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="route_search">Search by route<span class="sr-only">(current)</span></a></li>
+                <li><a href="stop_search">Search by stop</a></li>
+                <li><a href="https://www.dublinbus.ie/News-Centre/">News</a></li>
+                {% if session.logged_in %}
+                    <li class="dropdown" id="My Routes"><a class="dropdown-toggle" href="myroutes" toggle="dropdown"> My routes</a></li>
+                    <li class="dropdown" id="Logout"><a href="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                {% else %}
+                    <li class="dropdown" id="signup"><a class="dropdown-toggle" href="register"><span class="glyphicon glyphicon-log-in"></span> Register</a></li>
+                    <li class="dropdown" id="login"><a class="dropdown-toggle" href="" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                        <div class="dropdown-menu">
+                            <form action='{{url_for('login')}}' class="form-horizontal"  method="post" accept-charset="UTF-8">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" name="username" class="form-control" value={{request.form.username}}>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" class="form-control" value={{request.form.password}}>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
 
-        {% include 'includes/_messages.html' %}
-        {% block content %}{% endblock %}
-        {% from "includes/_formhelpers.html" import render_field %}
+    {% include 'includes/_messages.html' %}
+    {% block content %}{% endblock %}
+    {% from "includes/_formhelpers.html" import render_field %}
         
-        <!--import Lodash-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <!--import Lodash-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 
     </body>
 

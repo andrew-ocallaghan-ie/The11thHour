@@ -5,7 +5,6 @@
 
 <script>
     // This function adds all of the routes to the routes textbox so we can autocomplete them
-    // Currently takes the route from a CSV which can probably be done in a cleaner way
      function dataList() {
         var stopInfo;
 
@@ -19,29 +18,27 @@
      }
 </script>
 
-  <div id="map"></div>
+    <div id="map"></div>
 
-        <div class="container">
-            <div class="row" id="inputs">
+    <div class="container">
+        <div class="row" id="inputs">
+            <div class="col-sm-6">
+                {{ error_html }}
+                <form method="post">
+                    <input type="text" class="form-control" id="user_stop" name="user_stop" list="stops" placeholder="Stop Name">
+                    <datalist id="stops"></datalist>
+                    <!--This calls the script to add all of the routes to the textbox for autocomplete-->
+                    <script>window.onload=dataList();</script>
 
-                <div class="col-sm-6">
-                    {{ error_html }}
-                    <form method="post">
-                        <input type="text" class="form-control" id="user_stop" name="user_stop" list="stops" placeholder="Stop Name">
-                          <datalist id="stops"></datalist>
-                          <!--This calls the script to add all of the routes to the textbox for autocomplete-->
-                          <script>window.onload=dataList();</script>
-
-                      <button class="btn waves-effect waves-light" type="submit">GO!
-                          <i class="material-icons right">send</i>
-                      </button>
-                  </form>
-                </div>
+                    <button class="btn waves-effect waves-light" type="submit">GO!
+                        <i class="material-icons right">send</i>
+                    </button>
+                </form>
             </div>
         </div>
+    </div>
 
-<!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
-<!--stop info page-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
+    <!--Script to add the map to the page-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap"></script>
 
 {% endblock %}

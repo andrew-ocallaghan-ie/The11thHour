@@ -57,11 +57,13 @@
             {% endfor %}
         }
 
+        // Move the center of the map
         function moveCenter(lat, long){
             var center = new google.maps.LatLng(lat, long);
             map.panTo(center);
         }
 
+        // Initiall hide all the markers except the ones we need
         function hideAll() {
                 for (var i=0; i<markers.length; i++) {
                     if (markers[i].mycategory != "User Location") {
@@ -73,18 +75,15 @@
         $(document).ready(function(){
             $('.tooltipped').tooltip({delay: 50});
             $(".route_option_box").click(function(){
-{#                 var isExpanded = $("#collapse_map").attr("aria-expanded");#}
-{#                 if (isExpanded == 'true' || isExpanded == undefined){#}
                      hideAll();
-{#                 } else if (isExpanded == 'false'){#}
                      show($(this).attr('id'));
                      var lat = parseFloat($(this).attr('value').split(',')[0]);
                      var long = parseFloat($(this).attr('value').split(',')[1]);
                      moveCenter(lat, long);
-{#                 }#}
             });
         });
 
+        // IF the screen height is too small collapse the map
         $(window).bind('resize load', function() {
             if ($(this).height() < 415) {
                 $('#collapse_map').removeClass('in');
@@ -122,8 +121,7 @@
         </div>
     </div>
 
-    <!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
-    <!--stop info page-->
+    <!--Script to add the map to the page-->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=usersMap&libraries=places"></script>
 
     <!-- Script to refresh the map when it is unhidden. It appears as grey if this isn't used.-->

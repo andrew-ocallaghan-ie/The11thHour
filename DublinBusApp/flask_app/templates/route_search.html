@@ -15,7 +15,6 @@
     }
 
     // This function adds all of the routes to the routes textbox so we can autocomplete them
-    // Currently takes the route from a CSV which can probably be done in a cleaner way
      function dataList() {
          var routeInfo;
 
@@ -77,7 +76,6 @@
         <div class="col-sm-6" id="list_the_bus_stops">
             <div id="bus_stops"></div>
             <!--Calls the function to add the autocomplete info to the search bar-->
-            <!--Kind of slow at the moment. Need to make it faster.-->
             <script>window.onload = populateStopInfo();</script>
         </div>
     </div>

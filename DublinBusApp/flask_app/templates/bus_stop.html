@@ -34,28 +34,26 @@
     }
 
     // Gets live data from the live Dublin Bus API and prints it to the bus_stop_info div
-   function liveBusStopInfo(){
-        {% if session.logged_in %}
-        var like="<form action='{{url_for('likestop')}}' method='post'><button class='button' value='{{stop_num}}' name='stopnum'><span>Like </span></button></form>";
-        {% else %}
-        var like="<div>Please login to use all functions</div>";
-        {% endif %}
+    function liveBusStopInfo(){
+       {% if session.logged_in %}
+           var like="<form action='{{url_for('likestop')}}' method='post'><button class='button' value='{{stop_num}}' name='stopnum'><span>Like </span></button></form>";
+       {% else %}
+           var like="<div>Please login to use all functions</div>";
+       {% endif %}
 
-        $.getJSON("https://data.dublinked.ie/cgi-bin/rtpi/realtimebusinformation?stopid={{stop_num}}&format=json", function (json) {
-            var bus_stop_info = like +"<h1>Stop {{stop_num}} Live Info</h1>";
-            var buses = json.results;
-            for (var i = 0; i < buses.length; i++) {
-                bus_stop_info += "<p>" + buses[i].route + " - " + buses[i].origin + "{{x}} to {{y}}" + buses[i].destination + " - " + timeFromNow(buses[i].arrivaldatetime) + "mins</p>";
-            }
-            document.getElementById("bus_stop_info").innerHTML = bus_stop_info;
-        });
+       $.getJSON("https://data.dublinked.ie/cgi-bin/rtpi/realtimebusinformation?stopid={{stop_num}}&format=json", function (json) {
+           var bus_stop_info = like +"<h1>Stop {{stop_num}} Live Info</h1>";
+           var buses = json.results;
+           for (var i = 0; i < buses.length; i++) {
+               bus_stop_info += "<p>" + buses[i].route + " - " + buses[i].origin + "{{x}} to {{y}}" + buses[i].destination + " - " + timeFromNow(buses[i].arrivaldatetime) + "mins</p>";
+           }
+           document.getElementById("bus_stop_info").innerHTML = bus_stop_info;
+       });
     }
-
 
     // Used to show the amount of time in minutes until the bus arrives rather than just the arrival time
     function timeFromNow(input_time){
        var currentTime = new Date();
-       console.log(input_time);
        var date = input_time.substring(0,2);
        var month = input_time.substring(3,5);
        var year = input_time.substring(6,10);
@@ -68,9 +66,9 @@
 
        if (diffMins == 0){
            return "Due"
-        } else {
-            return diffMins;
-        }
+       } else {
+           return diffMins;
+       }
     }
 
 
@@ -81,15 +79,9 @@
 
 <div class="container">
     <div class="row">
-
         <div class="col-sm-6" id="bus_stop_info">
             <!--This calls the script to fill in the live bus times info in the div-->
             <script>window.onload = liveBusStopInfo();</script>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-
         </div>
     </div>
 </div>

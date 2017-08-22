@@ -3,7 +3,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
     <script>
-
         function initialize() {
             var input1 = document.getElementById('origin');
             var input2 = document.getElementById('destination');
@@ -21,19 +20,19 @@
         }
 
         $(document).ready(function(){
+            // Default the checkbox to being off
             $('#use_location').attr('checked', false);
+            // If the user want to leave at a certain time show the time/date inputs
             $("#now_arrive_depart").change(function(){
                  if (($(this).val() == 1) || ($(this).val() == 2)){
                      $('.date_time').collapse("show");
-                     var today = moment().format('YYYY-MM-DD');
-                     document.getElementById("date_input").value = today;
                  } else if ($(this).val() == 0){
                      $('.date_time').collapse("hide");
                  }
             });
         });
 
-        //get user geolocation
+        // Get user geolocation
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var user_lat = position.coords.latitude;
@@ -91,8 +90,7 @@
     </form>
 
 
-    <!--Script to add the map to the page. This has to be done on each individual page as we have a different map on the-->
-    <!--stop info page-->
+    <!--Script to add the map to the page-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVaetyYe44_Ay4Oi5Ljxu83jKLnMKEtBc&callback=myMap&libraries=places"></script>
     <script>window.onload=initialize();</script>
     <script>
@@ -118,12 +116,14 @@
             ampmclickable: true // make AM PM clickable
         });
 
+        // Show/hide the use location depending on if geolocation is enabled
         if (navigator.geolocation){
             document.getElementById("use_location").style.display = "block"
         } else {
             document.getElementById("use_location").style.display = "none"
         }
 
+        // If the user wants to use geolocation hide the source input
         $('#use_location').on('click', function(){
             $('#origin').collapse("toggle")
         });

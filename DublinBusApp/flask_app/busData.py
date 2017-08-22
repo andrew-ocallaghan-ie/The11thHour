@@ -2,18 +2,15 @@ from flask import jsonify
 from operator import itemgetter
 from sqlalchemy import create_engine
 from flask import g
-import pandas as pd
-import datetime
 import requests
 import traceback
-import numpy as np
-import csv
 import json
 import datetime
 from bs4 import BeautifulSoup
 import urllib.request
 import warnings
 
+# Removes deprecation warnings caused by using the wrong version of package from being printed.
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
     import sklearn, pandas as pd
@@ -23,6 +20,8 @@ from sklearn.externals import joblib
 
 # --------------------------------------------------------------------------#
 
+
+# This section sets up the connection to the database.
 URI = "bikesdb.cvaowyzhojfp.eu-west-1.rds.amazonaws.com"
 PORT = "3306"
 DB = "All_routes"
@@ -31,12 +30,14 @@ PASSWORD = "teamgosky"
 
 
 def connect_to_database():
+    """Creates the connection to the database."""
     db_str = "mysql+mysqldb://{}:{}@{}:{}/{}"
     engine = create_engine(db_str.format(USER, PASSWORD, URI, PORT, DB), echo=True)
     return engine
 
 
 def get_db():
+    """Connects to the database."""
     engine = getattr(g, 'engine', None)
     if engine is None:
         engine = g.engine = connect_to_database()
@@ -88,7 +89,6 @@ class api:
         all_data = result.fetchall()
 
         stops = []
-        stop_id_list = []
 
         for row in all_data:
             stop = {
@@ -207,6 +207,7 @@ class dbi:
         #------------------------------------------------------------------------------------#
 
     def dart_fare(self):
+        """Determine the fare for a DART trip. Returns a string."""
         if self.dart_stops_to_travel.values[0] <= 8:
             self.dart_fare = '€2.20'
         elif self.dart_stops_to_travel.values[0] < 12 and self.dart_stops_to_travel.values[0] > 8:
@@ -222,7 +223,8 @@ class dbi:
 
     def find_darts(self, src, dest):
         """
-        Finds darts
+        Finds dart options between given source and destination. Returns a tuple containing dataframe
+        and the latitude and longitude of stops.
         """
         src_lat, src_lon = src
         dest_lat, dest_lon = dest
@@ -275,6 +277,8 @@ class dbi:
          #-----------------------------------------------------------------------------------#
 
     def dart_dataframe_to_dict(self, dart_dataframe):
+        """Converts the dart dataframe from find_darts to a dictionary to be used in everything.
+        Returns a dictionary."""
         self.dart_stops_to_travel = dart_dataframe.stops_travelled
         self.dartluasroute = dart_dataframe.Route
         dart_dataframe['fare'] = self.dart_fare()
@@ -345,12 +349,14 @@ class dbi:
                                           "End_Stop_Sequence", "Distance_in_km_from_start", "Distance_in_km_from_end", "Start_Stop_Name", "End_Stop_Name"])
         dataframe['mid_point_lat']=self.mid_point_lat
         dataframe['mid_point_lon']=self.mid_point_lon
+
         return self.priority_options(dataframe)
 
         #------------------------------------------------------------------------------------#
 
     def priority_options(self, dataframe):
-        # this is here to select the nearest of the subset returned by sql to the user - minimises total user walking distance
+        """Selects the nearest of the subset of travel options returned by sql to the user
+        Minimises total user walking distance"""
         dataframe['low_score'] = dataframe["Distance_in_km_from_start"] + dataframe["Distance_in_km_from_end"]
         dataframe = dataframe.loc[dataframe.groupby('Route').low_score.idxmin()]
         self.start_stop_seq = dataframe.Start_Stop_Sequence
@@ -364,7 +370,8 @@ class dbi:
     # --------------------------------------------------------------------------#
 
     def extract_lat_lon_stops(self):
-        '''Returns lat lon of all stops on route'''
+        '''Returns lat lon of all stops on a given route
+        Returns a dictionary'''
         co_ords = []
         engine = get_db()
 
@@ -382,7 +389,8 @@ class dbi:
     # --------------------------------------------------------------------------#
 
     def extract_lat_lon_stops_dart(self):
-        '''Returns lat lon of all stops on route'''
+        '''Returns lat lon of all stops on route for DART
+        Returns a dictionary.'''
         co_ords_dart = []
         engine = get_db()
         sql = 'SELECT lat, lon FROM All_routes.dublinbike_dart_luas\
@@ -452,10 +460,6 @@ class dbi:
     #--------------------------------------------------------------------------#
     def fares(self):
         try:
-            if self.direction.values[0] == 1:
-                direction = 'I'
-            else:
-                direction = 'O'
             with urllib.request.urlopen("https://www.dublinbus.ie/Fare-Calculator/Fare-Calculator-Results/?routeNumber=" + self.fare_route.values[0] + "&direction=I&board=" + str( self.start_stop_seq.values[0]) + "&alight=" + str(self.end_stop_seq.values[0])) as response:
                 data = response.read()
                 soup = BeautifulSoup(data, 'html.parser')
@@ -484,6 +488,7 @@ class dbi:
         return (holidays)
 
     # --------------------------------------------------------------------------#
+
     def get_max_sequence(self, route, direction):
         """Return the max stop sequence for a route in a direction"""
         engine = get_db()
@@ -496,9 +501,10 @@ class dbi:
         max_seq = all_data[0]
         return max_seq
 
+# --------------------------------------------------------------------------#
 
 def dataframe_to_dict(src, dest, dataframe):
-    # this converts the interesting routes to a dictionary
+    """Converts route options between source and dest to a dictionary"""
     try:
         darts, dart_lat_longs = dbi().find_darts(src, dest)
         new_dataframe = pd.concat([darts, dataframe], axis=0)
@@ -524,6 +530,7 @@ def dataframe_to_dict(src, dest, dataframe):
 
     return (new_options, dart_lat_longs)
 
+# --------------------------------------------------------------------------#
 
 def everything(src, dest, time):
     """Determines the journey time for each viable route option
@@ -614,7 +621,7 @@ def everything(src, dest, time):
                 ratio_distance = (y-x)/(end-x)
                 prediction = prediction * ratio_distance
                 prediction_list.append(round(float(prediction), 2))
-                '''add stop name to df,'''
+                # Add stop name to DF,
             df['Predictions'] = [prediction_list]
             df["first_pred"] = prediction_list[0]
         except:

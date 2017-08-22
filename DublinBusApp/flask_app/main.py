@@ -18,21 +18,9 @@ from wtforms import Form, StringField, PasswordField, validators
 # https://passlib.readthedocs.io/en/stable/
 from passlib.hash import sha256_crypt
 
-# http://pymysql.readthedocs.io/en/latest/index.html
-import pymysql
-
 # https://docs.python.org/3/library/functools.html
 from functools import wraps
 
-# http://www.pythonforbeginners.com/requests/using-requests-in-python
-import requests
-
-# http://pandas.pydata.org/
-import pandas as pd
-
-#pymysql.install_as_MySQLdb()
-
-from flask import jsonify
 import json
 
 # View site @ http://localhost:5000/
@@ -66,8 +54,11 @@ def index():
 
     if request.method == 'POST':
 
+        # If the user select the normal GO button do this
         if request.form['submit'] == 'normal':
+            # Gets the user input from the destination input textbox
             dest = request.form['destination']
+            # Check if the user has said to use geolocation. If they do use it. If not use the source input.
             use_geolocation = request.form.getlist('user_location')
             if use_geolocation == ["on"]:
                 src_lat = request.form['users_lat_text']
@@ -77,38 +68,57 @@ def index():
                 src = request.form['origin']
                 src_lat, src_long = dbi().location_from_address(src)
                 src = (src_lat, src_long)
+        # If the user is logged in and requests Get me to Work
         elif request.form['submit'] == 'work':
+            # Get the address from the DB
             username = session['username']
             engine = get_db()
             sql_work = "SELECT work FROM users WHERE username = %s"
             result_work = engine.execute(sql_work, [username])
             data_work = result_work.fetchall()
             dest = data_work[0][0]
-            src_lat = request.form['users_lat_text']
-            src_long = request.form['users_long_text']
-            src = (float(src_lat), float(src_long))
+            # Get the geolocation. If it has not loaded yet give error.
+            try:
+                src_lat = request.form['users_lat_text']
+                src_long = request.form['users_long_text']
+                src = (float(src_lat), float(src_long))
+            except ValueError as ex:
+                error_html = "Error. Geolocation not found. Please wait and try again."
+                return render_template('home.html', **locals())
+        # If the user is logged in and requests Get me to Home
         elif request.form['submit'] == 'home':
+            # Get the address from the DB
             username = session['username']
             engine = get_db()
             sql_home = "SELECT home FROM users WHERE username = %s"
             result_home = engine.execute(sql_home, [username])
             data_home = result_home.fetchall()
             dest = data_home[0][0]
-            src_lat = request.form['users_lat_text']
-            src_long = request.form['users_long_text']
-            src = (float(src_lat), float(src_long))
+            # Get the geolocation. If it has not loaded yet give error.
+            try:
+                src_lat = request.form['users_lat_text']
+                src_long = request.form['users_long_text']
+                src = (float(src_lat), float(src_long))
+            except ValueError as ex:
+                error_html = "Error. Geolocation not found. Please wait and try again."
+                return render_template('home.html', **locals())
 
+        # Get the destination lat and long
         dest_lat, dest_long = dbi().location_from_address(dest)
         dest = (dest_lat, dest_long)
 
+        # Check if the user wants to depart now or in the future.
         now_arrive_depart_selection = request.form['now_arrive_depart']
+        # If now, use current time
         if now_arrive_depart_selection == '0':
             time = datetime.now()
             date = time.date()
             weekday = time.weekday()
             hour = time.hour
             min = time.minute
+        # If in the future get the time from the input boxes.
         else:
+            # Try except to ensure the date & time inputs are correct.
             try:
                 time = request.form['time'].split(":")
                 date = request.form['date'].split(" ")
@@ -127,17 +137,14 @@ def index():
                 error_html = "Error! Date input incorrect."
                 return render_template('home.html', **locals())
 
+        # Try running the model. If index error occurs it means there are no route options.
         try:
             route_options, dart_lat_long_list = everything(src, dest, time)
 
         except IndexError as ex:
-            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
             error_html = "No valid routes found. Please try a more detailed or different address."
             return render_template('home.html', **locals())
 
-        print("THE ROUTE OPTIONS ARE:", route_options)
         return render_template('route_options.html', **locals())
 
     return render_template('home.html', **locals())
@@ -150,13 +157,16 @@ def route_search():
     """Takes the input from the user for route number and direction"""
 
     if request.method == 'POST':
+        # Get the user input
         users_route = request.form['user_route']
 
         route_list = api().stop_and_route_lists()[0]
+        # If user select an invalid route give an error.
         if users_route not in route_list:
             error_html = 'Error. ' + users_route + ' is an invalid route. Please select a valid route from the dropdown list.'
             return render_template('route_search.html', **locals())
 
+        # Get the direction input.
         if request.form.get('direction') == 'on':
             direction = 0
         else:
@@ -179,12 +189,10 @@ def stop_search():
 
     if request.method == 'POST':
         stop_num = request.form['user_stop']
+        # Error check to ensure input is a number.
         try:
             int(stop_num)
         except ValueError as ex:
-            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
             error_html = "Stop ID must be a number."
             return render_template('stop_search.html', **locals())
 
@@ -225,6 +233,7 @@ def register():
         sql = "INSERT INTO users(name, email, username, home, work, password) VALUES(%s, %s, %s, %s, %s, %s)"
         engine.execute(sql, (name, email, username, work, home, password))
         flash('You are successfully registered, now you can log in', 'success')
+
     return render_template('register.html', form=form)
 
 
