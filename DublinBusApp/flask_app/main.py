@@ -23,13 +23,11 @@ from functools import wraps
 
 import json
 
-# View site @ http://localhost:5000/
 # --------------------------------------------------------------------------#
 # Creating Flask App
 app = Flask(__name__)
 # Enable Cross Origin Resource Sharing
 CORS(app)
-
 
 # --------------------------------------------------------------------------#
 

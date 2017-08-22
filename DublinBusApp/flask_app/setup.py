@@ -6,6 +6,10 @@ setup(
     include_package_data=True,
     install_requires=[
         'flask',
-        'pandas'
+        'pandas',
+        'flask_cors',
+        'sqlalchemy',
+        'wtforms',
+        'bs4'
     ],
 )
