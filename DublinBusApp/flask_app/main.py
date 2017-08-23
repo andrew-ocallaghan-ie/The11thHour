@@ -21,6 +21,10 @@ from passlib.hash import sha256_crypt
 # https://docs.python.org/3/library/functools.html
 from functools import wraps
 
+# http://pymysql.readthedocs.io/en/latest/index.html
+import pymysql
+pymysql.install_as_MySQLdb()
+
 import json
 
 # --------------------------------------------------------------------------#
@@ -219,6 +223,7 @@ def stop_info(stopnum):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
+    #get the information from the form
     if request.method == 'POST' and form.validate():
         name = form.name.data
         email = form.email.data
@@ -228,6 +233,7 @@ def register():
         password = sha256_crypt.encrypt(str(form.password.data))
 
         engine = get_db()
+        #insert the info into table
         sql = "INSERT INTO users(name, email, username, home, work, password) VALUES(%s, %s, %s, %s, %s, %s)"
         engine.execute(sql, (name, email, username, work, home, password))
         flash('You are successfully registered, now you can log in', 'success')
@@ -289,6 +295,7 @@ def is_logged_in(f):
 @app.route('/myroutes', methods=['GET', 'POST'])
 @is_logged_in
 def myroutes():
+    #get home, work, like_stop from database
     username = session['username']
     engine = get_db()
     sql = "SELECT * FROM like_stop WHERE username = % s"
@@ -311,7 +318,7 @@ def myroutes():
     for a in range(0, len(all_data)):
         sql = "SELECT Stop_name FROM Stops WHERE Stop_ID = % s"
         stopnamelist[a] = engine.execute(sql, [all_data[a]['stop_id']]).fetchall()[0][0]
-
+    #change the home and work address
     if request.method == 'POST':
         if request.form['submit'] == 'work':
             new_work = request.form['work']
@@ -336,7 +343,7 @@ def delete():
         stop_id = request.form['user_delete']
 
         engine = get_db()
-
+        #delete the stop in database
         sql = "DELETE FROM like_stop WHERE username = %s AND stop_id = %s"
         result = engine.execute(sql, [username, stop_id])
 
@@ -455,8 +462,7 @@ def get_db():
 
 
 # =================================== DB ==================================#
-
+app.secret_key = 'secret123'
 # Setting app to run only if this file is run directly.
 if __name__ == '__main__':
-    app.secret_key = 'secret123'
     app.run(debug=True)
