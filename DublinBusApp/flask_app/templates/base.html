@@ -75,11 +75,11 @@
                 
                 //create different content of markers
               marker.addListener("click",function(){
-                  if (marker.mycategory=="luas") {
+                  if (marker.mycategory=="Luas") {
                       var contentString='<h6>'+name+'</h6>'+'Luas';
                       markers.infowindow.setContent(contentString);
                       markers.infowindow.open(map, this);
-                  } else if (marker.mycategory=="dart") {
+                  } else if (marker.mycategory=="DART") {
                       var station_name = marker.myname.replace(/ /g, "%20");
                       var site = 'https://api.irishrail.ie/realtime/realtime.asmx/getStationDataByNameXML_withNumMins?StationDesc='+station_name+'&NumMins=20';
                       var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select objStationData.Destination, objStationData.Exparrival from xml where url="' + site + '"') + '&format=xml&callback=?';
@@ -228,8 +228,8 @@
                     });
 
                     hide("dublinbike");
-                    hide("luas");
-                    hide("dart");
+                    hide("Luas");
+                    hide("DART");
                 });
 
                 // Map options
