@@ -336,12 +336,12 @@ class dbi:
         * SIN(RADIANS(e.Lat))))  AS 'distance_in_km_end'\
                     FROM All_routes.new_all_routes e\
                     HAVING distance_in_km_end< %s) AS END\
-        Inner JOIN (SELECT DISTINCT hour, route FROM All_routes.Schedule) sh\
-        ON start_route = sh.route AND end_route = sh.route AND sh.hour = %s\
+        Inner JOIN (SELECT DISTINCT route FROM All_routes.Schedule) sh\
+        ON start_route = sh.route AND end_route = sh.route\
         WHERE start_route=end_route AND start_stop_seq<end_stop_seq AND start_direction=end_direction"
 
 
-        result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius, hour))
+        result = engine.execute(sql, (src_lat, src_lon, src_lat, radius, dest_lat, dest_lon, dest_lat, radius))
         all_data = result.fetchall()
 
         dataframe = pd.DataFrame(all_data,
@@ -458,13 +458,18 @@ class dbi:
 
 
     #--------------------------------------------------------------------------#
+
     def fares(self):
         try:
-            with urllib.request.urlopen("https://www.dublinbus.ie/Fare-Calculator/Fare-Calculator-Results/?routeNumber=" + self.fare_route.values[0] + "&direction=I&board=" + str( self.start_stop_seq.values[0]) + "&alight=" + str(self.end_stop_seq.values[0])) as response:
+            if self.direction.values[0] == 1:
+                direction = "I"
+            else:
+                direction = "O"
+            with urllib.request.urlopen("https://www.dublinbus.ie/Fare-Calculator/Fare-Calculator-Results/?routeNumber=" + self.fare_route.values[0] + "&direction=" + direction + "&board=" + str(self.start_stop_seq.values[0]) + "&alight=" + str(self.end_stop_seq.values[0])) as response:
                 data = response.read()
                 soup = BeautifulSoup(data, 'html.parser')
                 fare = soup.find('span',
-                                 {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
+                             {'id': 'ctl00_FullRegion_MainRegion_ContentColumns_holder_FareListingControl_lblFare'})
             return (fare.text)
         except:
             pass
@@ -585,14 +590,15 @@ def everything(src, dest, time):
                 times.append(time + datetime.timedelta(minutes=15 * i))
 
             for time in times:
-                # makes time pretty
+                # Converts times to a printable format
                 times_for_chart.append(str(time.hour) + ":" + str(time.minute))
-                # makes time bin for time
+                # Converts times to a time_bin for use in the model
                 bit1 = "1" if (time.minute > 15) else "0"
                 bit2 = "1" if (time.minute > 30) else "0"
                 bit3 = "1" if (time.minute > 45) else "0"
-                '''str .join this later'''
+
                 time_bins.append(str(time.hour) + bit1 + bit2 + bit3)
+
             return (time_bins, times_for_chart)
 
         time_bins, pretty_times = extra_time_bins(time)
@@ -608,7 +614,7 @@ def everything(src, dest, time):
         route = list(df.Route.unique())[0]
         prediction_list = []
         try:
-            predictor = joblib.load('static/pkls/pickle' + route + 'dat')
+            predictor = joblib.load('static/pkls/' + route + 'rf.pkl')
             time_options = list(df['time_bin'])
 
             for time in time_options[0]:
@@ -621,7 +627,7 @@ def everything(src, dest, time):
                 ratio_distance = (y-x)/(end-x)
                 prediction = prediction * ratio_distance
                 prediction_list.append(round(float(prediction), 2))
-                # Add stop name to DF,
+
             df['Predictions'] = [prediction_list]
             df["first_pred"] = prediction_list[0]
         except:

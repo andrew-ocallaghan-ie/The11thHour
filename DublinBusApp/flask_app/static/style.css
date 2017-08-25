@@ -279,7 +279,7 @@ input#user_stop{
     }
 }
 
- /*Tables and up */
+ /*Tablets and up */
 @media (min-height: 900px) {
     #panomap, #pano, #map{
         height: 540px;

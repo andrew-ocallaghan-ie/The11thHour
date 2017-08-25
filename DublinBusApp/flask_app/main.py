@@ -295,7 +295,7 @@ def is_logged_in(f):
 @app.route('/myroutes', methods=['GET', 'POST'])
 @is_logged_in
 def myroutes():
-    #get home, work, like_stop from database
+    # get home, work, like_stop from database
     username = session['username']
     engine = get_db()
     sql = "SELECT * FROM like_stop WHERE username = % s"
