@@ -8,6 +8,11 @@ setup(
         'flask_cors',
         'sqlalchemy',
         'wtforms',
-        'bs4'
+        'bs4',
+        'geopandas',
+        'numba',
+        'tqdm',
+        'sklearn',
+        'shapely'
     ],
 )
